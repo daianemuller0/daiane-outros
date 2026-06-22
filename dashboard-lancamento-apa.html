@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard do lançamento — APA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+<style>
+  :root{
+    --color-background-primary:#ffffff; --color-background-secondary:#f4f2ec; --color-background-tertiary:#faf9f5;
+    --color-text-primary:#1a1a18; --color-text-secondary:#5f5e5a; --color-text-tertiary:#908f88;
+    --color-text-success:#0f6e56; --color-text-danger:#a32d2d; --color-text-info:#185fa5;
+    --color-background-info:#e6f1fb;
+    --color-border-tertiary:rgba(0,0,0,.12); --color-border-secondary:rgba(0,0,0,.22);
+    --border-radius-md:8px; --border-radius-lg:12px; --border-radius-xl:16px;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --color-background-primary:#262624; --color-background-secondary:#2f2e2b; --color-background-tertiary:#1d1c1a;
+      --color-text-primary:#f5f4ef; --color-text-secondary:#b4b2a9; --color-text-tertiary:#88877f;
+      --color-text-success:#5dcaa5; --color-text-danger:#f09595; --color-text-info:#85b7eb;
+      --color-background-info:rgba(55,138,221,.16);
+      --color-border-tertiary:rgba(255,255,255,.12); --color-border-secondary:rgba(255,255,255,.22);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--color-background-tertiary); color:var(--color-text-primary); font-family:var(--font-sans); line-height:1.6;}
+  .wrap{max-width:1000px; margin:0 auto; padding:28px 20px 60px;}
+  h1{font-size:22px; font-weight:500; margin:0 0 4px;}
+  .sub{font-size:13px; color:var(--color-text-secondary); margin:0 0 22px;}
+  select,input,textarea,button{font-family:inherit; font-size:14px; color:var(--color-text-primary); background:var(--color-background-primary); border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); padding:7px 10px;}
+  button{cursor:pointer;} button:hover{background:var(--color-background-secondary);}
+  textarea{resize:vertical;}
+  .ti{line-height:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Dashboard do lançamento — APA</h1>
+<p class="sub">Análise do lançamento atual e comparativos com o lançamento anterior. Atualizado manualmente.</p>
+
+<div id="app"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+document.getElementById('app').innerHTML = `
+<div style="display:flex; gap:4px; border-bottom:0.5px solid var(--color-border-secondary); margin-bottom:1.5rem; flex-wrap:wrap;">
+  <button class="tabbtn" data-tab="g1" style="border:none; border-bottom:2px solid transparent; border-radius:0; background:transparent; padding:10px 16px; font-size:14px; cursor:pointer;"><i class="ti ti-layout-dashboard"></i> Informações gerais</button>
+  <button class="tabbtn" data-tab="g2" style="border:none; border-bottom:2px solid transparent; border-radius:0; background:transparent; padding:10px 16px; font-size:14px; cursor:pointer;"><i class="ti ti-users-group"></i> Origem dos leads</button>
+  <button class="tabbtn" data-tab="g3" style="border:none; border-bottom:2px solid transparent; border-radius:0; background:transparent; padding:10px 16px; font-size:14px; cursor:pointer;"><i class="ti ti-layout-grid"></i> Dados específicos dos fronts</button>
+  <button class="tabbtn" data-tab="g4" style="display:none; border:none; border-bottom:2px solid transparent; border-radius:0; background:transparent; padding:10px 16px; font-size:14px; cursor:pointer;"><i class="ti ti-bulb"></i> Insights</button>
+  <button class="tabbtn" data-tab="g5" style="border:none; border-bottom:2px solid transparent; border-radius:0; background:transparent; padding:10px 16px; font-size:14px; cursor:pointer;"><i class="ti ti-receipt"></i> Detalhamento das vendas</button>
+  <button class="tabbtn" data-tab="g6" style="border:none; border-bottom:2px solid transparent; border-radius:0; background:transparent; padding:10px 16px; font-size:14px; cursor:pointer;"><i class="ti ti-ad-2"></i> Detalhamento do tráfego</button>
+</div>
+
+<div id="g1" class="tabpane">
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:1rem;">
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Faturamento total</div><div style="font-size:24px; font-weight:500;">R$ 138.789</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Investimento total</div><div style="font-size:24px; font-weight:500;">R$ 36.552</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Lucro bruto</div><div style="font-size:24px; font-weight:500; color:var(--color-text-success);">R$ 102.238</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">ROAS</div><div style="font-size:24px; font-weight:500;">3,80x</div></div>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:12px; margin-bottom:1.5rem;">
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Leads totais</div><div style="font-size:20px; font-weight:500;">3.900</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">CPL médio</div><div style="font-size:20px; font-weight:500;">R$ 4,02</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Taxa de conversão</div><div style="font-size:20px; font-weight:500;">2,49%</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">CAC por aluno</div><div style="font-size:20px; font-weight:500;">R$ 377</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Ticket médio APA</div><div style="font-size:20px; font-weight:500;">R$ 1.200</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Margem bruta</div><div style="font-size:20px; font-weight:500;">73,7%</div></div>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Taxa de reembolso</div><div style="font-size:20px; font-weight:500;">7,6%</div></div>
+  </div>
+  <div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:8px;">Funil de conversão</div>
+  <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:14px; margin-bottom:1.75rem;">
+    <div style="display:grid; grid-template-rows:repeat(4,68px); gap:10px;">
+      <div style="clip-path:polygon(0 0,100% 0,91% 100%,9% 100%); background:#B5D4F4; color:#0C447C; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span style="font-size:12px;">Leads</span><span style="font-size:18px; font-weight:500;">3.900</span></div>
+      <div style="clip-path:polygon(9% 0,91% 0,82% 100%,18% 100%); background:#9FE1CB; color:#085041; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span style="font-size:12px;">Vendas APA</span><span style="font-size:18px; font-weight:500;">97</span></div>
+      <div style="clip-path:polygon(18% 0,82% 0,74% 100%,26% 100%); background:#FAC775; color:#633806; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span style="font-size:12px;">Order bump</span><span style="font-size:18px; font-weight:500;">5</span></div>
+      <div style="clip-path:polygon(26% 0,74% 0,68% 100%,32% 100%); background:#CECBF6; color:#3C3489; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span style="font-size:12px;">Upsell coaching</span><span style="font-size:18px; font-weight:500;">5</span></div>
+    </div>
+    <div style="display:grid; grid-template-rows:repeat(4,68px); gap:10px;">
+      <div style="display:flex; align-items:center; padding:0 4px; font-size:12px; color:var(--color-text-tertiary);">Topo do funil · base 100%</div>
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:8px 12px; display:flex; align-items:center; gap:10px;"><i class="ti ti-arrow-down" style="font-size:18px; color:var(--color-text-secondary);"></i><div><div style="font-size:18px; font-weight:500;">2,49%</div><div style="font-size:11px; color:var(--color-text-secondary);">leads → APA</div></div></div>
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:8px 12px; display:flex; align-items:center; gap:10px;"><i class="ti ti-arrow-down" style="font-size:18px; color:var(--color-text-secondary);"></i><div><div style="font-size:18px; font-weight:500;">5,15%</div><div style="font-size:11px; color:var(--color-text-secondary);">compradores APA → order bump</div></div></div>
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:8px 12px; display:flex; align-items:center; gap:10px;"><i class="ti ti-arrow-down" style="font-size:18px; color:var(--color-text-secondary);"></i><div><div style="font-size:18px; font-weight:500;">5,15%</div><div style="font-size:11px; color:var(--color-text-secondary);">compradores APA → upsell</div></div></div>
+    </div>
+  </div>
+  <div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:8px;">Investimento × faturamento × lucro</div>
+  <div style="position:relative; width:100%; height:260px; margin-bottom:1.5rem;"><canvas id="cOverview"></canvas></div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem;">
+    <div><div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:8px;">Faturamento por produto</div><div style="position:relative; width:100%; height:250px;"><canvas id="cFatProd"></canvas></div></div>
+    <div><div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:8px;">Investimento por finalidade</div><div style="position:relative; width:100%; height:250px;"><canvas id="cInv"></canvas></div></div>
+  </div>
+  <div style="font-size:13px; color:var(--color-text-secondary); margin:1.75rem 0 8px;">Investimento detalhado por canal e finalidade</div>
+  <div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+      <thead><tr>
+        <th style="text-align:left; padding:8px 10px; font-weight:500; color:var(--color-text-secondary); border-bottom:0.5px solid var(--color-border-secondary);">Finalidade</th>
+        <th style="text-align:right; padding:8px 10px; font-weight:500; color:var(--color-text-secondary); border-bottom:0.5px solid var(--color-border-secondary);">Valor</th>
+      </tr></thead>
+      <tbody>
+        <tr><td colspan="2" style="padding:8px 10px; font-weight:500; background:var(--color-background-secondary);">Meta Ads</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">Captação</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 4.507,65</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">Corredor polonês</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 935,69</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">Grupo VIP</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 1.616,78</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">RMKT</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 3.815,25</td></tr>
+        <tr><td style="padding:7px 10px; font-weight:500; border-bottom:0.5px solid var(--color-border-secondary);">Subtotal Meta</td><td style="padding:7px 10px; text-align:right; font-weight:500; border-bottom:0.5px solid var(--color-border-secondary);">R$ 10.875,37</td></tr>
+        <tr><td colspan="2" style="padding:8px 10px; font-weight:500; background:var(--color-background-secondary);">Google Ads</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">Captação</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 11.183,64</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">Corredor polonês</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 1.360,22</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">RMKT</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 0,00</td></tr>
+        <tr><td style="padding:7px 10px; font-weight:500; border-bottom:0.5px solid var(--color-border-secondary);">Subtotal Google</td><td style="padding:7px 10px; text-align:right; font-weight:500; border-bottom:0.5px solid var(--color-border-secondary);">R$ 12.543,86</td></tr>
+        <tr><td colspan="2" style="padding:8px 10px; font-weight:500; background:var(--color-background-secondary);">API</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">Conta 1</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 11.587,50</td></tr>
+        <tr><td style="padding:7px 10px; border-bottom:0.5px solid var(--color-border-tertiary);">Conta 2</td><td style="padding:7px 10px; text-align:right; border-bottom:0.5px solid var(--color-border-tertiary);">R$ 1.545,00</td></tr>
+        <tr><td style="padding:7px 10px; font-weight:500; border-bottom:0.5px solid var(--color-border-secondary);">Subtotal API</td><td style="padding:7px 10px; text-align:right; font-weight:500; border-bottom:0.5px solid var(--color-border-secondary);">R$ 13.132,50</td></tr>
+        <tr><td style="padding:9px 10px; font-weight:500; background:rgba(55,138,221,.08);">Total investido</td><td style="padding:9px 10px; text-align:right; font-weight:500; background:rgba(55,138,221,.08);">R$ 36.551,73</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="g2" class="tabpane" style="display:none;">
+  <div style="display:inline-flex; gap:2px; background:var(--color-background-secondary); padding:3px; border-radius:var(--border-radius-md); margin-bottom:1.25rem;">
+    <button class="subbtn" data-sub="atual" style="border:none; border-radius:6px; background:transparent; padding:7px 14px; font-size:13px; cursor:pointer;">Lançamento atual</button>
+    <button class="subbtn" data-sub="comp" style="border:none; border-radius:6px; background:transparent; padding:7px 14px; font-size:13px; cursor:pointer;">Comparar com anterior</button>
+  </div>
+  <div id="subAtual">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-bottom:1.25rem;">
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Base (2m antes)</div><div style="font-size:20px; font-weight:500;">3.013</div></div>
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Leads inscritos</div><div style="font-size:20px; font-weight:500;">569</div></div>
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Taxa de inscrição</div><div style="font-size:20px; font-weight:500;">18,88%</div></div>
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Vendas (inscritos)</div><div style="font-size:20px; font-weight:500;">21</div></div>
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem;"><div style="font-size:13px; color:var(--color-text-secondary);">Faturamento APA</div><div style="font-size:20px; font-weight:500;">R$ 43.200</div></div>
+    </div>
+    <div style="overflow-x:auto;"><table id="tblAtual" style="width:100%; border-collapse:collapse; font-size:12px;"></table></div>
+  </div>
+  <div id="subComp" style="display:none;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+      <label for="metricSel" style="font-size:13px; color:var(--color-text-secondary);">Métrica:</label>
+      <select id="metricSel" style="width:auto; min-width:220px;">
+        <option value="leads">Leads inscritos</option><option value="pct">% de inscrição</option><option value="vend">Vendas dos inscritos</option><option value="fat">Faturamento dos inscritos</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto;"><table id="tblComp" style="width:100%; border-collapse:collapse; font-size:12px;"></table></div>
+    <div style="background:var(--color-background-info); border-radius:var(--border-radius-md); padding:12px 14px; font-size:13px; color:var(--color-text-info); margin-top:1rem;"><i class="ti ti-bulb"></i> Comparação restrita aos dados de inscritos das duas planilhas. A taxa de inscrição foi de 18,88% (atual) vs 15,88% (anterior); entre os inscritos, 21/569 viraram venda no atual vs 67/1.117 no anterior.</div>
+  </div>
+</div>
+
+<div id="g3" class="tabpane" style="display:none;">
+  <div style="margin-bottom:1.25rem;"><button id="toggleAtual" style="font-size:13px;"><i class="ti ti-columns"></i> Ver comparação com lançamento anterior</button></div>
+  <div id="frontsBox"></div>
+</div>
+
+<div id="g4" class="tabpane" style="display:none;">
+  <div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:14px;">Análise do lançamento atual. As comparações usam apenas dados presentes nas duas planilhas. As edições ficam salvas neste navegador.</div>
+  <div id="insightsBox"></div>
+</div>
+
+<div id="g5" class="tabpane" style="display:none;">
+  <div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:14px;">Faturamento estimado = vendas × R$ 1.200. Clique nos cabeçalhos para ordenar.</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-bottom:1.5rem;">
+    <div style="border:0.5px solid var(--color-border-tertiary); border-left:3px solid #888780; border-radius:var(--border-radius-md); padding:12px 14px;">
+      <div style="font-size:13px; font-weight:500; margin-bottom:10px;">Não inscritos</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Vendas</div><div style="font-size:17px; font-weight:500;">32</div></div>
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Faturamento</div><div style="font-size:17px; font-weight:500;">R$ 38.400</div></div>
+      </div>
+    </div>
+    <div style="border:0.5px solid var(--color-border-tertiary); border-left:3px solid #1D9E75; border-radius:var(--border-radius-md); padding:12px 14px;">
+      <div style="font-size:13px; font-weight:500; margin-bottom:10px;">Orgânico</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Vendas</div><div style="font-size:17px; font-weight:500;">55</div></div>
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Faturamento</div><div style="font-size:17px; font-weight:500;">R$ 66.000</div></div>
+      </div>
+    </div>
+    <div style="border:0.5px solid var(--color-border-tertiary); border-left:3px solid #378ADD; border-radius:var(--border-radius-md); padding:12px 14px;">
+      <div style="font-size:13px; font-weight:500; margin-bottom:10px;">Tráfego</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Vendas</div><div style="font-size:17px; font-weight:500;">10</div></div>
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Faturamento</div><div style="font-size:17px; font-weight:500;">R$ 12.000</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="font-size:16px; font-weight:500; margin-bottom:8px;">Detalhamento por origem</div>
+  <div style="overflow-x:auto;"><table id="tblVendas" style="width:100%; border-collapse:collapse; font-size:13px;"></table></div>
+  <div style="font-size:16px; font-weight:500; margin:24px 0 8px;">Detalhamento do orgânico</div>
+  <div style="overflow-x:auto;"><table id="tblOrg" style="width:100%; border-collapse:collapse; font-size:13px;"></table></div>
+</div>
+
+<div id="g6" class="tabpane" style="display:none;">
+  <div style="font-size:13px; color:var(--color-text-secondary); margin-bottom:14px;">Valor gasto e CPL por público e criativo. Faturamento = vendas × R$ 1.200. Clique nos cabeçalhos para ordenar.</div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-bottom:1.5rem;">
+    <div style="border:0.5px solid var(--color-border-tertiary); border-left:3px solid #378ADD; border-radius:var(--border-radius-md); padding:12px 14px;">
+      <div style="font-size:13px; font-weight:500; margin-bottom:10px;">Meta Ads</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Invest. captação</div><div style="font-size:17px; font-weight:500;">R$ 4.507,65</div></div>
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Vendas</div><div style="font-size:17px; font-weight:500;">1</div></div>
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">ROAS</div><div style="font-size:17px; font-weight:500;">0,27</div></div>
+      </div>
+    </div>
+    <div style="border:0.5px solid var(--color-border-tertiary); border-left:3px solid #D85A30; border-radius:var(--border-radius-md); padding:12px 14px;">
+      <div style="font-size:13px; font-weight:500; margin-bottom:10px;">Google Ads</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Invest. captação</div><div style="font-size:17px; font-weight:500;">R$ 11.183,64</div></div>
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">Vendas</div><div style="font-size:17px; font-weight:500;">10</div></div>
+        <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px;"><div style="font-size:12px; color:var(--color-text-secondary);">ROAS</div><div style="font-size:17px; font-weight:500;">1,07</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="font-size:16px; font-weight:500; margin-bottom:8px;">Segmentação — Meta Ads</div>
+  <div style="overflow-x:auto;"><table id="tMetaSeg" style="width:100%; border-collapse:collapse; font-size:13px;"></table></div>
+  <div style="font-size:16px; font-weight:500; margin:24px 0 8px;">Desempenho por criativo — Meta Ads</div>
+  <div style="overflow-x:auto;"><table id="tMetaCri" style="width:100%; border-collapse:collapse; font-size:13px;"></table></div>
+  <div style="font-size:16px; font-weight:500; margin:24px 0 8px;">Segmentação — Google Ads</div>
+  <div style="overflow-x:auto;"><table id="tGooSeg" style="width:100%; border-collapse:collapse; font-size:13px;"></table></div>
+  <div style="font-size:16px; font-weight:500; margin:24px 0 8px;">Desempenho por criativo — Google Ads</div>
+  <div style="overflow-x:auto;"><table id="tGooCri" style="width:100%; border-collapse:collapse; font-size:13px;"></table></div>
+</div>
+`;
+
+(function(){
+  var brl=function(v){return 'R$ '+Math.round(v).toLocaleString('pt-BR');};
+  var brl2=function(v){return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});};
+  var num=function(v){return Math.round(v).toLocaleString('pt-BR');};
+  var esc=function(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+  var isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+  var grid=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.06)';
+  var tick=isDark?'#B4B2A9':'#5F5E5A';
+  var bd='0.5px solid '+(isDark?'rgba(255,255,255,.12)':'rgba(0,0,0,.1)');
+  Chart.defaults.font.family='inherit'; Chart.defaults.color=tick;
+  var P={purple:'#7F77DD',teal:'#1D9E75',coral:'#D85A30',blue:'#378ADD',amber:'#EF9F27',gray:'#888780',pink:'#D4537E'};
+  var charts={};
+  var money={ticks:{color:tick,callback:function(v){return 'R$ '+(v/1000)+'k';}},grid:{color:grid}};
+
+  charts.cOverview=new Chart(document.getElementById('cOverview'),{type:'bar',data:{labels:['Investimento','Faturamento','Lucro bruto'],datasets:[{data:[36551.73,138789.4,102237.67],backgroundColor:[P.coral,P.teal,P.blue],borderRadius:6,barPercentage:0.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return brl(c.parsed.y);}}}},scales:{y:money,x:{ticks:{color:tick},grid:{display:false}}}}});
+  charts.cFatProd=new Chart(document.getElementById('cFatProd'),{type:'doughnut',data:{labels:['Curso APA','Coaching','Order bump'],datasets:[{data:[116400,20593.4,1796],backgroundColor:[P.teal,P.purple,P.amber],borderWidth:2,borderColor:isDark?'#262624':'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{color:tick,boxWidth:10,boxHeight:10,padding:10,font:{size:12}}},tooltip:{callbacks:{label:function(c){return c.label+': '+brl(c.parsed);}}}}}});
+  charts.cInv=new Chart(document.getElementById('cInv'),{type:'doughnut',data:{labels:['Captação','API','RMKT','Corredor polonês','Grupo VIP'],datasets:[{data:[15691.29,13132.5,3815.25,2295.91,1616.78],backgroundColor:[P.blue,P.purple,P.coral,P.amber,P.pink],borderWidth:2,borderColor:isDark?'#262624':'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{color:tick,boxWidth:10,boxHeight:10,padding:8,font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.label+': '+brl(c.parsed);}}}}}});
+
+  var prods=[
+    {n:'Curso de Memorização Para Concursos Públicos',ab:794,al:97,ap:12.22,avi:4,avt:8,af:9600, bb:1563,bl:227,bp:14.52,bv:21,bf:25200},
+    {n:'Como COMEÇAR a estudar (Área Fiscal, Controle)',ab:379,al:77,ap:20.32,avi:3,avt:5,af:6000, bb:759,bl:151,bp:19.89,bv:13,bf:15600},
+    {n:'Tudo sobre REVISÕES para Concursos Públicos',ab:51,al:21,ap:41.18,avi:2,avt:2,af:2400, bb:259,bl:43,bp:16.60,bv:1,bf:1200},
+    {n:'Desafio Concurseiro FODA em 30 dias',ab:254,al:62,ap:24.41,avi:4,avt:4,af:4800, bb:1037,bl:167,bp:16.10,bv:10,bf:12000},
+    {n:'Tudo sobre o estudo por PROVAS de Concursos',ab:333,al:63,ap:18.92,avi:1,avt:2,af:2400, bb:843,bl:158,bp:18.74,bv:0,bf:0},
+    {n:'Curso de Procrastinação Zero',ab:269,al:34,ap:12.64,avi:1,avt:2,af:2400, bb:753,bl:105,bp:13.94,bv:2,bf:2400},
+    {n:'Contas Sem Calculadora para Concurseiros',ab:114,al:21,ap:18.42,avi:0,avt:0,af:0, bb:276,bl:28,bp:10.14,bv:1,bf:1200},
+    {n:'Ansiedade ZERO para Concurseiros',ab:27,al:2,ap:7.41,avi:0,avt:0,af:0, bb:37,bl:2,bp:5.41,bv:0,bf:0},
+    {n:'CONSTÂNCIA e PRODUTIVIDADE',ab:13,al:3,ap:23.08,avi:0,avt:0,af:0, bb:10,bl:1,bp:10.00,bv:0,bf:0},
+    {n:'Alimentação',ab:0,al:0,ap:0,avi:0,avt:0,af:0, bb:11,bl:0,bp:0,bv:0,bf:0},
+    {n:'Como ser APROVADO na SEFAZ CE 2026?',ab:96,al:30,ap:31.25,avi:0,avt:0,af:0, bb:0,bl:0,bp:0,bv:0,bf:0},
+    {n:'DAI',ab:339,al:63,ap:18.58,avi:1,avt:1,af:1200, bb:432,bl:43,bp:9.95,bv:1,bf:1200},
+    {n:'GC',ab:344,al:96,ap:27.91,avi:5,avt:12,af:14400, bb:1054,bl:192,bp:18.22,bv:18,bf:21600}
+  ];
+
+  var thS='padding:8px; text-align:right; font-weight:500; color:'+tick+'; border-bottom:'+bd+'; white-space:nowrap;';
+  var thL='padding:8px; text-align:left; font-weight:500; color:'+tick+'; border-bottom:'+bd+';';
+  var tdS='padding:7px 8px; text-align:right; border-bottom:'+bd+'; white-space:nowrap;';
+  var tdL='padding:7px 8px; text-align:left; border-bottom:'+bd+';';
+  var gb='padding:8px; text-align:right; font-weight:500; white-space:nowrap; background:'+(isDark?'rgba(55,138,221,.12)':'rgba(55,138,221,.08)')+';';
+
+  function buildAtual(){
+    var h='<thead><tr><th style="'+thL+'">Produto</th><th style="'+thS+'">Base 2m</th><th style="'+thS+'">Leads</th><th style="'+thS+'">% insc.</th><th style="'+thS+'">Vendas insc.</th><th style="'+thS+'">Vendas total</th><th style="'+thS+'">Faturamento</th></tr></thead><tbody>';
+    prods.forEach(function(p){h+='<tr><td style="'+tdL+'">'+p.n+'</td><td style="'+tdS+'">'+num(p.ab)+'</td><td style="'+tdS+'">'+num(p.al)+'</td><td style="'+tdS+'">'+p.ap.toFixed(2)+'%</td><td style="'+tdS+'">'+p.avi+'</td><td style="'+tdS+'">'+p.avt+'</td><td style="'+tdS+'">'+brl(p.af)+'</td></tr>';});
+    h+='<tr><td style="'+gb+'text-align:left;">Geral</td><td style="'+gb+'">3.013</td><td style="'+gb+'">569</td><td style="'+gb+'">18,88%</td><td style="'+gb+'">21</td><td style="'+gb+'">36</td><td style="'+gb+'">R$ 43.200</td></tr></tbody>';
+    document.getElementById('tblAtual').innerHTML=h;
+  }
+  function av(p,m){return m==='leads'?p.al:m==='pct'?p.ap:m==='vend'?p.avi:p.avi*1200;}
+  function bvm(p,m){return m==='leads'?p.bl:m==='pct'?p.bp:m==='vend'?p.bv:p.bv*1200;}
+  function fmt(v,m){return m==='pct'?v.toFixed(2)+'%':m==='fat'?brl(v):num(v);}
+  function varc(a,b,m){if(m==='pct'){var d=a-b;return {t:(d>=0?'+':'')+d.toFixed(2)+' pp',pos:d>=0};} if(b===0){return a>0?{t:'novo',pos:true}:{t:'—',pos:true};} var pc=(a-b)/b*100;return {t:(pc>=0?'+':'')+Math.round(pc)+'%',pos:pc>=0};}
+  function buildComp(m){
+    var rows=prods.slice().sort(function(x,y){return av(y,m)-av(x,m);});
+    var h='<thead><tr><th style="'+thL+'">Produto</th><th style="'+thS+'">Atual</th><th style="'+thS+'">Anterior</th><th style="'+thS+'">Variação</th></tr></thead><tbody>';
+    rows.forEach(function(p){var a=av(p,m),b=bvm(p,m),vc=varc(a,b,m);var col=vc.t==='—'?tick:(vc.pos?'var(--color-text-success)':'var(--color-text-danger)');h+='<tr><td style="'+tdL+'">'+p.n+'</td><td style="'+tdS+'">'+fmt(a,m)+'</td><td style="'+tdS+'color:'+tick+';">'+fmt(b,m)+'</td><td style="'+tdS+'color:'+col+';">'+vc.t+'</td></tr>';});
+    var ta=0,tb=0; prods.forEach(function(p){ta+=av(p,m);tb+=bvm(p,m);}); if(m==='pct'){ta=18.88;tb=15.88;}
+    var vc=varc(ta,tb,m), col=vc.pos?'var(--color-text-success)':'var(--color-text-danger)';
+    h+='<tr><td style="'+gb+'text-align:left;">Geral</td><td style="'+gb+'">'+fmt(ta,m)+'</td><td style="'+gb+'">'+fmt(tb,m)+'</td><td style="'+gb+'color:'+col+';">'+vc.t+'</td></tr></tbody>';
+    document.getElementById('tblComp').innerHTML=h;
+  }
+
+  var PAL=[{a:'#639922',tL:'#27500A',tD:'#C0DD97',bgL:'#EAF3DE',bgD:'rgba(99,153,34,.16)'},{a:'#378ADD',tL:'#0C447C',tD:'#B5D4F4',bgL:'#E6F1FB',bgD:'rgba(55,138,221,.16)'},{a:'#7F77DD',tL:'#3C3489',tD:'#CECBF6',bgL:'#EEEDFE',bgD:'rgba(127,119,221,.16)'},{a:'#D85A30',tL:'#712B13',tD:'#F5C4B3',bgL:'#FAECE7',bgD:'rgba(216,90,48,.16)'},{a:'#BA7517',tL:'#633806',tD:'#FAC775',bgL:'#FAEEDA',bgD:'rgba(186,117,23,.16)'},{a:'#1D9E75',tL:'#085041',tD:'#9FE1CB',bgL:'#E1F5EE',bgD:'rgba(29,158,117,.16)'}];
+  function fpc(v){return v.toFixed(2).replace('.',',')+'%';}
+  function fm(v,mObj){if(v===null||v===undefined)return '—';var f=mObj.fmt;if(f==='money')return brl2(v);if(f==='pct')return fpc(v);if(f==='ratio')return v.toFixed(2).replace('.',',');return num(v);}
+  function diffFor(a,b,mObj){if(a===null||a===undefined||b===null||b===undefined)return{t:'—',c:tick};if(mObj.fmt==='pct'){var d=a-b;return{t:(d>=0?'+':'')+d.toFixed(2).replace('.',',')+' pp',c:d>=0?'var(--color-text-success)':'var(--color-text-danger)'};}if(a===0&&b===0)return{t:'—',c:tick};if(b===0)return{t:'novo',c:'var(--color-text-success)'};if(a===0)return{t:'saiu',c:'var(--color-text-danger)'};var pc=(a-b)/b*100, good=mObj.lower?pc<=0:pc>=0;return{t:(pc>=0?'+':'')+pc.toFixed(1).replace('.',',')+'%', c:good?'var(--color-text-success)':'var(--color-text-danger)'};}
+  function fvalM(v,t){return t==='pct'?fpc(v):num(v);}
+  function fdiffM(r){if(r.type==='pct'){var d=r.a-r.b;return {t:(d>=0?'+':'')+d.toFixed(2).replace('.',',')+' pp',pos:d>=0};}if(r.b===0){return r.a>0?{t:'novo',pos:true}:{t:'—',pos:true};}var pc=(r.a-r.b)/r.b*100;return {t:(pc>=0?'+':'')+pc.toFixed(1).replace('.',',')+'%',pos:pc>=0};}
+
+  var fronts=[
+    {title:'Dados Gerais', type:'metrics', rows:[
+      {label:'Vendas APA computadas', a:99, b:158, type:'num'},
+      {label:'Compradores anteriores', a:24, b:65, type:'num'},
+      {label:'% de compradores anteriores', a:24.24, b:41.14, type:'pct'}
+    ]},
+    {title:'Dados dos fronts (2 meses)', type:'products',
+      metrics:[{key:'fat',label:'Faturamento oferta front',fmt:'money'},{key:'inv',label:'Valor investido total',fmt:'money'},{key:'qtd',label:'Qtd de vendas únicas',fmt:'num'},{key:'cpa',label:'CPA médio',fmt:'money',lower:true}],
+      prods:[
+        {n:'Curso de Memorização Para Concursos Públicos',a:{fat:6544.20,inv:7481.32,qtd:658,cpa:11.37},b:{fat:15265.80,inv:23096.73,qtd:1542,cpa:14.98}},
+        {n:'Como COMEÇAR (Área Fiscal, Controle e Receita)',a:{fat:2999.70,inv:6499.66,qtd:303,cpa:21.45},b:{fat:8495.51,inv:16996.89,qtd:759,cpa:22.39}},
+        {n:'Tudo sobre REVISÕES para Concursos Públicos',a:{fat:456.30,inv:0,qtd:37,cpa:0},b:{fat:2919.12,inv:3918.03,qtd:253,cpa:15.49}},
+        {n:'Desafio Concurseiro FODA em 30 dias',a:{fat:1910.70,inv:3019.59,qtd:193,cpa:15.65},b:{fat:10236.60,inv:14308.85,qtd:1034,cpa:13.84}},
+        {n:'Tudo sobre o estudo por PROVAS de Concursos',a:{fat:2940.70,inv:6026.74,qtd:293,cpa:20.57},b:{fat:8385.70,inv:12306.15,qtd:843,cpa:14.60}},
+        {n:'Curso de Procrastinação Zero',a:{fat:1910.70,inv:2828.66,qtd:193,cpa:14.66},b:{fat:734.00,inv:10971.04,qtd:808,cpa:13.58}},
+        {n:'Contas Sem Calculadora para Concurseiros',a:{fat:1101.00,inv:999.36,qtd:90,cpa:11.10},b:{fat:2059.20,inv:2969.04,qtd:208,cpa:14.27}},
+        {n:'Ansiedade ZERO para Concurseiros',a:{fat:204.70,inv:0,qtd:23,cpa:0},b:{fat:153.40,inv:508.76,qtd:26,cpa:19.57}},
+        {n:'CONSTÂNCIA e PRODUTIVIDADE',a:{fat:118.80,inv:119.91,qtd:12,cpa:9.99},b:{fat:99.00,inv:197.67,qtd:10,cpa:19.77}},
+        {n:'Como ser APROVADO na SEFAZ CE 2026?',aOnly:true,a:{fat:900.90,inv:1017.89,qtd:91,cpa:11.19},b:{fat:0,inv:0,qtd:0,cpa:0}},
+        {n:'Alimentação',bOnly:true,a:{fat:0,inv:0,qtd:0,cpa:0},b:{fat:64.90,inv:443.95,qtd:11,cpa:40.36}}
+      ],
+      geral:{a:{fat:19087.70,inv:27993.13,qtd:1893,cpa:14.79},b:{fat:48413.23,inv:85717.11,qtd:5494,cpa:15.60}}
+    },
+    {title:'Dados do lançamento — Vendas', type:'products',
+      metrics:[{key:'ni',label:'Vendas não inscritos',fmt:'num'},{key:'vg',label:'Vendas APA geral',fmt:'num'},{key:'pv',label:'% vendas / compradores',fmt:'pct'},{key:'fat',label:'Faturamento',fmt:'money'},{key:'roas',label:'ROAS s/ investimento dos fronts',fmt:'ratio'}],
+      prods:[
+        {n:'Curso de Memorização Para Concursos Públicos',a:{ni:4,vg:8,pv:1.22,fat:9600,roas:1.28},b:{ni:5,vg:26,pv:1.69,fat:31200,roas:1.35}},
+        {n:'Como COMEÇAR (Área Fiscal, Controle e Receita)',a:{ni:2,vg:5,pv:1.65,fat:6000,roas:0.92},b:{ni:5,vg:18,pv:2.37,fat:21600,roas:1.27}},
+        {n:'Tudo sobre REVISÕES para Concursos Públicos',a:{ni:0,vg:2,pv:5.41,fat:2400,roas:null},b:{ni:1,vg:2,pv:0.79,fat:2400,roas:0.61}},
+        {n:'Desafio Concurseiro FODA em 30 dias',a:{ni:0,vg:4,pv:2.07,fat:4800,roas:1.59},b:{ni:4,vg:14,pv:1.35,fat:16800,roas:1.17}},
+        {n:'Tudo sobre o estudo por PROVAS de Concursos',a:{ni:1,vg:2,pv:0.68,fat:2400,roas:0.40},b:{ni:1,vg:1,pv:0.12,fat:1200,roas:0.10}},
+        {n:'Curso de Procrastinação Zero',a:{ni:1,vg:2,pv:1.04,fat:2400,roas:0.85},b:{ni:0,vg:2,pv:0.25,fat:2400,roas:0.22}},
+        {n:'Contas Sem Calculadora para Concurseiros',a:{ni:0,vg:0,pv:0,fat:0,roas:0},b:{ni:1,vg:2,pv:0.96,fat:2400,roas:0.81}},
+        {n:'Ansiedade ZERO para Concurseiros',a:{ni:0,vg:0,pv:0,fat:0,roas:null},b:{ni:0,vg:0,pv:0,fat:0,roas:0}},
+        {n:'CONSTÂNCIA e PRODUTIVIDADE',a:{ni:0,vg:0,pv:0,fat:0,roas:0},b:{ni:0,vg:0,pv:0,fat:0,roas:0}},
+        {n:'Como ser APROVADO na SEFAZ CE 2026?',aOnly:true,a:{ni:0,vg:0,pv:0,fat:0,roas:0},b:{ni:0,vg:0,pv:0,fat:0,roas:0}},
+        {n:'Alimentação',bOnly:true,a:{ni:0,vg:0,pv:0,fat:0,roas:0},b:{ni:0,vg:0,pv:0,fat:0,roas:0}}
+      ],
+      geral:{a:{ni:8,vg:23,pv:1.22,fat:27600,roas:0.99},b:{ni:17,vg:65,pv:1.18,fat:78000,roas:0.91}}
+    },
+    {title:'Dados do coaching (2 meses)', type:'products', noCompare:true,
+      metrics:[{key:'ve',label:'Vendas exclusivas (1ª compra)',fmt:'num'},{key:'fat',label:'Faturamento',fmt:'money'},{key:'pv',label:'% vendas / compradores',fmt:'pct'}],
+      prods:[
+        {n:'Curso de Memorização Para Concursos Públicos',a:{ve:0,fat:0,pv:0}},
+        {n:'Como COMEÇAR (Área Fiscal, Controle e Receita)',a:{ve:3,fat:13997.00,pv:0.99}},
+        {n:'Tudo sobre REVISÕES para Concursos Públicos',a:{ve:0,fat:0,pv:0}},
+        {n:'Desafio Concurseiro FODA em 30 dias',a:{ve:0,fat:0,pv:0}},
+        {n:'Tudo sobre o estudo por PROVAS de Concursos',a:{ve:0,fat:0,pv:0}},
+        {n:'Curso de Procrastinação Zero',a:{ve:0,fat:0,pv:0}},
+        {n:'Contas Sem Calculadora para Concurseiros',a:{ve:1,fat:4198.80,pv:1.11}},
+        {n:'Ansiedade ZERO para Concurseiros',a:{ve:0,fat:0,pv:0}},
+        {n:'CONSTÂNCIA e PRODUTIVIDADE',a:{ve:0,fat:0,pv:0}},
+        {n:'Como ser APROVADO na SEFAZ CE 2026?',a:{ve:0,fat:0,pv:0}},
+        {n:'DAI',a:{ve:0,fat:0,pv:0}}
+      ],
+      geral:{a:{ve:4,fat:18195.80,pv:null}}
+    }
+  ];
+
+  var frontSort={}, onlyAtual=true;
+  function metricOf(f,key){return f.metrics.filter(function(m){return m.key===key;})[0];}
+  function arrow(sk,col){var s=frontSort[sk];return (s&&s.col===col)?(s.dir==='desc'?' ↓':' ↑'):'';}
+  function sth(sk,col,label){return '<th class="sortH" data-sk="'+sk+'" data-col="'+col+'" style="'+thS+'cursor:pointer; user-select:none;">'+label+arrow(sk,col)+'</th>';}
+  function sthL(sk,col,label){return '<th class="sortH" data-sk="'+sk+'" data-col="'+col+'" style="'+thL+'cursor:pointer; user-select:none;">'+label+arrow(sk,col)+'</th>';}
+  function cellRaw(p,f,mode,col){if(col==='name')return p.n;if(mode==='d'){var a=p.a[col],b=p.b[col],m=metricOf(f,col);if(a==null||b==null)return -Infinity;if(m.fmt==='pct')return a-b;if(b===0)return a>0?1e9:0;return (a-b)/b;}var v=(mode==='a')?p.a[col]:p.b[col];return (v==null)?-Infinity:v;}
+  function sortFull(f,idx,mode){var arr=f.prods.filter(function(p){return mode==='a'?!p.bOnly:mode==='b'?!p.aOnly:true;});var sk=idx+'_'+mode,s=frontSort[sk];if(!s)return arr;arr.sort(function(x,y){if(s.col==='name')return s.dir==='desc'?y.n.localeCompare(x.n):x.n.localeCompare(y.n);var xv=cellRaw(x,f,mode,s.col),yv=cellRaw(y,f,mode,s.col);if(xv<yv)return s.dir==='desc'?1:-1;if(xv>yv)return s.dir==='desc'?-1:1;return 0;});return arr;}
+  function renderMetricTable(f,idx,mode,title){
+    var sk=idx+'_'+mode, rows=sortFull(f,idx,mode);
+    var t=title?'<div style="font-size:12px; font-weight:500; color:'+tick+'; margin:16px 0 6px;">'+title+'</div>':'';
+    t+='<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; font-size:12px;"><thead><tr>'+sthL(sk,'name','Produto');
+    f.metrics.forEach(function(m){t+=sth(sk,m.key,m.label);});
+    t+='</tr></thead><tbody>';
+    rows.forEach(function(p){t+='<tr><td style="'+tdL+'">'+p.n+'</td>';f.metrics.forEach(function(m){if(mode==='d'){var d=diffFor(p.a[m.key],p.b[m.key],m);t+='<td style="'+tdS+'color:'+d.c+';">'+d.t+'</td>';}else{t+='<td style="'+tdS+'">'+fm((mode==='a'?p.a:p.b)[m.key],m)+'</td>';}});t+='</tr>';});
+    t+='<tr><td style="'+gb+'text-align:left;">Geral</td>';
+    f.metrics.forEach(function(m){if(mode==='d'){var d=diffFor(f.geral.a[m.key],f.geral.b[m.key],m);t+='<td style="'+gb+'color:'+d.c+';">'+d.t+'</td>';}else{t+='<td style="'+gb+'">'+fm((mode==='a'?f.geral.a:f.geral.b)[m.key],m)+'</td>';}});
+    t+='</tr></tbody></table></div>';
+    return t;
+  }
+  function renderMetricsFront(f,head){
+    var cols=onlyAtual?'<th style="'+thL+'">Métrica</th><th style="'+thS+'">Atual</th>':'<th style="'+thL+'">Métrica</th><th style="'+thS+'">Atual</th><th style="'+thS+'">Anterior</th><th style="'+thS+'">% diferença</th>';
+    var t='<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; font-size:13px;"><thead><tr>'+cols+'</tr></thead><tbody>';
+    f.rows.forEach(function(r){t+='<tr><td style="'+tdL+'">'+r.label+'</td><td style="'+tdS+'">'+fvalM(r.a,r.type)+'</td>';if(!onlyAtual){var d=fdiffM(r),col=d.t==='—'?tick:(d.pos?'var(--color-text-success)':'var(--color-text-danger)');t+='<td style="'+tdS+'color:'+tick+';">'+fvalM(r.b,r.type)+'</td><td style="'+tdS+'color:'+col+';">'+d.t+'</td>';}t+='</tr>';});
+    t+='</tbody></table></div>';return head+t;
+  }
+  function renderProductsFront(f,idx,head){
+    if(f.noCompare||onlyAtual)return head+renderMetricTable(f,idx,'a',null);
+    return head+renderMetricTable(f,idx,'a','Lançamento atual')+renderMetricTable(f,idx,'b','Lançamento anterior')+renderMetricTable(f,idx,'d','% diferença (atual × anterior)');
+  }
+  function renderFronts(){
+    var box=document.getElementById('frontsBox'); box.innerHTML='';
+    fronts.forEach(function(f,i){
+      var c=PAL[i%PAL.length], hbg=isDark?c.bgD:c.bgL, ht=isDark?c.tD:c.tL;
+      var card=document.createElement('div');
+      card.style.cssText='border:0.5px solid '+(isDark?'rgba(255,255,255,.12)':'rgba(0,0,0,.1)')+'; border-left:3px solid '+c.a+'; border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1.25rem;';
+      var note=f.noCompare?'<span style="font-size:11px; font-weight:400; opacity:.85; margin-left:8px;">· sem comparativo</span>':'';
+      var head='<div style="background:'+hbg+'; color:'+ht+'; font-size:14px; font-weight:500; padding:10px 14px;">'+f.title+note+'</div>';
+      card.innerHTML=f.type==='products'?renderProductsFront(f,i,head):renderMetricsFront(f,head);
+      box.appendChild(card);
+    });
+    document.querySelectorAll('.sortH').forEach(function(h){h.addEventListener('click',function(){var sk=this.dataset.sk,col=this.dataset.col,s=frontSort[sk];if(s&&s.col===col){s.dir=s.dir==='desc'?'asc':'desc';}else{frontSort[sk]={col:col,dir:'desc'};}renderFronts();});});
+  }
+  document.getElementById('toggleAtual').addEventListener('click',function(){onlyAtual=!onlyAtual;this.innerHTML=(onlyAtual?'<i class="ti ti-columns"></i> Ver comparação com lançamento anterior':'<i class="ti ti-columns"></i> Ver somente lançamento atual');renderFronts();});
+  renderFronts();
+
+  var ITYPE={pos:{c:'#1D9E75',bgL:'#E1F5EE',bgD:'rgba(29,158,117,.16)',tL:'#085041',tD:'#9FE1CB',label:'Positivo',icon:'ti-circle-check'},opo:{c:'#378ADD',bgL:'#E6F1FB',bgD:'rgba(55,138,221,.16)',tL:'#0C447C',tD:'#B5D4F4',label:'Oportunidade',icon:'ti-bulb'},aten:{c:'#BA7517',bgL:'#FAEEDA',bgD:'rgba(186,117,23,.16)',tL:'#633806',tD:'#FAC775',label:'Atenção',icon:'ti-alert-triangle'},risco:{c:'#E24B4A',bgL:'#FCEBEB',bgD:'rgba(226,75,74,.16)',tL:'#791F1F',tD:'#F7C1C1',label:'Risco',icon:'ti-alert-hexagon'},dados:{c:'#888780',bgL:'#F1EFE8',bgD:'rgba(136,135,128,.16)',tL:'#444441',tD:'#D3D1C7',label:'Dados',icon:'ti-database'}};
+  var TYPES=[['pos','Positivo'],['opo','Oportunidade'],['aten','Atenção'],['risco','Risco'],['dados','Dados']];
+  var defaultInsights=[
+    {type:'pos',title:'Lucro e margem saudáveis',text:'Lucro bruto de R$ 102.238 com margem de 73,7% e ROAS de 3,80x — cada R$ 1 investido em mídia retornou R$ 3,80 em faturamento.'},
+    {type:'pos',title:'Captação barata',text:'CPL médio de apenas R$ 4,02 para gerar 3.900 leads, com taxa de inscrição de 18,88% nos fronts. (Dado apenas do lançamento atual — não há total de leads do anterior para comparar.)'},
+    {type:'pos',title:'Desafio Concurseiro é o front mais rentável',text:'ROAS de 1,59 sobre o investimento do próprio front, o único bem acima de 1 (no anterior, esse mesmo front fez 1,17). Forte candidato a receber mais verba.'},
+    {type:'aten',title:'O topo do funil é o maior gargalo',text:'A conversão de leads em alunos foi de 2,49% (97 vendas de APA para 3.900 leads). É a etapa do funil com mais espaço de ganho — pequenas melhorias na passagem lead→venda têm o maior impacto absoluto no faturamento.'},
+    {type:'risco',title:'Dependência de público novo',text:'Entre os compradores, a fatia de quem já havia comprado antes caiu de 41,14% para 24,24% (−16,9 pp, da tabela "Dados Gerais"). Este lançamento dependeu muito mais de público novo — vale reativar a base para os próximos.'},
+    {type:'aten',title:'ROAS dos fronts está abaixo de 1 (0,99)',text:'A venda direta atribuída aos fronts não paga sozinha o investimento neles; o retorno vem do conjunto (upsell, recompra, LTV). Vigiar os fronts mais caros: Área Fiscal (CPA R$ 21,45) e Provas (CPA R$ 20,57).'},
+    {type:'opo',title:'Order bump e upsell subexplorados',text:'Ambos convertem só 5,15% dos compradores do APA, enquanto order bump costuma fazer 10–30%. Como são vendas sobre quem já comprou, subir essa taxa é faturamento incremental quase sem custo.'},
+    {type:'opo',title:'Coaching concentrado em 2 fronts',text:'Os R$ 18.196 de coaching vieram só de Área Fiscal (R$ 13.997) e Contas Sem Calculadora (R$ 4.199), com ticket alto (~R$ 4.549). Replicar a abordagem do "Área Fiscal" nos demais fronts pode multiplicar essa receita.'},
+    {type:'opo',title:'REVISÕES converte muito, mas tem base mínima',text:'Melhor taxa de inscrição do lançamento (41,18%) com apenas 51 pessoas na base. Levar mais tráfego pra esse front tende a trazer leads baratos e qualificados.'},
+    {type:'aten',title:'GC entregou menos leads que no anterior',text:'Continua sendo o maior ativo de captação (96 leads inscritos, 5 vendas APA, R$ 14.400), mas na tabela de inscritos caiu de 192 para 96 leads. Entender essa queda pode recuperar volume.'},
+    {type:'dados',title:'Inconsistência no faturamento do lançamento anterior',text:'A linha "Geral" do anterior mostra R$ 57.600, mas a soma dos produtos dá R$ 80.400 (67 vendas × R$ 1.200) — provavelmente não atualizada após incluir DAI e GC.'},
+    {type:'dados',title:'Fronts com R$ 0 investido e vendas',text:'REVISÕES (37) e Ansiedade (23) registraram vendas únicas sem investimento atribuído, então o ROAS aparece como "—". Provável tráfego orgânico — vale confirmar a atribuição.'}
+  ];
+  function loadIns(){try{var s=localStorage.getItem('apa_insights_v1');if(s)return JSON.parse(s);}catch(e){}return defaultInsights.slice();}
+  function saveIns(){try{localStorage.setItem('apa_insights_v1',JSON.stringify(insights));}catch(e){}}
+  var insights=loadIns(), editingIdx=null;
+  function insCard(it,i){var ty=ITYPE[it.type]||ITYPE.opo,tintBg=isDark?ty.bgD:ty.bgL,tagT=isDark?ty.tD:ty.tL;
+    return '<div style="border:0.5px solid '+(isDark?'rgba(255,255,255,.12)':'rgba(0,0,0,.1)')+'; border-left:3px solid '+ty.c+'; border-radius:var(--border-radius-md); padding:12px 14px; margin-bottom:10px;">'
+      +'<div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">'
+        +'<i class="ti '+ty.icon+'" style="color:'+ty.c+'; font-size:18px;"></i>'
+        +'<span style="font-size:14px; font-weight:500;">'+esc(it.title)+'</span>'
+        +'<span style="margin-left:auto; font-size:11px; padding:2px 8px; border-radius:var(--border-radius-md); background:'+tintBg+'; color:'+tagT+';">'+ty.label+'</span>'
+        +'<button class="insEdit" data-i="'+i+'" aria-label="Editar" style="padding:3px 7px; border-radius:6px;"><i class="ti ti-pencil"></i></button>'
+        +'<button class="insDel" data-i="'+i+'" aria-label="Excluir" style="padding:3px 7px; border-radius:6px;"><i class="ti ti-trash"></i></button>'
+      +'</div><div style="font-size:13px; color:var(--color-text-secondary); line-height:1.6;">'+esc(it.text)+'</div></div>';
+  }
+  function insForm(it,i){var opts=TYPES.map(function(t){return '<option value="'+t[0]+'"'+(t[0]===it.type?' selected':'')+'>'+t[1]+'</option>';}).join('');
+    return '<div style="border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); padding:12px 14px; margin-bottom:10px;">'
+      +'<div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;"><select id="edType" style="width:auto;">'+opts+'</select>'
+      +'<input id="edTitle" type="text" value="'+esc(it.title).replace(/"/g,'&quot;')+'" placeholder="Título" style="flex:1; min-width:160px;"></div>'
+      +'<textarea id="edText" rows="3" placeholder="Texto do insight" style="width:100%; margin-bottom:8px;">'+esc(it.text)+'</textarea>'
+      +'<div style="display:flex; gap:8px;"><button id="edSave" data-i="'+i+'"><i class="ti ti-check"></i> Salvar</button><button id="edCancel" data-i="'+i+'">Cancelar</button></div></div>';
+  }
+  function renderInsights(){
+    var h='<div style="margin-bottom:12px;"><button id="addInsight"><i class="ti ti-plus"></i> Adicionar insight</button></div>';
+    insights.forEach(function(it,i){h+=(i===editingIdx)?insForm(it,i):insCard(it,i);});
+    var box=document.getElementById('insightsBox'); box.innerHTML=h;
+    var add=document.getElementById('addInsight'); if(add)add.addEventListener('click',function(){insights.push({type:'opo',title:'',text:''});editingIdx=insights.length-1;renderInsights();});
+    document.querySelectorAll('.insEdit').forEach(function(b){b.addEventListener('click',function(){editingIdx=+this.dataset.i;renderInsights();});});
+    document.querySelectorAll('.insDel').forEach(function(b){b.addEventListener('click',function(){insights.splice(+this.dataset.i,1);editingIdx=null;saveIns();renderInsights();});});
+    var sv=document.getElementById('edSave'); if(sv)sv.addEventListener('click',function(){var i=+this.dataset.i;insights[i]={type:document.getElementById('edType').value,title:document.getElementById('edTitle').value,text:document.getElementById('edText').value};editingIdx=null;saveIns();renderInsights();});
+    var cc=document.getElementById('edCancel'); if(cc)cc.addEventListener('click',function(){var i=+this.dataset.i;if(!insights[i].title&&!insights[i].text)insights.splice(i,1);editingIdx=null;renderInsights();});
+  }
+  renderInsights();
+
+  var origem=[
+    {n:'aberta1',l:9,v:0},{n:'aberta2',l:59,v:1},{n:'bio',l:210,v:9},{n:'descricao',l:196,v:7},
+    {n:'descricao1',l:57,v:4},{n:'descricao2',l:14,v:3},{n:'descricao3',l:96,v:4},{n:'descricao4',l:20,v:0},
+    {n:'direct',l:1,v:0},{n:'direct2',l:306,v:10},{n:'email1',l:1,v:0},{n:'email2',l:10,v:1},
+    {n:'email3',l:4,v:0},{n:'email4',l:43,v:0},{n:'email5',l:1,v:0},{n:'email6',l:4,v:0},
+    {n:'email9',l:5,v:1},{n:'meta-quente',l:651,v:1},{n:'stories',l:79,v:2},{n:'wpp3',l:614,v:5},
+    {n:'wpp5',l:154,v:8},{n:'yt-quente',l:1363,v:9},{n:'não inscrito',l:0,v:32}
+  ];
+  var metaPub=[
+    {n:'{{adset.name}}',l:3,v:0},
+    {n:'Captura_+_VV_Ads',l:104,v:0},
+    {n:'Envolvimento_030D_+_Viu_Ads',l:86,v:1},
+    {n:'Envolvimento_090D_+_Seguidores',l:34,v:0},
+    {n:'Envolvimento_180D',l:414,v:0},
+    {n:'Lista_Total_Leads',l:10,v:0}
+  ];
+  function makeTable(elId,data,firstLabel){
+    var sort={col:'v',dir:'desc'};
+    function af(col){return sort.col===col?(sort.dir==='desc'?' ↓':' ↑'):'';}
+    function cv(o){return o.l>0?o.v/o.l*100:null;}
+    function fc(c){return c===null?'—':c.toFixed(2).replace('.',',')+'%';}
+    function render(){
+      var arr=data.slice();
+      arr.sort(function(x,y){var c=sort.col;if(c==='n')return sort.dir==='desc'?y.n.localeCompare(x.n):x.n.localeCompare(y.n);var gv=function(o){return c==='l'?o.l:c==='v'?o.v:c==='f'?o.v*1200:(cv(o)===null?-Infinity:cv(o));};var xv=gv(x),yv=gv(y);if(xv<yv)return sort.dir==='desc'?1:-1;if(xv>yv)return sort.dir==='desc'?-1:1;return 0;});
+      var tl=0,tv=0;data.forEach(function(o){tl+=o.l;tv+=o.v;});var tc=tl>0?tv/tl*100:null;
+      var th=function(col,label,align){return '<th class="tsortH" data-col="'+col+'" style="padding:8px; text-align:'+align+'; font-weight:500; color:'+tick+'; border-bottom:'+bd+'; cursor:pointer; user-select:none; white-space:nowrap;">'+label+af(col)+'</th>';};
+      var h='<thead><tr>'+th('n',firstLabel,'left')+th('l','Leads','right')+th('v','Vendas','right')+th('c','% conversão','right')+th('f','Faturamento','right')+'</tr></thead><tbody>';
+      arr.forEach(function(o){h+='<tr><td style="'+tdL+'">'+o.n+'</td><td style="'+tdS+'">'+num(o.l)+'</td><td style="'+tdS+'">'+num(o.v)+'</td><td style="'+tdS+'">'+fc(cv(o))+'</td><td style="'+tdS+'">'+brl(o.v*1200)+'</td></tr>';});
+      h+='<tr><td style="'+gb+'text-align:left;">Total geral</td><td style="'+gb+'">'+num(tl)+'</td><td style="'+gb+'">'+num(tv)+'</td><td style="'+gb+'">'+fc(tc)+'</td><td style="'+gb+'">'+brl(tv*1200)+'</td></tr></tbody>';
+      var el=document.getElementById(elId);el.innerHTML=h;
+      el.querySelectorAll('.tsortH').forEach(function(b){b.addEventListener('click',function(){var c=this.dataset.col;if(sort.col===c)sort.dir=sort.dir==='desc'?'asc':'desc';else{sort.col=c;sort.dir='desc';}render();});});
+    }
+    render();
+  }
+  var googlePub=[
+    {n:'Envolvimento_030D',l:130,v:2},
+    {n:'Envolvimento_090D',l:229,v:2},
+    {n:'Envolvimento_180D',l:723,v:2},
+    {n:'Site_365D',l:281,v:3}
+  ];
+  var organico=[
+    {n:'aberta1',l:9,v:0},{n:'aberta2',l:59,v:1},{n:'bio',l:210,v:9},{n:'descricao',l:196,v:7},
+    {n:'descricao1',l:57,v:4},{n:'descricao2',l:14,v:3},{n:'descricao3',l:96,v:4},{n:'descricao4',l:20,v:0},
+    {n:'direct',l:1,v:0},{n:'direct2',l:306,v:10},{n:'email1',l:1,v:0},{n:'email2',l:10,v:1},
+    {n:'email3',l:4,v:0},{n:'email4',l:43,v:0},{n:'email5',l:1,v:0},{n:'email6',l:4,v:0},
+    {n:'email9',l:5,v:1},{n:'stories',l:79,v:2},{n:'wpp3',l:614,v:5},{n:'wpp5',l:154,v:8}
+  ];
+  var criMeta=[
+    {n:'{{ad.name}}',l:3,v:0},
+    {n:'055B_VID_Eu_já_fui_chamada',l:259,v:0},
+    {n:'070_Sabe_como_se_passa',l:164,v:0},
+    {n:'51_Como_auditora_fiscal',l:225,v:1}
+  ];
+  var criGoogle=[
+    {n:'051_Como_auditora_fiscal',l:201,v:0},
+    {n:'067_Como_auditora_fiscal',l:65,v:1},
+    {n:'070_Sabe_como_se_passa',l:1097,v:8}
+  ];
+  makeTable('tblVendas',origem,'Origem');
+  makeTable('tblOrg',organico,'Origem');
+
+  function makeTraf(elId,data,firstLabel,hasLink){
+    var sort={col:'v',dir:'desc'};
+    function cpl(o){return o.l>0?o.g/o.l:null;}
+    function conv(o){return o.l>0?o.v/o.l*100:null;}
+    function roas(o){return o.g>0?(o.v*1200)/o.g:null;}
+    function val(o,c){return c==='n'?o.n:c==='l'?o.l:c==='g'?o.g:c==='cpl'?(cpl(o)===null?-Infinity:cpl(o)):c==='v'?o.v:c==='c'?(conv(o)===null?-Infinity:conv(o)):c==='roas'?(roas(o)===null?-Infinity:roas(o)):o.v*1200;}
+    function af(col){return sort.col===col?(sort.dir==='desc'?' ↓':' ↑'):'';}
+    function render(){
+      var arr=data.slice();
+      arr.sort(function(x,y){if(sort.col==='n')return sort.dir==='desc'?y.n.localeCompare(x.n):x.n.localeCompare(y.n);var xv=val(x,sort.col),yv=val(y,sort.col);if(xv<yv)return sort.dir==='desc'?1:-1;if(xv>yv)return sort.dir==='desc'?-1:1;return 0;});
+      var tl=0,tg=0,tv=0;data.forEach(function(o){tl+=o.l;tg+=o.g;tv+=o.v;});
+      var tcpl=tl>0?tg/tl:null,tc=tl>0?tv/tl*100:null,troas=tg>0?(tv*1200)/tg:null;
+      var th=function(col,label,align){return '<th class="tsortH" data-col="'+col+'" style="padding:8px; text-align:'+align+'; font-weight:500; color:'+tick+'; border-bottom:'+bd+'; cursor:pointer; user-select:none; white-space:nowrap;">'+label+af(col)+'</th>';};
+      var h='<thead><tr>'+th('n',firstLabel,'left')+(hasLink?'<th style="padding:8px; text-align:left; font-weight:500; color:'+tick+'; border-bottom:'+bd+';">Link</th>':'')+th('l','Leads','right')+th('g','Valor gasto','right')+th('cpl','CPL','right')+th('v','Vendas','right')+th('c','% conversão','right')+th('f','Faturamento','right')+th('roas','ROAS','right')+'</tr></thead><tbody>';
+      arr.forEach(function(o){
+        h+='<tr><td style="'+tdL+'">'+o.n+'</td>';
+        if(hasLink)h+='<td style="'+tdL+'">'+(o.link?'<a href="'+o.link+'" target="_blank" rel="noopener" style="color:var(--color-text-info);">abrir <i class="ti ti-external-link" style="font-size:13px; vertical-align:-2px;"></i></a>':'—')+'</td>';
+        h+='<td style="'+tdS+'">'+num(o.l)+'</td><td style="'+tdS+'">'+brl2(o.g)+'</td><td style="'+tdS+'">'+(cpl(o)===null?'—':brl2(cpl(o)))+'</td><td style="'+tdS+'">'+num(o.v)+'</td><td style="'+tdS+'">'+(conv(o)===null?'—':conv(o).toFixed(2).replace('.',',')+'%')+'</td><td style="'+tdS+'">'+brl(o.v*1200)+'</td><td style="'+tdS+'">'+(roas(o)===null?'—':roas(o).toFixed(2).replace('.',','))+'</td></tr>';
+      });
+      h+='<tr><td style="'+gb+'text-align:left;">Total geral</td>'+(hasLink?'<td style="'+gb+'"></td>':'')+'<td style="'+gb+'">'+num(tl)+'</td><td style="'+gb+'">'+brl2(tg)+'</td><td style="'+gb+'">'+(tcpl===null?'—':brl2(tcpl))+'</td><td style="'+gb+'">'+num(tv)+'</td><td style="'+gb+'">'+(tc===null?'—':tc.toFixed(2).replace('.',',')+'%')+'</td><td style="'+gb+'">'+brl(tv*1200)+'</td><td style="'+gb+'">'+(troas===null?'—':troas.toFixed(2).replace('.',','))+'</td></tr></tbody>';
+      var el=document.getElementById(elId);el.innerHTML=h;
+      el.querySelectorAll('.tsortH').forEach(function(b){b.addEventListener('click',function(){var c=this.dataset.col;if(sort.col===c)sort.dir=sort.dir==='desc'?'asc':'desc';else{sort.col=c;sort.dir='desc';}render();});});
+    }
+    render();
+  }
+  var metaSeg=[
+    {n:'Captura_+_VV_Ads',l:108,g:411.17,v:1},
+    {n:'Envolvimento_180D',l:426,g:2885.54,v:0},
+    {n:'Envolvimento_090D_+_Seguidores',l:35,g:312.05,v:0},
+    {n:'{{adset.name}}',l:3,g:0,v:0},
+    {n:'Lista_Total_Leads',l:11,g:86.45,v:0},
+    {n:'Envolvimento_030D_+_Viu_Ads',l:93,g:812.44,v:0}
+  ];
+  var metaCri=[
+    {n:'070_Sabe_como_se_passa',l:187,g:678.70,v:1,link:'https://www.instagram.com/p/DSmkC7-jG3m/#advertiser'},
+    {n:'51_Como_auditora_fiscal',l:282,g:2345.10,v:0},
+    {n:'055B_VID_Eu_já_fui_chamada',l:299,g:1483.85,v:0}
+  ];
+  var gooSeg=[
+    {n:'Envolvimento_180D',l:751,g:5770,v:4},
+    {n:'Envolvimento_030D',l:149,g:1396,v:3},
+    {n:'Envolvimento_090D',l:227,g:1766,v:2},
+    {n:'Site_365D',l:287,g:2250,v:1}
+  ];
+  var gooCri=[
+    {n:'070_Sabe_como_se_passa',l:1331,g:8774,v:8,link:'https://www.youtube.com/watch?v=bNQDF3NMygY'},
+    {n:'051_Como_auditora_fiscal',l:273,g:1917,v:1},
+    {n:'067_Como_auditora_fiscal',l:84,g:492,v:1,link:'https://www.youtube.com/watch?v=EXbWuE0TngQ'}
+  ];
+  makeTraf('tMetaSeg',metaSeg,'Público',false);
+  makeTraf('tMetaCri',metaCri,'Criativo',true);
+  makeTraf('tGooSeg',gooSeg,'Público',false);
+  makeTraf('tGooCri',gooCri,'Criativo',true);
+
+  buildAtual();
+  document.getElementById('metricSel').addEventListener('change',function(e){buildComp(e.target.value);});
+  var subbtns=document.querySelectorAll('.subbtn');
+  function activeSub(s){document.getElementById('subAtual').style.display=s==='atual'?'block':'none';document.getElementById('subComp').style.display=s==='comp'?'block':'none';subbtns.forEach(function(b){var on=b.dataset.sub===s;b.style.background=on?'var(--color-background-primary)':'transparent';b.style.color=on?'var(--color-text-primary)':'var(--color-text-secondary)';b.style.fontWeight=on?'500':'400';});if(s==='comp'&&!document.getElementById('tblComp').innerHTML){buildComp('leads');}}
+  subbtns.forEach(function(b){b.addEventListener('click',function(){activeSub(b.dataset.sub);});});
+  activeSub('atual');
+
+  var btns=document.querySelectorAll('.tabbtn'),panes=document.querySelectorAll('.tabpane');
+  function activate(id){panes.forEach(function(p){p.style.display=p.id===id?'block':'none';});btns.forEach(function(b){var on=b.dataset.tab===id;b.style.borderBottomColor=on?P.teal:'transparent';b.style.color=on?'var(--color-text-primary)':'var(--color-text-secondary)';b.style.fontWeight=on?'500':'400';});Object.keys(charts).forEach(function(k){charts[k].resize();});}
+  btns.forEach(function(b){b.addEventListener('click',function(){activate(b.dataset.tab);});});
+  activate('g1');
+})();
+</script>
+</body>
+</html>
