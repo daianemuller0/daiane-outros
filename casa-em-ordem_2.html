@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#E9EBDF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Casa em ordem">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%2365795A'/%3E%3Cpath d='M90 38c-20 22-32 38-32 58a32 32 0 1 0 64 0c0-20-12-36-32-58z' fill='%23E9EBDF'/%3E%3Cpath d='M90 70v54' stroke='%2365795A' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Casa%20em%20ordem%22%2C%22short_name%22%3A%22Casa%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23E9EBDF%22%2C%22theme_color%22%3A%22%23E9EBDF%22%2C%22start_url%22%3A%22.%22%7D">
+<title>Casa em ordem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E9EBDF; --panel:#F6F6EF; --panel-soft:#F0F1E7; --ink:#2B3326;
+    --sage:#65795A; --sage-deep:#4F6147; --sage-light:#DDE3D2;
+    --stone:#8C8779; --honey:#C2974A; --honey-soft:#EBDDBE;
+    --line:#D6D8C8; --bloom:#B5687A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Karla',system-ui,sans-serif; font-size:17px; line-height:1.5;
+    -webkit-font-smoothing:antialiased; padding:0 0 64px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px;position:relative;}
+
+  header{padding:46px 0 12px;}
+  .eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--stone);font-weight:600;margin:0 0 10px;}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(34px,8vw,46px);
+    line-height:1.02;margin:0;color:var(--ink);letter-spacing:-.01em;}
+  .lead{margin:14px 0 0;color:var(--sage-deep);font-size:18px;max-width:46ch;}
+  .lead b{font-weight:700;}
+
+  .gear{
+    position:absolute;top:50px;right:20px;display:flex;align-items:center;gap:6px;
+    background:var(--panel);border:1px solid var(--line);border-radius:99px;
+    padding:7px 14px;font-family:'Karla',sans-serif;font-weight:600;font-size:13.5px;
+    color:var(--sage-deep);cursor:pointer;transition:all .15s;
+  }
+  .gear:hover{border-color:var(--sage);background:var(--panel-soft);}
+
+  .progress{margin:22px 0 6px;display:flex;align-items:center;gap:14px;}
+  .progress-track{flex:1;height:7px;border-radius:99px;background:var(--sage-light);overflow:hidden;}
+  .progress-fill{height:100%;border-radius:99px;background:var(--sage);width:0;
+    transition:width .5s cubic-bezier(.4,0,.2,1);}
+  .progress-label{font-size:14px;color:var(--stone);font-weight:600;white-space:nowrap;}
+
+  section{margin-top:30px;}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 12px;}
+  .sec-title{font-family:'Fraunces',serif;font-size:15px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin:0;}
+  .sec-note{font-size:13px;color:var(--stone);}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;}
+  .chip{font-family:'Karla',sans-serif;font-size:13.5px;font-weight:600;
+    border:1px solid var(--line);background:transparent;color:var(--stone);
+    padding:6px 13px;border-radius:99px;cursor:pointer;transition:all .15s;}
+  .chip:hover{border-color:var(--sage);color:var(--sage-deep);}
+  .chip[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:#F6F6EF;}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
+  .row{display:flex;align-items:center;gap:14px;width:100%;padding:15px 18px;border:none;
+    background:transparent;border-top:1px solid var(--line);text-align:left;cursor:pointer;
+    font-family:inherit;font-size:16.5px;color:var(--ink);transition:background .15s;}
+  .row:first-child{border-top:none;}
+  .row:hover{background:var(--panel-soft);}
+  .row:focus-visible{outline:2.5px solid var(--sage);outline-offset:-3px;}
+
+  .check{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--sage);
+    position:relative;transition:all .25s;}
+  .check svg{position:absolute;inset:0;margin:auto;width:13px;height:13px;stroke:#F6F6EF;
+    stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .3s .05s;}
+  .body{flex:1;min-width:0;}
+  .name{display:block;line-height:1.3;}
+  .tag{display:inline-block;margin-top:4px;font-size:12px;font-weight:600;letter-spacing:.04em;
+    color:var(--sage-deep);background:var(--sage-light);padding:2px 9px;border-radius:99px;}
+  .stars{flex:none;letter-spacing:1px;color:var(--honey);font-size:13px;}
+
+  .row.done .check{background:var(--sage);border-color:var(--sage);
+    animation:bloom .45s cubic-bezier(.2,.7,.3,1.3);}
+  .row.done .check svg{stroke-dashoffset:0;}
+  .row.done .name{color:var(--stone);text-decoration:line-through;text-decoration-color:var(--line);}
+  .row.done{background:var(--panel-soft);}
+  @keyframes bloom{0%{box-shadow:0 0 0 0 var(--honey-soft);}
+    60%{box-shadow:0 0 0 7px rgba(194,151,74,0);}100%{box-shadow:0 0 0 0 rgba(194,151,74,0);}}
+
+  .empty{background:var(--panel);border:1px dashed var(--line);border-radius:18px;
+    padding:26px 22px;text-align:center;color:var(--sage-deep);}
+  .empty .big{font-family:'Fraunces',serif;font-size:20px;display:block;margin-bottom:4px;}
+  .empty .small{font-size:14px;color:var(--stone);}
+
+  .up-row{display:flex;align-items:center;gap:14px;padding:12px 4px;border-top:1px solid var(--line);}
+  .up-row:first-child{border-top:none;}
+  .when{flex:none;width:74px;font-size:13px;font-weight:700;color:var(--sage);line-height:1.15;}
+  .when small{display:block;font-weight:500;color:var(--stone);font-size:11.5px;
+    letter-spacing:.03em;text-transform:uppercase;}
+  .up-name{flex:1;font-size:15.5px;color:var(--ink);}
+  .up-name .freq{color:var(--stone);font-size:13px;}
+
+  /* Caderno */
+  .notes{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:8px;}
+  .notes textarea{width:100%;min-height:140px;resize:vertical;border:none;background:transparent;
+    font-family:'Karla',sans-serif;font-size:16px;line-height:1.6;color:var(--ink);padding:12px 14px;}
+  .notes textarea:focus{outline:none;}
+  .notes textarea::placeholder{color:var(--stone);}
+  .saved{font-size:12.5px;color:var(--sage);padding:2px 14px 8px;height:20px;
+    opacity:0;transition:opacity .3s;font-weight:600;}
+  .saved.show{opacity:1;}
+  .tabs{display:flex;gap:6px;}
+  .tab{font-family:'Karla',sans-serif;font-size:13px;font-weight:600;border:1px solid var(--line);
+    background:transparent;color:var(--stone);padding:5px 13px;border-radius:99px;cursor:pointer;transition:all .15s;}
+  .tab:hover{border-color:var(--sage);color:var(--sage-deep);}
+  .tab[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:#F6F6EF;}
+  .hist-empty{background:var(--panel);border:1px dashed var(--line);border-radius:18px;
+    padding:24px;text-align:center;color:var(--stone);font-size:14px;}
+  .hist-day{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-bottom:10px;overflow:hidden;}
+  .hist-top{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+    padding:14px 16px;border:none;background:transparent;cursor:pointer;font-family:inherit;text-align:left;}
+  .hist-top:hover{background:var(--panel-soft);}
+  .hist-date{font-family:'Fraunces',serif;font-size:16px;color:var(--ink);}
+  .hist-prev{font-size:13.5px;color:var(--stone);margin-top:3px;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;max-width:100%;}
+  .hist-chev{flex:none;color:var(--stone);transition:transform .2s;}
+  .hist-day.open .hist-chev{transform:rotate(90deg);}
+  .hist-body{display:none;padding:0 8px 8px;}
+  .hist-day.open .hist-body{display:block;}
+  .hist-body textarea{width:100%;min-height:110px;resize:vertical;border:1px solid var(--line);
+    border-radius:12px;background:var(--bg);font-family:'Karla',sans-serif;font-size:15.5px;
+    line-height:1.6;color:var(--ink);padding:11px 13px;}
+  .hist-body textarea:focus{outline:2px solid var(--sage);border-color:var(--sage);}
+
+  .proj{display:flex;align-items:center;gap:14px;width:100%;padding:14px 18px;border:none;
+    border-top:1px solid var(--line);background:transparent;text-align:left;cursor:pointer;
+    font-family:inherit;font-size:16.5px;color:var(--ink);}
+  .proj:first-child{border-top:none;}
+  .proj:hover{background:var(--panel-soft);}
+  .proj:focus-visible{outline:2.5px solid var(--sage);outline-offset:-3px;}
+  .proj.done .check{background:var(--sage);border-color:var(--sage);}
+  .proj.done .check svg{stroke-dashoffset:0;}
+  .proj.done .name{color:var(--stone);text-decoration:line-through;text-decoration-color:var(--line);}
+
+  footer{margin-top:40px;text-align:center;}
+  .reset{background:none;border:none;color:var(--stone);font-family:inherit;font-size:13px;
+    cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+  .reset:hover{color:var(--bloom);}
+  .seal{font-family:'Fraunces',serif;font-style:italic;color:var(--sage);font-size:15px;margin:0 0 14px;}
+
+  /* Modal */
+  .overlay{position:fixed;inset:0;background:rgba(43,51,38,.42);backdrop-filter:blur(2px);
+    display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0;}
+  .overlay.open{display:flex;}
+  .sheet{background:var(--bg);width:100%;max-width:640px;max-height:90vh;overflow-y:auto;
+    border-radius:22px 22px 0 0;border:1px solid var(--line);border-bottom:none;
+    padding:24px 20px 40px;animation:rise .28s cubic-bezier(.2,.7,.3,1);}
+  @keyframes rise{from{transform:translateY(30px);opacity:.6;}to{transform:translateY(0);opacity:1;}}
+  @media(min-width:680px){.overlay{align-items:center;}.sheet{border-radius:22px;border-bottom:1px solid var(--line);}}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .sheet-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:24px;margin:0;}
+  .x{background:none;border:none;font-size:24px;color:var(--stone);cursor:pointer;
+    width:36px;height:36px;border-radius:50%;line-height:1;}
+  .x:hover{background:var(--panel-soft);color:var(--ink);}
+
+  .addbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    padding:13px;border:1.5px dashed var(--sage);background:transparent;color:var(--sage-deep);
+    border-radius:14px;font-family:'Karla',sans-serif;font-weight:700;font-size:15.5px;
+    cursor:pointer;margin-bottom:16px;transition:all .15s;}
+  .addbtn:hover{background:var(--panel);border-style:solid;}
+
+  .mlist{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+  .mrow{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--line);}
+  .mrow:first-child{border-top:none;}
+  .mrow .mbody{flex:1;min-width:0;}
+  .mrow .mname{font-size:15.5px;line-height:1.25;}
+  .mrow .mmeta{font-size:12.5px;color:var(--stone);margin-top:2px;}
+  .iconbtn{flex:none;width:34px;height:34px;border-radius:9px;border:1px solid var(--line);
+    background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    color:var(--sage-deep);transition:all .15s;}
+  .iconbtn:hover{border-color:var(--sage);background:var(--panel-soft);}
+  .iconbtn.del:hover{border-color:var(--bloom);color:var(--bloom);}
+  .iconbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round;}
+  .mgroup{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);
+    font-weight:700;margin:18px 0 8px;}
+  .mgroup:first-child{margin-top:0;}
+
+  /* Form */
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;font-weight:700;letter-spacing:.04em;
+    color:var(--sage-deep);margin-bottom:6px;text-transform:uppercase;}
+  .field input[type=text],.field input[type=number],.field select{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel);font-family:'Karla',sans-serif;font-size:16px;color:var(--ink);}
+  .field input:focus,.field select:focus{outline:2px solid var(--sage);outline-offset:0;border-color:var(--sage);}
+  .difrow{display:flex;gap:8px;}
+  .difbtn{flex:1;padding:11px;border:1px solid var(--line);background:var(--panel);border-radius:12px;
+    cursor:pointer;font-family:'Karla',sans-serif;font-weight:600;color:var(--stone);font-size:14px;}
+  .difbtn[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:#F6F6EF;}
+  .seg{display:flex;gap:8px;}
+  .seg button{flex:1;padding:11px;border:1px solid var(--line);background:var(--panel);border-radius:12px;
+    cursor:pointer;font-family:'Karla',sans-serif;font-weight:600;color:var(--stone);font-size:14px;}
+  .seg button[aria-pressed="true"]{background:var(--sage);border-color:var(--sage);color:#F6F6EF;}
+  .formfoot{display:flex;gap:10px;margin-top:24px;}
+  .btn-primary{flex:1;padding:14px;border:none;border-radius:13px;background:var(--sage);
+    color:#F6F6EF;font-family:'Karla',sans-serif;font-weight:700;font-size:16px;cursor:pointer;}
+  .btn-primary:hover{background:var(--sage-deep);}
+  .btn-ghost{padding:14px 18px;border:1px solid var(--line);border-radius:13px;background:transparent;
+    color:var(--stone);font-family:'Karla',sans-serif;font-weight:600;font-size:15px;cursor:pointer;}
+  .btn-del{width:100%;margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:13px;
+    background:transparent;color:var(--bloom);font-family:'Karla',sans-serif;font-weight:600;font-size:15px;cursor:pointer;}
+  .btn-del:hover{border-color:var(--bloom);background:#F6EEF0;}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <button class="gear" id="open-manage" aria-label="Gerenciar tarefas">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+    Tarefas
+  </button>
+
+  <header>
+    <p class="eyebrow" id="date">—</p>
+    <h1>Casa em ordem</h1>
+    <p class="lead" id="lead">Carregando o seu dia…</p>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+      <span class="progress-label" id="prog">0 de 0</span>
+    </div>
+  </header>
+
+  <section id="hoje-sec">
+    <div class="sec-head"><h2 class="sec-title">Hoje</h2><span class="sec-note" id="hoje-note"></span></div>
+    <div class="chips" id="chips"></div>
+    <div id="hoje"></div>
+  </section>
+
+  <section id="breve-sec">
+    <div class="sec-head"><h2 class="sec-title">Em breve</h2><span class="sec-note">o que vem chegando</span></div>
+    <div class="card" id="breve" style="padding:6px 16px;"></div>
+  </section>
+
+  <section id="cad-sec">
+    <div class="sec-head"><h2 class="sec-title">Caderno</h2>
+      <div class="tabs">
+        <button class="tab" id="tab-hoje" aria-pressed="true">Hoje</button>
+        <button class="tab" id="tab-hist" aria-pressed="false">Histórico</button>
+      </div>
+    </div>
+    <div class="notes" id="pane-hoje">
+      <textarea id="notes" placeholder="Anote aqui… ex.: lavar louça ~15 min · varrer 10 min · ideias, lembretes, listas de compras."></textarea>
+      <div class="saved" id="saved">salvo ✓</div>
+    </div>
+    <div id="pane-hist" style="display:none;"></div>
+  </section>
+
+  <section id="proj-sec">
+    <div class="sec-head"><h2 class="sec-title">Projetos da casa</h2><span class="sec-note">uma vez só</span></div>
+    <div class="card" id="proj"></div>
+  </section>
+
+  <footer>
+    <p class="seal" id="seal"></p>
+    <button class="reset" id="reset">recomeçar do zero</button>
+  </footer>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Gerenciar tarefas">
+    <div class="sheet-head">
+      <h3 id="sheet-title">Gerenciar tarefas</h3>
+      <button class="x" id="close-modal" aria-label="Fechar">×</button>
+    </div>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+
+<script>
+const DAY = 86400000;
+const today = () => { const d=new Date(); return new Date(d.getFullYear(),d.getMonth(),d.getDate()); };
+const iso = d => d.toISOString().slice(0,10);
+const parse = s => { const [y,m,dd]=s.split('-').map(Number); return new Date(y,m-1,dd); };
+const daysSince = s => Math.round((today() - parse(s)) / DAY);
+const $ = id => document.getElementById(id);
+
+const DEFAULTS = [
+  {id:'louca',nome:'Lavar louça + pia',comodo:'Cozinha',freq:1,dif:1},
+  {id:'bancada',nome:'Limpar bancada',comodo:'Cozinha',freq:1,dif:1},
+  {id:'mesacoz',nome:'Limpar mesa (cozinha)',comodo:'Cozinha',freq:1,dif:1},
+  {id:'roupa',nome:'Lavar roupa',comodo:'Lavanderia',freq:1,dif:1},
+  {id:'guardar-roupa',nome:'Guardar roupa',comodo:'Quarto',freq:1,dif:1},
+  {id:'vaso',nome:'Limpar vaso',comodo:'Banheiro',freq:1,dif:1},
+  {id:'varrer',nome:'Varrer',comodo:'Geral',freq:1,dif:1},
+  {id:'org15',nome:'Organização geral — 15 minutos',comodo:'Geral',freq:1,dif:2},
+  {id:'lixo',nome:'Tirar lixo',comodo:'Geral',freq:2,dif:2},
+  {id:'pano',nome:'Passar pano',comodo:'Geral',freq:3,dif:2},
+  {id:'cooktop',nome:'Limpar cooktop',comodo:'Cozinha',freq:3,dif:2},
+  {id:'geladeira-arr',nome:'Arrumar geladeira',comodo:'Cozinha',freq:7,dif:1},
+  {id:'cama',nome:'Trocar roupa de cama',comodo:'Quarto',freq:7,dif:1},
+  {id:'piaban',nome:'Limpar pia do banheiro',comodo:'Banheiro',freq:7,dif:1},
+  {id:'rack',nome:'Limpar rack',comodo:'Sala',freq:7,dif:1},
+  {id:'mesasala',nome:'Limpar mesa (sala)',comodo:'Sala',freq:7,dif:1},
+  {id:'secadora',nome:'Limpar filtro da secadora',comodo:'Lavanderia',freq:7,dif:1},
+  {id:'plantas',nome:'Molhar plantas',comodo:'Área',freq:15,dif:1},
+  {id:'guarda',nome:'Arrumar guarda-roupas',comodo:'Quarto',freq:15,dif:2},
+  {id:'moveis',nome:'Limpar móveis (quarto)',comodo:'Quarto',freq:15,dif:1},
+  {id:'area',nome:'Limpar área',comodo:'Área',freq:15,dif:2},
+  {id:'geladeira-limp',nome:'Limpar geladeira',comodo:'Cozinha',freq:30,dif:2},
+  {id:'azulejos',nome:'Limpar azulejos do banheiro',comodo:'Banheiro',freq:30,dif:2},
+  {id:'calcados',nome:'Lavar calçados',comodo:'Quarto',freq:30,dif:3},
+  {id:'lavanderia',nome:'Arrumar lavanderia (geral)',comodo:'Lavanderia',freq:30,dif:3},
+  {id:'condimentos',nome:'Arrumar armário (condimentos)',comodo:'Cozinha',freq:30,dif:1},
+  {id:'cimentos',nome:'Limpar cimentos',comodo:'Externo',freq:30,dif:2},
+  {id:'podar',nome:'Podar plantas',comodo:'Externo',freq:30,dif:2},
+  {id:'forno',nome:'Limpar forno',comodo:'Cozinha',freq:30,dif:1},
+  {id:'airfryer',nome:'Limpar air fryer + micro-ondas',comodo:'Cozinha',freq:30,dif:2},
+  {id:'box',nome:'Lavar box',comodo:'Banheiro',freq:30,dif:2},
+  {id:'churrasqueira',nome:'Limpar churrasqueira',comodo:'Área',freq:90,dif:3},
+  {id:'vidroquarto',nome:'Limpar vidros (janela quarto)',comodo:'Quarto',freq:90,dif:1},
+  {id:'vidrosala',nome:'Limpar vidro (janela sala)',comodo:'Sala',freq:90,dif:2},
+  {id:'panelas',nome:'Arrumar armário (panelas)',comodo:'Cozinha',freq:90,dif:2},
+  {id:'pratos',nome:'Arrumar armário (pratos)',comodo:'Cozinha',freq:90,dif:2},
+  {id:'potes',nome:'Arrumar armário (potes)',comodo:'Cozinha',freq:90,dif:2},
+  {id:'armpia',nome:'Arrumar armário (pia)',comodo:'Cozinha',freq:90,dif:3},
+  {id:'gavetas',nome:'Arrumar armário (gavetas)',comodo:'Cozinha',freq:90,dif:2},
+  {id:'maquina',nome:'Limpar máquina de lavar',comodo:'Lavanderia',freq:90,dif:3},
+  {id:'cobertura',nome:'Cobertura de terra',comodo:'Externo',freq:'once',dif:2},
+  {id:'canteiro',nome:'Canteiro / horta',comodo:'Externo',freq:'once',dif:2},
+];
+
+const freqLabel = f => f==='once'?'uma vez':f===1?'todo dia':f===7?'semanal':
+  f===30?'mensal':f===90?'a cada 3 meses':'a cada '+f+' dias';
+
+let state = { tasks:[], last:{}, prev:{}, once:{}, notes:{}, seeded:false, mig1:false };
+
+// Salva no Claude (window.storage) e também no aparelho (localStorage),
+// para funcionar dentro do app e como link hospedado.
+const Store = {
+  async get(){
+    if(typeof window.storage!=='undefined'){
+      try{ const r=await window.storage.get('casa-state'); if(r&&r.value) return r.value; }catch(e){}
+    }
+    try{ return localStorage.getItem('casa-state'); }catch(e){ return null; }
+  },
+  async set(v){
+    if(typeof window.storage!=='undefined'){ try{ await window.storage.set('casa-state',v); }catch(e){} }
+    try{ localStorage.setItem('casa-state',v); }catch(e){}
+  }
+};
+
+async function load(){
+  try{ const raw=await Store.get(); if(raw) state=JSON.parse(raw); }catch(e){}
+  state.tasks = state.tasks||[]; state.last=state.last||{}; state.prev=state.prev||{};
+  state.once=state.once||{};
+  // notes agora é um mapa por data { 'AAAA-MM-DD': texto }
+  if(typeof state.notes==='string'){ const old=state.notes.trim(); state.notes = old?{[iso(today())]:old}:{}; }
+  if(!state.notes || typeof state.notes!=='object') state.notes={};
+  if(!state.seeded){ seed(); state.seeded=true; }
+  // Garante "Guardar roupa" para quem já tinha o app antes (uma vez só)
+  if(!state.mig1){
+    if(!state.tasks.some(t=>t.id==='guardar-roupa'))
+      state.tasks.push({id:'guardar-roupa',nome:'Guardar roupa',comodo:'Quarto',freq:1,dif:1});
+    state.mig1=true;
+  }
+  await save();
+}
+async function save(){
+  await Store.set(JSON.stringify(state));
+}
+
+function seed(){
+  state.tasks = DEFAULTS.map(t=>({...t}));
+  const t = today();
+  const groups = {};
+  state.tasks.forEach(k=>{ if(k.freq!==1 && k.freq!=='once'){ (groups[k.freq]=groups[k.freq]||[]).push(k); }});
+  Object.values(groups).forEach(arr=>{
+    arr.forEach((k,i)=>{
+      const offset = Math.max(1, Math.round((i+1)/(arr.length+1)*k.freq));
+      state.last[k.id] = iso(new Date(t.getTime() - (k.freq-offset)*DAY));
+    });
+  });
+  // "Limpar área" vence amanhã
+  state.last['area'] = iso(new Date(t.getTime() + (1-15)*DAY));
+  // "Limpar mesa (cozinha)" já estava feita hoje → reaparece amanhã
+  state.last['mesacoz'] = iso(t);
+}
+
+function isDoneToday(k){ return state.last[k.id] === iso(today()); }
+function isDue(k){ return !state.last[k.id] || daysSince(state.last[k.id]) >= k.freq; }
+function inHoje(k){ return k.freq!=='once' && (isDue(k) || isDoneToday(k)); }
+function nextDue(k){ return state.last[k.id] ? parse(state.last[k.id]).getTime()+k.freq*DAY : today().getTime(); }
+
+let roomFilter = 'Todos';
+const stars = n => '★'.repeat(n);
+
+function relDay(ts){
+  const diff = Math.round((new Date(ts).setHours(0,0,0,0) - today())/DAY);
+  if(diff<=1) return {a:'amanhã',b:''};
+  if(diff<7) return {a:'em '+diff,b:'dias'};
+  if(diff<14) return {a:'semana',b:'que vem'};
+  if(diff<45) return {a:'em '+Math.round(diff/7),b:'semanas'};
+  return {a:'em '+Math.round(diff/30),b:'meses'};
+}
+function checkSVG(){ return '<svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg>'; }
+
+function render(){
+  const d = today();
+  $('date').textContent = d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+
+  const hojeAll = state.tasks.filter(inHoje);
+  const rooms = ['Todos', ...new Set(hojeAll.map(k=>k.comodo))];
+  if(!rooms.includes(roomFilter)) roomFilter='Todos';
+  const hoje = hojeAll.filter(k=> roomFilter==='Todos' || k.comodo===roomFilter);
+  const doneCount = hojeAll.filter(isDoneToday).length;
+  const total = hojeAll.length;
+  const left = total - doneCount;
+
+  $('lead').innerHTML = total===0 ? 'Hoje não tem nada agendado. Aproveite — é dia de descanso.'
+    : (left===0 ? 'Tudo feito por hoje. A casa está em ordem.'
+      : `Hoje você cuida de <b>${left}</b> coisa${left>1?'s':''}. Uma de cada vez.`);
+  $('prog').textContent = `${doneCount} de ${total}`;
+  $('fill').style.width = (total? doneCount/total*100 : 0) + '%';
+  $('hoje-note').textContent = doneCount && doneCount<total ? 'continue assim' : '';
+
+  const chips = $('chips'); chips.innerHTML='';
+  if(rooms.length>2){
+    rooms.forEach(r=>{
+      const b=document.createElement('button'); b.className='chip'; b.textContent=r;
+      b.setAttribute('aria-pressed', r===roomFilter);
+      b.onclick=()=>{ roomFilter=r; render(); };
+      chips.appendChild(b);
+    });
+  }
+
+  const cont=$('hoje');
+  if(hoje.length===0 && total===0){
+    cont.innerHTML=`<div class="empty"><span class="big">Dia leve 🌿</span>
+      <span class="small">Nenhuma tarefa para hoje. Rega as plantas se quiser.</span></div>`;
+  } else if(hoje.length===0){
+    cont.innerHTML=`<div class="empty"><span class="big">Nada aqui</span>
+      <span class="small">Esse cômodo está em dia. Toque em “Todos” para ver o resto.</span></div>`;
+  } else {
+    hoje.sort((a,b)=>(isDoneToday(a)?1:0)-(isDoneToday(b)?1:0));
+    cont.innerHTML=`<div class="card">${hoje.map(rowHTML).join('')}</div>`;
+    hoje.forEach(k=>{ $('t-'+k.id).onclick=()=>toggle(k); });
+  }
+
+  const breve = state.tasks.filter(k=>k.freq!=='once' && !inHoje(k))
+    .sort((a,b)=>nextDue(a)-nextDue(b)).slice(0,8);
+  $('breve').innerHTML = breve.map(k=>{
+    const r=relDay(nextDue(k));
+    return `<div class="up-row"><span class="when">${r.a}${r.b?'<small>'+r.b+'</small>':''}</span>
+      <span class="up-name">${esc(k.nome)} <span class="freq">· ${esc(k.comodo)}</span></span></div>`;
+  }).join('') || `<div class="up-row"><span class="up-name">Nada por perto.</span></div>`;
+
+  const once = state.tasks.filter(k=>k.freq==='once');
+  $('proj').innerHTML = once.map(k=>{
+    const done=state.once[k.id];
+    return `<button class="proj ${done?'done':''}" id="p-${k.id}"><span class="check">${checkSVG()}</span>
+      <span class="body"><span class="name">${esc(k.nome)}</span><span class="tag">${esc(k.comodo)}</span></span>
+      <span class="stars">${stars(k.dif)}</span></button>`;
+  }).join('') || `<div class="empty"><span class="small">Sem projetos no momento.</span></div>`;
+  once.forEach(k=>{ $('p-'+k.id).onclick=async()=>{ state.once[k.id]=!state.once[k.id]; await save(); render(); }; });
+
+  $('seal').textContent = left===0 && total>0 ? '“Tudo no seu devido tempo.”' : '';
+}
+
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function rowHTML(k){
+  const done=isDoneToday(k);
+  return `<button class="row ${done?'done':''}" id="t-${k.id}" role="checkbox" aria-checked="${done}">
+    <span class="check">${checkSVG()}</span>
+    <span class="body"><span class="name">${esc(k.nome)}</span>
+    <span class="tag">${esc(k.comodo)} · ${freqLabel(k.freq)}</span></span>
+    <span class="stars" aria-label="dificuldade ${k.dif}">${stars(k.dif)}</span></button>`;
+}
+
+async function toggle(k){
+  const t=iso(today());
+  if(isDoneToday(k)){
+    state.last[k.id]=state.prev[k.id]??null;
+    if(state.last[k.id]===null) delete state.last[k.id];
+  } else { state.prev[k.id]=state.last[k.id]??null; state.last[k.id]=t; }
+  await save(); render();
+}
+
+/* ---------- Caderno (por dia + histórico) ---------- */
+let noteTimer;
+function bindNotes(){
+  const ta=$('notes'); ta.value=state.notes[iso(today())]||'';
+  ta.addEventListener('input',()=>{
+    const key=iso(today());
+    const v=ta.value;
+    if(v.trim()) state.notes[key]=v; else delete state.notes[key];
+    clearTimeout(noteTimer);
+    noteTimer=setTimeout(async()=>{ await save(); flashSaved(); },600);
+  });
+  $('tab-hoje').onclick=()=>switchCaderno('hoje');
+  $('tab-hist').onclick=()=>switchCaderno('hist');
+}
+function switchCaderno(which){
+  const hoje=which==='hoje';
+  $('tab-hoje').setAttribute('aria-pressed',hoje);
+  $('tab-hist').setAttribute('aria-pressed',!hoje);
+  $('pane-hoje').style.display=hoje?'block':'none';
+  $('pane-hist').style.display=hoje?'none':'block';
+  if(!hoje) renderHistory();
+}
+function fmtDate(key){
+  const d=parse(key);
+  const s=d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+  return s.charAt(0).toUpperCase()+s.slice(1);
+}
+function renderHistory(){
+  const todayKey=iso(today());
+  const keys=Object.keys(state.notes).filter(k=>state.notes[k] && state.notes[k].trim() && k!==todayKey)
+    .sort((a,b)=>b.localeCompare(a));
+  const pane=$('pane-hist');
+  if(keys.length===0){
+    pane.innerHTML=`<div class="hist-empty">Ainda não há anotações de outros dias.<br>O que você escrever hoje aparece aqui amanhã.</div>`;
+    return;
+  }
+  pane.innerHTML=keys.map(k=>{
+    const prev=state.notes[k].replace(/\s+/g,' ').trim().slice(0,60);
+    return `<div class="hist-day" data-day="${k}">
+      <button class="hist-top">
+        <span><span class="hist-date">${fmtDate(k)}</span><span class="hist-prev">${esc(prev)}</span></span>
+        <svg class="hist-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+      <div class="hist-body"><textarea data-edit="${k}">${esc(state.notes[k])}</textarea></div>
+    </div>`;
+  }).join('');
+  pane.querySelectorAll('.hist-top').forEach(btn=>{
+    btn.onclick=()=>btn.parentElement.classList.toggle('open');
+  });
+  let histTimer;
+  pane.querySelectorAll('textarea[data-edit]').forEach(ta=>{
+    ta.addEventListener('input',()=>{
+      const key=ta.dataset.edit, v=ta.value;
+      if(v.trim()) state.notes[key]=v; else delete state.notes[key];
+      clearTimeout(histTimer);
+      histTimer=setTimeout(()=>save(),600);
+    });
+  });
+}
+function flashSaved(){ const s=$('saved'); s.classList.add('show'); setTimeout(()=>s.classList.remove('show'),1400); }
+
+/* ---------- Modal / Gerenciar ---------- */
+const overlay=$('overlay');
+function openModal(){ overlay.classList.add('open'); renderManageList(); document.addEventListener('keydown',escClose); }
+function closeModal(){ overlay.classList.remove('open'); document.removeEventListener('keydown',escClose); }
+function escClose(e){ if(e.key==='Escape') closeModal(); }
+$('open-manage').onclick=openModal;
+$('close-modal').onclick=closeModal;
+overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
+
+function renderManageList(){
+  $('sheet-title').textContent='Gerenciar tarefas';
+  const order=[1,2,3,7,15,30,90,'once'];
+  const labelFor=f=>f==='once'?'Uma vez só':f===1?'Todo dia':f===7?'Semanal':f===30?'Mensal':
+    f===90?'A cada 3 meses':'A cada '+f+' dias';
+  const byFreq={}; state.tasks.forEach(k=>{(byFreq[k.freq]=byFreq[k.freq]||[]).push(k);});
+  const freqs=Object.keys(byFreq).map(f=>f==='once'?'once':Number(f))
+    .sort((a,b)=>order.indexOf(a)-order.indexOf(b));
+  let html=`<button class="addbtn" id="add-new">＋ Nova tarefa</button>`;
+  freqs.forEach(f=>{
+    html+=`<div class="mgroup">${labelFor(f)}</div><div class="mlist">`;
+    byFreq[f].sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(k=>{
+      html+=`<div class="mrow">
+        <div class="mbody"><div class="mname">${esc(k.nome)}</div>
+        <div class="mmeta">${esc(k.comodo)} · ${stars(k.dif)}</div></div>
+        <button class="iconbtn" data-edit="${k.id}" aria-label="Editar">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+        <button class="iconbtn del" data-del="${k.id}" aria-label="Excluir">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  $('sheet-body').innerHTML=html;
+  $('add-new').onclick=()=>renderForm(null);
+  $('sheet-body').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>renderForm(b.dataset.edit));
+  $('sheet-body').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delTask(b.dataset.del));
+}
+
+const PRESETS=[[1,'Todo dia'],[2,'A cada 2 dias'],[3,'A cada 3 dias'],[7,'Semanal'],
+  [15,'A cada 15 dias'],[30,'Mensal'],[90,'A cada 3 meses'],['once','Uma vez só'],['custom','Personalizado…']];
+
+let formDif=1, formProx='freq';
+function renderForm(id){
+  const k = id ? state.tasks.find(x=>x.id===id) : null;
+  $('sheet-title').textContent = k ? 'Editar tarefa' : 'Nova tarefa';
+  formDif = k ? k.dif : 1;
+  formProx = k ? 'manter' : 'amanha';
+  const isPreset = !k ? true : PRESETS.some(p=>p[0]===k.freq);
+  const presetVal = !k ? 7 : (isPreset ? k.freq : 'custom');
+
+  let html=`
+  <div class="field"><label>Nome</label>
+    <input type="text" id="f-nome" value="${k?esc(k.nome):''}" placeholder="Ex.: Limpar área"></div>
+  <div class="field"><label>Cômodo</label>
+    <input type="text" id="f-comodo" list="rooms" value="${k?esc(k.comodo):''}" placeholder="Ex.: Área">
+    <datalist id="rooms">${[...new Set(state.tasks.map(t=>t.comodo))].map(r=>`<option value="${esc(r)}">`).join('')}</datalist></div>
+  <div class="field"><label>Periodicidade</label>
+    <select id="f-freq">${PRESETS.map(p=>`<option value="${p[0]}" ${p[0]===presetVal?'selected':''}>${p[1]}</option>`).join('')}</select></div>
+  <div class="field" id="custom-wrap" style="display:${presetVal==='custom'?'block':'none'}">
+    <label>A cada quantos dias?</label>
+    <input type="number" id="f-custom" min="1" value="${(!isPreset&&k)?k.freq:10}"></div>
+  <div class="field"><label>Dificuldade</label>
+    <div class="difrow" id="dif">
+      ${[1,2,3].map(n=>`<button class="difbtn" data-dif="${n}" aria-pressed="${n===formDif}">${'★'.repeat(n)}</button>`).join('')}
+    </div></div>
+  <div class="field" id="prox-wrap"><label>${k?'Próxima vez':'Fazer pela primeira vez'}</label>
+    <div class="seg" id="prox">
+      ${k?`<button data-prox="manter" aria-pressed="${formProx==='manter'}">Manter</button>`:''}
+      <button data-prox="hoje" aria-pressed="${formProx==='hoje'}">Hoje</button>
+      <button data-prox="amanha" aria-pressed="${formProx==='amanha'}">Amanhã</button>
+      <button data-prox="freq" aria-pressed="${formProx==='freq'}">Na frequência</button>
+    </div></div>
+  <div class="formfoot">
+    <button class="btn-ghost" id="f-cancel">Voltar</button>
+    <button class="btn-primary" id="f-save">Salvar</button>
+  </div>
+  ${k?`<button class="btn-del" id="f-del">Excluir tarefa</button>`:''}`;
+  $('sheet-body').innerHTML=html;
+
+  const freqSel=$('f-freq');
+  const updateUI=()=>{
+    $('custom-wrap').style.display = freqSel.value==='custom'?'block':'none';
+    $('prox-wrap').style.display = freqSel.value==='once'?'none':'block';
+  };
+  freqSel.onchange=updateUI; updateUI();
+
+  $('dif').querySelectorAll('[data-dif]').forEach(b=>b.onclick=()=>{
+    formDif=Number(b.dataset.dif);
+    $('dif').querySelectorAll('[data-dif]').forEach(x=>x.setAttribute('aria-pressed', Number(x.dataset.dif)===formDif));
+  });
+  $('prox').querySelectorAll('[data-prox]').forEach(b=>b.onclick=()=>{
+    formProx=b.dataset.prox;
+    $('prox').querySelectorAll('[data-prox]').forEach(x=>x.setAttribute('aria-pressed', x.dataset.prox===formProx));
+  });
+  $('f-cancel').onclick=renderManageList;
+  $('f-save').onclick=()=>saveForm(id);
+  if(k) $('f-del').onclick=()=>delTask(id);
+}
+
+function scheduleFirst(t, when){
+  if(t.freq==='once') return;
+  const now=today().getTime();
+  if(when==='hoje') state.last[t.id]=iso(new Date(now - t.freq*DAY));
+  else if(when==='amanha') state.last[t.id]=iso(new Date(now + (1-t.freq)*DAY));
+  else if(when==='freq') state.last[t.id]=iso(today()); // próxima em 'freq' dias
+}
+
+async function saveForm(id){
+  const nome=$('f-nome').value.trim();
+  const comodo=$('f-comodo').value.trim()||'Geral';
+  if(!nome){ $('f-nome').focus(); $('f-nome').style.borderColor='var(--bloom)'; return; }
+  let freq=$('f-freq').value;
+  if(freq==='custom'){ freq=Math.max(1,parseInt($('f-custom').value)||1); }
+  else if(freq!=='once'){ freq=Number(freq); }
+
+  if(id){
+    const t=state.tasks.find(x=>x.id===id);
+    const freqChanged = t.freq!==freq;
+    Object.assign(t,{nome,comodo,freq,dif:formDif});
+    if(freq==='once'){ delete state.last[id]; }
+    else if(formProx!=='manter' || freqChanged){
+      scheduleFirst(t, formProx==='manter'?'freq':formProx);
+    }
+  } else {
+    const t={id:'c'+Date.now(),nome,comodo,freq,dif:formDif};
+    state.tasks.push(t);
+    scheduleFirst(t, formProx);
+  }
+  await save(); render(); renderManageList();
+}
+
+async function delTask(id){
+  const t=state.tasks.find(x=>x.id===id);
+  if(!confirm(`Excluir “${t?t.nome:''}”? Não dá pra desfazer.`)) return;
+  state.tasks=state.tasks.filter(x=>x.id!==id);
+  delete state.last[id]; delete state.prev[id]; delete state.once[id];
+  await save(); render(); renderManageList();
+}
+
+$('reset').onclick=async()=>{
+  if(confirm('Recomeçar do zero? Isso apaga o histórico, suas tarefas personalizadas e o caderno.')){
+    state={tasks:[],last:{},prev:{},once:{},notes:{},seeded:false,mig1:false};
+    seed(); state.seeded=true; await save();
+    roomFilter='Todos'; $('notes').value=''; switchCaderno('hoje'); render();
+  }
+};
+
+(async()=>{ await load(); render(); bindNotes(); })();
+</script>
+</body>
+</html>
