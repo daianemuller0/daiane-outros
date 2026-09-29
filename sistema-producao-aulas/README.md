@@ -1,6 +1,6 @@
 # Sistema de Produção de Aulas — TI TOTAL (Vercel)
 
-Interface original (`public/index.html`) adaptada para o Vercel: login por senha, dados no Upstash Redis, anexos no Vercel Blob. O servidor local antigo está em `local-original-server.py` (referência).
+Dados iniciais: `seed/db.json` (aulas do sistema local; carregado enquanto o Redis estiver vazio). Interface original (`public/index.html`) adaptada para o Vercel: login por senha, dados no Upstash Redis, anexos no Vercel Blob. O servidor local antigo está em `local-original-server.py` (referência).
 
 ## Deploy
 1. Vercel → *Add New Project* → importe `daiane-outros` e defina **Root Directory** = `sistema-producao-aulas`.

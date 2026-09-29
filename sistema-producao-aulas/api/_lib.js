@@ -23,7 +23,8 @@ async function redis(cmd) {
 
 async function readDb() {
   const raw = await redis(['GET', KEY]);
-  return raw ? JSON.parse(raw) : { aulas: [] };
+  // Banco ainda vazio: começa com as aulas do db.json original (seed/db.json).
+  return raw ? JSON.parse(raw) : require('../seed/db.json');
 }
 
 async function writeDb(data) {

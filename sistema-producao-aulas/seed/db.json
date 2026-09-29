@@ -428,33 +428,7 @@
        "text": "Recebidos IDS (88q) e VPN (61q) com gabarito. Observação registrada: se o geral tiver +200 questões, exportar os 5 tópicos separadamente. Tudo pronto para montar o Word."
       }
      ],
-     "uploads": [
-      {
-       "name": "Caderno Caderno TI TOTAL - SI02 - 4 - IDS, IPS e Honeypot.pdf",
-       "size": 638333,
-       "url": "/uploads/si02mp/Caderno Caderno TI TOTAL - SI02 - 4 - IDS, IPS e Honeypot.pdf"
-      },
-      {
-       "name": "Caderno Caderno TI TOTAL - SI02 - 5 - VPN.pdf",
-       "size": 513504,
-       "url": "/uploads/si02mp/Caderno Caderno TI TOTAL - SI02 - 5 - VPN.pdf"
-      },
-      {
-       "name": "Caderno Caderno TI TOTAL - SI02 - Mecanismos de Protec_a_o.pdf",
-       "size": 1444294,
-       "url": "/uploads/si02mp/Caderno Caderno TI TOTAL - SI02 - Mecanismos de Protec_a_o.pdf"
-      },
-      {
-       "name": "Caderno SI02 Geral (gabarito).pdf",
-       "size": 36,
-       "url": "/uploads/si02mp/Caderno SI02 Geral (gabarito).pdf"
-      },
-      {
-       "name": "TI TOTAL - SI02 - Teoria.docx",
-       "size": 43267,
-       "url": "/uploads/si02mp/TI TOTAL - SI02 - Teoria.docx"
-      }
-     ],
+     "uploads": [],
      "doneAt": 1790170635790,
      "timeSpent": 0,
      "timerStart": null
@@ -490,13 +464,7 @@
      ],
      "timeSpent": 209049,
      "timerStart": null,
-     "uploads": [
-      {
-       "name": "TI TOTAL - SI02 - Teoria.docx",
-       "size": 43267,
-       "url": "/uploads/si02mp/TI TOTAL - SI02 - Teoria.docx"
-      }
-     ]
+     "uploads": []
     },
     "e6": {
      "status": "todo",
