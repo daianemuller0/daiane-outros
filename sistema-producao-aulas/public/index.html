@@ -86,6 +86,7 @@
   .txview th,.txview td{border:1px solid var(--line);padding:5px 8px;text-align:left;font-size:13px}.txview th{background:#eef2fb}
   .tx-az{color:#0070C0;font-weight:700}.tx-vm{color:#d00000;font-weight:700}
   .pedido{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:10px 12px;font-size:12px;max-height:280px;overflow:auto}
+  .callout{background:#fff8e1;border-left:3px solid #e29a00;padding:6px 10px;margin:8px 0;border-radius:4px;font-size:13px}
   /* header */
   header.top{background:linear-gradient(100deg,var(--navy) 0%,var(--navy2) 60%,#1c3a86 100%);color:#fff;box-shadow:0 2px 10px rgba(0,32,96,.18)}
   header.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
@@ -959,6 +960,8 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         out+="<table>"+body.map((r,k)=>"<tr>"+cells(r).map(c=>"<"+(k?"td":"th")+">"+inl(c)+"</"+(k?"td":"th")+">").join("")+"</tr>").join("")+"</table>";continue;}
       if(/^\s*[-*•]\s+/.test(l)){out+="<ul>";while(i<lines.length&&/^\s*[-*•]\s+/.test(lines[i])){out+="<li>"+inl(lines[i].replace(/^\s*[-*•]\s+/,""))+"</li>";i++;}out+="</ul>";continue;}
       if(!l.trim()){i++;continue;}
+      const mq=/^\s*>\s*\[([^\]]+)\]\s*:?\s*(.*)$/.exec(l);
+      if(mq){out+='<div class="callout"><b>'+esc(mq[1])+":</b> "+inl(mq[2])+"</div>";i++;continue;}
       out+="<p>"+inl(l)+"</p>";i++;
     }
     return out;
@@ -1111,6 +1114,19 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       const barra=el("div","conclusao");
       barra.innerHTML='<div class="conclusao-h"><b>Conclusão da teoria</b><span>'+pctTot+'%</span></div><div class="bar"><i style="width:'+pctTot+'%"></i></div><div class="small muted">'+tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados · "+tops.filter(t=>t.teoria.status==="revisao").length+" em revisão · "+tops.filter(t=>t.teoria.status==="producao").length+" em produção · "+tops.filter(t=>t.teoria.status==="aguardando").length+" aguardando</div>";
       box.appendChild(barra);
+      const bw=el("button","btn ghost sm","📄 Baixar teoria em Word (o que já foi produzido)");
+      bw.onclick=async()=>{
+        bw.disabled=true;const t0=bw.textContent;bw.textContent="Montando o Word…";
+        try{
+          const topicos=tops.map((t,ti)=>({id:t.id,nome:t.nome,itens:flatNos(t.subs,String(ti+1)).map(x=>({id:x.node.id,nivel:x.nivel,nome:x.nome}))}));
+          const r=await fetch("/api/docx",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({aulaId:a.id,titulo:a.titulo,arquivo:(a.titulo||"Aula")+" - Teoria",topicos:topicos})});
+          if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||("Erro "+r.status));}
+          const blob=await r.blob();const url=URL.createObjectURL(blob);const an=document.createElement("a");
+          an.href=url;an.download=(a.titulo||"Aula")+" - Teoria.docx";document.body.appendChild(an);an.click();an.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+        }catch(err){alert("Não foi possível montar o Word: "+err.message);}
+        bw.disabled=false;bw.textContent=t0;
+      };
+      box.appendChild(bw);
       const idxAtual=tops.findIndex(t=>t.teoria.status!=="aprovado");
       box.appendChild(el("div","pnl-sum",tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados"));
       tops.forEach((t,ti)=>{

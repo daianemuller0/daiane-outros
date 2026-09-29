@@ -5,7 +5,9 @@
   "description": "TI TOTAL - Sistema de Produção de Aulas (Vercel)",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.129.0",
-    "@vercel/blob": "^2.8.0"
+    "@vercel/blob": "^2.8.0",
+    "@xmldom/xmldom": "^0.9.12",
+    "jszip": "^3.10.2"
   },
   "engines": {
     "node": ">=18"

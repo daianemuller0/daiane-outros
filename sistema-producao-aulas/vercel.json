@@ -9,6 +9,10 @@
     "api/gerar.js": {
       "includeFiles": "entregas/**",
       "maxDuration": 60
+    },
+    "api/docx.js": {
+      "includeFiles": "templates/teoria-modelo-SI01.docx",
+      "maxDuration": 30
     }
   }
 }
