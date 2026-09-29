@@ -71,6 +71,13 @@
   .regra .warnw{color:#c0392b;font-weight:700}
   .qs{color:#0E57C4}.tnote.warn{background:#fdecea;border-left-color:#c0392b}
   .cobre{display:block;margin:10px 0 4px;font-size:13px;font-weight:700;color:var(--navy)}
+  .conclusao{background:#f4f8ff;border:1px solid #d5e4fb;border-radius:10px;padding:10px 12px;margin:10px 0}
+  .conclusao-h{display:flex;justify-content:space-between;font-size:14px;color:var(--navy)}
+  .conclusao .bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0}
+  .conclusao .bar i{display:block;height:100%;background:var(--ok);transition:width .3s}
+  .pipe{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+  .pipe-i{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:#eef1f7;color:#8a93a8}
+  .pipe-i.fei{background:#d8f3e5;color:#1a7f4b}.pipe-i.atu{background:#fff0cc;color:#9a6a00;box-shadow:0 0 0 1px #e6c66a}
   /* header */
   header.top{background:linear-gradient(100deg,var(--navy) 0%,var(--navy2) 60%,#1c3a86 100%);color:#fff;box-shadow:0 2px 10px rgba(0,32,96,.18)}
   header.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
@@ -271,7 +278,7 @@
      obj:"Antes de produzir a teoria, você define manualmente os sub-tópicos de cada tópico principal (os tópicos principais já foram definidos no planejamento), um tópico por vez. Nº de páginas e comentários são opcionais; a teoria é produzida seguindo esses sub-tópicos.",
      ativ:["Conferir os tópicos principais definidos no planejamento.","Cadastrar os sub-tópicos de cada tópico, na ordem da teoria.","Conferir se os sub-tópicos cobrem TODAS as questões do Word de questões (regra obrigatória).","Informar nº de páginas e comentários, se quiser.","Concluir o tópico e seguir para o próximo."],
      res:"Sub-tópicos definidos para todos os tópicos da aula."},
-    {id:"e5",num:"1.5",trilha:"Teoria",nome:"Produção da Teoria (um tópico por vez)",resp:"Estagiário / IA",tempo:"10h",panel:"teoria",
+    {id:"e5",num:"1.5",trilha:"Teoria",nome:"Produção da Teoria (um tópico por vez)",resp:"Estagiário / IA",tempo:"10h",panel:"teoria",semRodarIA:true,
      obj:"Produzir a teoria em partes, um tópico por vez. Após cada tópico há uma revisão humana, com comentários que a IA usa para melhorar os tópicos seguintes.",
      ativ:["Produzir o tópico seguindo os sub-tópicos aprovados, com foco em concursos.","Garantir que toda questão do Word deste tópico tenha a resposta explicada na teoria (regra obrigatória).","Priorizar explicações objetivas, definições, comparações e exemplos.","Enviar o tópico para revisão humana.","Registrar os comentários da revisão (a IA aprende para os demais tópicos).","Repetir até todos os tópicos estarem aprovados."],
      res:"Teoria de todos os tópicos produzida e aprovada, tópico a tópico."},
@@ -544,7 +551,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     row.setAttribute("data-step",s.id);
     const head=el("div","step-head");
     const pill=`<span class="pill ${st}"><span class="dot"></span>${st==="done"?"Feito":st==="doing"?"Fazendo":"A fazer"}</span>`;
-    const isIA=/IA/.test(s.resp);
+    const isIA=/IA/.test(s.resp)&&!s.semRodarIA;
     head.innerHTML=`<div class="step-num">${s.num.replace("1.","")}</div>
       <div style="flex:1"><div class="nm">${esc(s.nome)}${isIA?'<span class="ia-badge">🤖 IA</span>':''}</div><div class="rp">👤 ${esc(s.resp)} · ⏱ ${esc(s.tempo)}</div></div>
       ${pill}<div class="chev">▶</div>`;
@@ -663,7 +670,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     box.appendChild(g);
 
     // IA note + run button (for steps executed by the IA)
-    const isIA=/IA/.test(s.resp);
+    const isIA=/IA/.test(s.resp)&&!s.semRodarIA;
     if(isIA){
       const note=el("div","ia-note",'🤖 <b>Etapa executada pela IA.</b> Clique em “Rodar com a IA” para eu executar esta etapa pelo seu navegador/ferramentas.');
       box.appendChild(note);
@@ -947,6 +954,11 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       box.appendChild(el("div","small muted","Cada tópico passa por revisão humana antes de o próximo começar. Seus comentários de revisão servem para a IA aprender e acertar melhor nos tópicos seguintes."));
       box.appendChild(regraQuestoes(a));
       if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico cadastrado. Defina os tópicos e sub-tópicos na etapa 1.4.2."));return;}
+      const PCT={aguardando:0,producao:33,revisao:66,aprovado:100};
+      const pctTot=Math.round(tops.reduce((n,t)=>n+(PCT[t.teoria.status]||0),0)/tops.length);
+      const barra=el("div","conclusao");
+      barra.innerHTML='<div class="conclusao-h"><b>Conclusão da teoria</b><span>'+pctTot+'%</span></div><div class="bar"><i style="width:'+pctTot+'%"></i></div><div class="small muted">'+tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados · "+tops.filter(t=>t.teoria.status==="revisao").length+" em revisão · "+tops.filter(t=>t.teoria.status==="producao").length+" em produção · "+tops.filter(t=>t.teoria.status==="aguardando").length+" aguardando</div>";
+      box.appendChild(barra);
       const idxAtual=tops.findIndex(t=>t.teoria.status!=="aprovado");
       box.appendChild(el("div","pnl-sum",tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados"));
       tops.forEach((t,ti)=>{
@@ -958,6 +970,11 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         const lbl={aguardando:"Aguardando",producao:"Em produção",revisao:"Em revisão humana",aprovado:"Aprovado"}[st]||st;
         hd.appendChild(el("span","tpill "+(st==="aprovado"?"ok":st==="aguardando"?"":"warn"),lbl+(T.versao>1?" · v"+T.versao:"")));
         card.appendChild(hd);
+        const ETP=[["aguardando","Aguardando"],["producao","Produção"],["revisao","Revisão humana"],["aprovado","Aprovado"]];
+        const ordem=ETP.findIndex(x=>x[0]===st);
+        const pipe=el("div","pipe");
+        ETP.forEach((x,i)=>{pipe.appendChild(el("span","pipe-i"+(i<ordem?" fei":i===ordem?" atu":""),(i<ordem?"✓ ":"")+x[1]));});
+        card.appendChild(pipe);
         const at=subsAtivas(t,ti);
         const dt=el("details","small");dt.innerHTML="<summary>Sumário deste tópico ("+at.length+" itens)</summary>"+(at.length?at.map(x=>'<div style="margin-left:'+((x.nivel-2)*14)+'px">'+esc(x.num)+" "+esc(x.nome)+(x.pag?" ("+esc(x.pag)+"p)":"")+(x.qs?' <span class="qs">📎 '+esc(x.qs)+"</span>":"")+"</div>").join(""):"<div>—</div>");
         card.appendChild(dt);
@@ -977,7 +994,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         if(st==="producao"){
           if(T.historico.length&&T.historico[T.historico.length-1].acao==="ajustes")
             card.appendChild(el("div","tnote","↩ Ajustes pedidos: "+esc(T.historico[T.historico.length-1].comentario||"(sem comentário)")));
-          card.appendChild(el("div","small muted","A IA produz este tópico. Quando terminar, anexe a parte produzida e envie para revisão."));
+          card.appendChild(el("div","small muted","Produção deste tópico em andamento. Quando terminar, anexe a parte produzida (arquivo ou link) e envie para revisão humana."));
           card.appendChild(filesRow(T,true,draw));
           card.appendChild(uploadRow(a,T,draw));
           const bs=el("button","btn ok sm","📨 Enviar para revisão humana");
