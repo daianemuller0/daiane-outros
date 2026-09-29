@@ -1,3 +1,6 @@
 {
-  "functions": { "api/*.js": { "maxDuration": 30 } }
+  "functions": {
+    "api/entregas.js": { "includeFiles": "entregas/**" },
+    "api/arquivo.js": { "includeFiles": "entregas/**" }
+  }
 }

@@ -1,46 +1,192 @@
 {
-  "versao": 1,
-  "aulas": {
-    "si02mp": {
-      "Antimalware": [
-        {"nome": "Conceito e função do antimalware", "nota": "O que é, onde atua (estação, servidor, e-mail, rede) e a diferença entre antivírus e antimalware."},
-        {"nome": "Métodos de detecção: assinatura, heurística e comportamental", "nota": "Como o antivírus identifica ameaças conhecidas e desconhecidas; limitações de cada método."},
-        {"nome": "Quarentena, desinfecção e falsos positivos", "nota": "Ações após a detecção (remover, isolar, reparar) e o problema dos alertas indevidos."},
-        {"nome": "Sandbox e análise dinâmica", "nota": "Execução isolada para observar o comportamento de arquivos suspeitos."},
-        {"nome": "EDR/XDR e antimalware moderno", "nota": "Detecção e resposta em endpoints; diferença para o antivírus tradicional."},
-        {"nome": "Boas práticas de proteção", "nota": "Atualização, varreduras, defesa em camadas e outros mecanismos complementares."}
-      ],
-      "Proxy": [
-        {"nome": "Conceito e funcionamento do proxy", "nota": "Intermediário entre cliente e servidor; o que ele faz com a requisição."},
-        {"nome": "Proxy direto (forward) × proxy reverso", "nota": "Quem protege quem: clientes internos × servidores internos."},
-        {"nome": "Proxy transparente × explícito", "nota": "Necessidade de configuração no cliente e implicações."},
-        {"nome": "Cache e filtragem de conteúdo", "nota": "Ganho de desempenho, controle de acesso, listas de bloqueio e autenticação de usuários."},
-        {"nome": "Proxy, anonimato e registro (logs)", "nota": "O que o proxy oculta ou revela; auditoria; proxies HTTP e SOCKS."}
-      ],
-      "Firewall": [
-        {"nome": "Conceito e finalidades do firewall", "nota": "Controle do tráfego entre redes com base em políticas; o que ele faz e o que não faz."},
-        {"nome": "Filtro de pacotes (stateless)", "nota": "Decisão por cabeçalhos (IP, porta, protocolo), sem memória de conexões."},
-        {"nome": "Inspeção de estado (stateful)", "nota": "Tabela de estados das conexões e vantagens sobre o filtro simples."},
-        {"nome": "Firewall de aplicação e proxy firewall (WAF)", "nota": "Inspeção na camada de aplicação."},
-        {"nome": "NGFW e UTM", "nota": "Firewalls de próxima geração e gerenciamento unificado de ameaças."},
-        {"nome": "Arquiteturas: DMZ, bastion host e sub-rede filtrada", "nota": "Posicionamento do firewall e segmentação da rede."},
-        {"nome": "Regras e políticas (ACL, negar por padrão)", "nota": "Ordem das regras, política padrão e boas práticas."}
-      ],
-      "IDS/IPS/Honeypot": [
-        {"nome": "IDS: conceito e funcionamento", "nota": "Detecção passiva de intrusões e geração de alertas."},
-        {"nome": "Detecção por assinatura × por anomalia", "nota": "Vantagens, limitações e taxa de falsos positivos e negativos."},
-        {"nome": "HIDS × NIDS", "nota": "IDS baseado em host × baseado em rede; onde cada um é instalado."},
-        {"nome": "IPS: prevenção ativa e posicionamento", "nota": "Atuação em linha (inline) e bloqueio automático."},
-        {"nome": "Comparativo IDS × IPS × Firewall", "nota": "Diferenças de função, posicionamento e reação."},
-        {"nome": "Honeypot e honeynet", "nota": "Sistemas-isca para atrair e estudar atacantes; riscos e usos."}
-      ],
-      "VPN": [
-        {"nome": "Conceito e finalidades da VPN", "nota": "Túnel seguro sobre rede pública; confidencialidade, integridade e autenticação."},
-        {"nome": "Tipos: acesso remoto e site-to-site", "nota": "Cenários de uso e diferenças de arquitetura."},
-        {"nome": "IPSec: AH, ESP, modo túnel e modo transporte", "nota": "Serviços de cada protocolo e quando usar cada modo."},
-        {"nome": "Protocolos: PPTP, L2TP e SSL/TLS VPN", "nota": "Comparação entre os protocolos mais comuns."},
-        {"nome": "Tunelamento e encapsulamento", "nota": "Como o pacote original é encapsulado e transportado."}
-      ]
-    }
+ "versao": 2,
+ "aulas": {
+  "si02mp": {
+   "Antimalware": {
+    "subs": [
+     {
+      "nome": "Conceito e função do antivírus/antimalware e seus limites",
+      "nota": "2 questão(ões) do Word neste tema.",
+      "qs": "Q1, Q8"
+     },
+     {
+      "nome": "Métodos de detecção: assinatura, heurística, comportamental e aprendizado de máquina (zero-day)",
+      "nota": "4 questão(ões) do Word neste tema.",
+      "qs": "Q2, Q3, Q4, Q6"
+     },
+     {
+      "nome": "Aplicativos potencialmente indesejados (PUA), adware e scareware",
+      "nota": "3 questão(ões) do Word neste tema.",
+      "qs": "Q5, Q9, Q10"
+     },
+     {
+      "nome": "Ransomware: prevenção e backup",
+      "nota": "1 questão(ões) do Word neste tema.",
+      "qs": "Q11"
+     },
+     {
+      "nome": "Defesa em camadas: antivírus, firewall e monitoramento integrados",
+      "nota": "4 questão(ões) do Word neste tema.",
+      "qs": "Q7, Q8, Q10, Q11"
+     }
+    ],
+    "lacunas": []
+   },
+   "Proxy": {
+    "subs": [
+     {
+      "nome": "Conceito e funcionamento do proxy (intermediário entre cliente e servidor)",
+      "nota": "2 questão(ões) do Word neste tema.",
+      "qs": "Q3, Q4"
+     },
+     {
+      "nome": "Filtragem de conteúdo e política de acesso no proxy",
+      "nota": "1 questão(ões) do Word neste tema.",
+      "qs": "Q1"
+     },
+     {
+      "nome": "Proxy transparente × explícito",
+      "nota": "1 questão(ões) do Word neste tema.",
+      "qs": "Q2"
+     },
+     {
+      "nome": "Proxy direto (forward) × proxy reverso: balanceamento e disponibilidade",
+      "nota": "2 questão(ões) do Word neste tema.",
+      "qs": "Q4, Q5"
+     }
+    ],
+    "lacunas": []
+   },
+   "Firewall": {
+    "subs": [
+     {
+      "nome": "Conceito, função e limites do firewall (o que faz e o que NÃO faz)",
+      "nota": "24 questão(ões) do Word neste tema.",
+      "qs": "Q4, Q8, Q9, Q14, Q15, Q20, Q24, Q26, Q27, Q28, Q34, Q36, Q37, Q40, Q41, Q44, Q56, Q57, Q58, Q60, Q62, Q63, Q67, Q68"
+     },
+     {
+      "nome": "Filtro de pacotes (stateless) e camadas do modelo OSI",
+      "nota": "10 questão(ões) do Word neste tema.",
+      "qs": "Q10, Q15, Q18, Q22, Q23, Q30, Q31, Q32, Q33, Q65"
+     },
+     {
+      "nome": "Inspeção de estado (stateful)",
+      "nota": "8 questão(ões) do Word neste tema.",
+      "qs": "Q1, Q3, Q6, Q32, Q33, Q42, Q59, Q65"
+     },
+     {
+      "nome": "Firewall de aplicação, proxy firewall e WAF",
+      "nota": "10 questão(ões) do Word neste tema.",
+      "qs": "Q2, Q5, Q11, Q16, Q19, Q38, Q46, Q48, Q54, Q69"
+     },
+     {
+      "nome": "Next-Generation Firewall (NGFW) e UTM",
+      "nota": "9 questão(ões) do Word neste tema.",
+      "qs": "Q39, Q43, Q45, Q47, Q50, Q55, Q64, Q66, Q69"
+     },
+     {
+      "nome": "Firewall pessoal, de host e Windows Firewall",
+      "nota": "6 questão(ões) do Word neste tema.",
+      "qs": "Q7, Q21, Q35, Q49, Q51, Q53"
+     },
+     {
+      "nome": "Tipos e implementações: hardware × software, bridge/transparente, NAT, zonas",
+      "nota": "9 questão(ões) do Word neste tema.",
+      "qs": "Q10, Q13, Q18, Q27, Q29, Q30, Q31, Q52, Q53"
+     },
+     {
+      "nome": "Arquiteturas: DMZ, screened host, screened subnet e dual-homed",
+      "nota": "4 questão(ões) do Word neste tema.",
+      "qs": "Q25, Q43, Q60, Q61"
+     },
+     {
+      "nome": "Regras e políticas: permitir/negar por padrão, ordem e controle de acesso",
+      "nota": "8 questão(ões) do Word neste tema.",
+      "qs": "Q12, Q17, Q21, Q29, Q40, Q49, Q51, Q66"
+     }
+    ],
+    "lacunas": []
+   },
+   "IDS/IPS/Honeypot": {
+    "subs": [
+     {
+      "nome": "IDS: conceito e funcionamento (monitoramento, alertas, passivo × ativo)",
+      "nota": "12 questão(ões) do Word neste tema.",
+      "qs": "Q5, Q7, Q9, Q14, Q16, Q17, Q19, Q20, Q21, Q26, Q27, Q33"
+     },
+     {
+      "nome": "Detecção por assinatura × por anomalia (falsos positivos e dia zero)",
+      "nota": "6 questão(ões) do Word neste tema.",
+      "qs": "Q11, Q18, Q25, Q29, Q33, Q37"
+     },
+     {
+      "nome": "HIDS × NIDS × HIPS: onde cada um atua",
+      "nota": "4 questão(ões) do Word neste tema.",
+      "qs": "Q1, Q3, Q17, Q20"
+     },
+     {
+      "nome": "IPS: prevenção ativa, posicionamento em linha (inline) e ação automática",
+      "nota": "12 questão(ões) do Word neste tema.",
+      "qs": "Q2, Q6, Q8, Q12, Q13, Q16, Q23, Q31, Q34, Q35, Q36, Q37"
+     },
+     {
+      "nome": "Comparativo IDS × IPS × firewall",
+      "nota": "10 questão(ões) do Word neste tema.",
+      "qs": "Q13, Q15, Q19, Q22, Q24, Q27, Q28, Q29, Q30, Q32"
+     },
+     {
+      "nome": "Ferramentas e integração: Snort, Suricata e SIEM",
+      "nota": "3 questão(ões) do Word neste tema.",
+      "qs": "Q4, Q10, Q38"
+     },
+     {
+      "nome": "Honeypot e honeynet (sistemas-isca)",
+      "nota": "1 questão(ões) do Word neste tema.",
+      "qs": "Q23"
+     }
+    ],
+    "lacunas": []
+   },
+   "VPN": {
+    "subs": [
+     {
+      "nome": "Conceito e finalidades da VPN (túnel seguro sobre rede pública)",
+      "nota": "8 questão(ões) do Word neste tema.",
+      "qs": "Q2, Q3, Q6, Q7, Q15, Q16, Q17, Q18"
+     },
+     {
+      "nome": "Tipos de VPN: site-to-site × acesso remoto (user-to-site)",
+      "nota": "7 questão(ões) do Word neste tema.",
+      "qs": "Q4, Q5, Q13, Q19, Q22, Q24, Q26"
+     },
+     {
+      "nome": "Tunelamento e modos túnel × transporte",
+      "nota": "5 questão(ões) do Word neste tema.",
+      "qs": "Q1, Q7, Q8, Q15, Q23"
+     },
+     {
+      "nome": "IPSec (AH, ESP, IKE)",
+      "nota": "4 questão(ões) do Word neste tema.",
+      "qs": "Q8, Q9, Q12, Q14"
+     },
+     {
+      "nome": "VPN SSL/TLS e outros protocolos (PPTP, L2TP, OpenVPN)",
+      "nota": "6 questão(ões) do Word neste tema.",
+      "qs": "Q9, Q10, Q11, Q12, Q20, Q27"
+     },
+     {
+      "nome": "Criptografia e propriedades de segurança na VPN",
+      "nota": "6 questão(ões) do Word neste tema.",
+      "qs": "Q2, Q10, Q11, Q14, Q17, Q20"
+     },
+     {
+      "nome": "Configuração e uso prático (cliente VPN, trabalho remoto)",
+      "nota": "4 questão(ões) do Word neste tema.",
+      "qs": "Q21, Q24, Q25, Q26"
+     }
+    ],
+    "lacunas": []
+   }
   }
+ }
 }
