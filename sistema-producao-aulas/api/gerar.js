@@ -85,13 +85,19 @@ async function chamar(client, pedido) {
 module.exports = async (req, res) => {
   if (!isAuthed(req)) return res.status(401).json({ error: 'Não autenticado' });
   if (req.method !== 'POST') return res.status(405).end();
-  if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY não configurada no Vercel.' });
+  const simular = req.query && req.query.simular;
+  if (!simular && !process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: 'ANTHROPIC_API_KEY não configurada no Vercel.' });
   try {
     const b = await readBody(req);
     if (!b || !b.aulaId || !b.topico || !b.no || !b.no.nome) return res.status(400).json({ error: 'Pedido inválido' });
     const questoes = questoesDoTopico(b.aulaId, b.topico, (b.topicoIdx || 1) - 1);
+    const pedido = montarPedido(b, questoes);
+    if (simular) {
+      // Mostra exatamente o que seria enviado, sem chamar a IA e sem custo.
+      return res.status(200).json({ modelo: MODELO, sistema: SISTEMA, pedido, caracteres: SISTEMA.length + pedido.length, tokensAprox: Math.round((SISTEMA.length + pedido.length) / 3.6) });
+    }
     const client = new Anthropic();
-    const msg = await chamar(client, montarPedido(b, questoes));
+    const msg = await chamar(client, pedido);
     if (msg.stop_reason === 'refusal') {
       return res.status(422).json({ error: 'A IA recusou este item por regras de segurança. Ajuste o item ou escreva-o manualmente.' });
     }

@@ -85,6 +85,7 @@
   .txview{font-size:14px;line-height:1.6;padding:6px 2px}.txview table{border-collapse:collapse;margin:8px 0;width:100%}
   .txview th,.txview td{border:1px solid var(--line);padding:5px 8px;text-align:left;font-size:13px}.txview th{background:#eef2fb}
   .tx-az{color:#0070C0;font-weight:700}.tx-vm{color:#d00000;font-weight:700}
+  .pedido{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:10px 12px;font-size:12px;max-height:280px;overflow:auto}
   /* header */
   header.top{background:linear-gradient(100deg,var(--navy) 0%,var(--navy2) 60%,#1c3a86 100%);color:#fff;box-shadow:0 2px 10px rgba(0,32,96,.18)}
   header.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
@@ -972,6 +973,35 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       if(r.ok){const d=await r.json();TXT[t.id]=d.nos||{};}}catch(e){}
     return TXT[t.id]||{};
   }
+  function corpoPedido(a,t,ti,itens,k,tx,sumario,orient,opt){
+    const it=itens[k];const T=t.teoria;const refazer=!!(opt&&opt.refazer);
+    const feitosAntes=itens.slice(0,k).filter(x=>x.tipo==="item"&&tx[x.id]).map(x=>x.num+" "+x.nome+": "+String(tx[x.id].texto||"").replace(/\s+/g," ").slice(0,160)+"…");
+    return {aulaId:a.id,aula:a.titulo,disciplina:a.disciplina||"",topico:t.nome,topicoId:t.id,topicoIdx:ti+1,
+      sumario:sumario,no:{id:it.id,num:it.num,nome:it.nome,temFilhos:it.temFilhos},tipo:it.tipo,
+      qs:it.node?parseQs(it.node.qs):(function(){const s=new Set();t.subs.forEach(n=>qsDoNo(n).forEach(x=>s.add(x)));return Array.from(s);})(),
+      anteriores:feitosAntes.slice(-8),
+      orientacoes:orient.concat(it.node&&it.node.comentario?["Sobre este item: "+it.node.comentario]:[]).join("\n"),
+      feedback:(opt&&opt.feedback)||"",textoAnterior:refazer&&tx[it.id]?tx[it.id].texto:"",versao:T.versao};
+  }
+  function contextoGeracao(a,t){
+    const licoes=(DB.licoes||[]).filter(l=>l.aulaId===a.id&&l.tipo==="revisao-teoria"&&l.comentario).slice(-6).map(l=>"- ("+l.topico+") "+l.comentario);
+    return [t.subComentario?"Sobre o tópico: "+t.subComentario:"",licoes.length?"Comentários das revisões anteriores nesta aula (aprenda com eles):\n"+licoes.join("\n"):""].filter(Boolean);
+  }
+  async function verPedido(a,t,ti){
+    const itens=itensDoTopico(t,ti);const tx=await carregarTextos(a,t);
+    let k=itens.findIndex(x=>!tx[x.id]);if(k<0)k=0;
+    const sumario=itens.filter(x=>x.tipo==="item").map(x=>x.num+" "+x.nome);
+    const body=corpoPedido(a,t,ti,itens,k,tx,sumario,contextoGeracao(a,t),{});
+    const r=await fetch("/api/gerar?simular=1",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){alert(d.error||"Erro");return;}
+    const m=el("div","modal modal-wide");
+    m.innerHTML='<span class="mx">✕</span><h2>👁 O que será enviado à IA</h2><div class="sub muted small">Item de exemplo: '+esc(itens[k].num+" "+itens[k].nome)+' · modelo '+esc(d.modelo)+'</div>'
+      +'<div class="small" style="margin:8px 0"><b>Tamanho aproximado deste pedido:</b> '+d.tokensAprox.toLocaleString("pt-BR")+' tokens de entrada ('+d.caracteres.toLocaleString("pt-BR")+' caracteres). A resposta da IA (o texto do item) vem além disso. Nenhuma chamada foi feita e nada foi cobrado.</div>'
+      +'<div class="block-lbl">Instruções fixas (enviadas em todos os itens)</div><pre class="pedido">'+esc(d.sistema)+'</pre>'
+      +'<div class="block-lbl">Pedido deste item</div><pre class="pedido">'+esc(d.pedido)+'</pre><div class="foot"><button class="btn" id="pd-ok">Fechar</button></div>';
+    m.querySelector(".mx").onclick=closeModal;m.querySelector("#pd-ok").onclick=closeModal;showModal(m);
+  }
   async function gerarTopico(a,t,ti,redraw,opt){
     const g=GEN[t.id]=GEN[t.id]||{};if(g.rodando)return;
     const T=t.teoria;const itens=itensDoTopico(t,ti);
@@ -980,21 +1010,14 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     const refazer=!!(opt&&opt.refazer);
     g.feitos=refazer?0:itens.filter(x=>tx[x.id]).length;
     const sumario=itens.filter(x=>x.tipo==="item").map(x=>x.num+" "+x.nome);
-    const licoes=(DB.licoes||[]).filter(l=>l.aulaId===a.id&&l.tipo==="revisao-teoria"&&l.comentario).slice(-6).map(l=>"- ("+l.topico+") "+l.comentario);
-    const orient=[t.subComentario?"Sobre o tópico: "+t.subComentario:"",licoes.length?"Comentários das revisões anteriores nesta aula (aprenda com eles):\n"+licoes.join("\n"):""].filter(Boolean);
+    const orient=contextoGeracao(a,t);
     redraw();
     for(let k=0;k<itens.length;k++){
       const it=itens[k];
       if(g.parar)break;
       if(!refazer&&tx[it.id])continue;
       g.atual=it.num+" "+it.nome;redraw();
-      const feitosAntes=itens.slice(0,k).filter(x=>x.tipo==="item"&&tx[x.id]).map(x=>x.num+" "+x.nome+": "+String(tx[x.id].texto||"").replace(/\s+/g," ").slice(0,160)+"…");
-      const body={aulaId:a.id,aula:a.titulo,disciplina:a.disciplina||"",topico:t.nome,topicoId:t.id,topicoIdx:ti+1,
-        sumario:sumario,no:{id:it.id,num:it.num,nome:it.nome,temFilhos:it.temFilhos},tipo:it.tipo,
-        qs:it.node?parseQs(it.node.qs):(function(){const s=new Set();t.subs.forEach(n=>qsDoNo(n).forEach(x=>s.add(x)));return Array.from(s);})(),
-        anteriores:feitosAntes.slice(-8),
-        orientacoes:orient.concat(it.node&&it.node.comentario?["Sobre este item: "+it.node.comentario]:[]).join("\n"),
-        feedback:(opt&&opt.feedback)||"",textoAnterior:refazer&&tx[it.id]?tx[it.id].texto:"",versao:T.versao};
+      const body=corpoPedido(a,t,ti,itens,k,tx,sumario,orient,opt);
       try{
         const r=await fetch("/api/gerar",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
         const d=await r.json().catch(()=>({}));
@@ -1040,6 +1063,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         b3.onclick=()=>{if(confirm("Refazer todos os itens deste tópico? Os textos atuais serão substituídos."))gerarTopico(a,t,ti,redraw,{refazer:true});};ac.appendChild(b3);
       }
     }
+    const bv=el("button","btn ghost sm","👁 Ver o que será enviado");bv.onclick=()=>verPedido(a,t,ti);ac.appendChild(bv);
     box.appendChild(ac);
     // textos gerados
     if(Object.keys(tx).length){
