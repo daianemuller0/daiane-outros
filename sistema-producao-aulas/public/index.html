@@ -254,7 +254,7 @@
      obj:"Toda entrega feita pela IA passa por revisão humana. Aqui, conferir manualmente os cadernos criados pela IA no TEC antes de seguir para a etapa seguinte.",
      ativ:["Conferir se todos os cadernos previstos foram criados (por tópico, integradas e geral da aula).","Verificar as contagens de questões de cada caderno.","Conferir a nomenclatura padronizada (Caderno TI TOTAL - SI0X - ...).","Excluir os cadernos de teste/duplicados sinalizados pela IA.","Validar que as bancas sem questões foram corretamente puladas.","Confirmar que todos estão na pasta correta."],
      res:"Cadernos revisados e aprovados por um humano."},
-    {id:"e4",num:"1.4",trilha:"Questões",nome:"Preparação editorial de questões",resp:"Assistente editorial / IA",tempo:"1h",manual:"q",upload:true,uploadTitulo:"⬆ Word de questões (referência obrigatória da teoria)",uploadDesc:"Suba aqui o Word com as questões (ainda sem comentários). Ele é a referência da teoria: toda questão deste Word precisa ter a resposta explicada na teoria.",
+    {id:"e4",num:"1.4",trilha:"Questões",nome:"Preparação editorial de questões",resp:"Assistente editorial / IA",tempo:"1h",manual:"q",
      obj:"Transpor entre 100 e 200 questões dos cadernos para o Word.",
      ativ:["Exportar questões do TEC.","Colocar no template Word: separadas por tópico e por banca, em ordem decrescente de ano.","Preparar estrutura de comentário: espaço para justificativa (itens isolados Correto/Incorreto quando for o caso).","Preparar espaço para teoria e para o gabarito."],
      res:"Documento Word organizado para comentários."},
@@ -262,7 +262,12 @@
      obj:"O TEC esconde o gabarito das questões nas APIs, mas a IA precisa dele para montar a teoria e os comentários. Por isso, você exporta o caderno em PDF (com gabarito) e sobe aqui — a IA lê direto do sistema, sem depender do chat.",
      ativ:["No TEC, abra o caderno GERAL da aula (todas as questões).","Clique em Imprimir → Salvar como PDF, marcando a opção COM GABARITO.","Salve o PDF no computador.","Suba o PDF na área de upload abaixo (⬆ Subir caderno).","Confira que o arquivo aparece na lista de enviados."],
      res:"Caderno com gabarito disponível no sistema para a IA usar."},
-    {id:"e4s",num:"1.4.2",trilha:"Teoria",nome:"Sub-tópicos da teoria (sugeridos pela IA + sua revisão)",resp:"Revisão humana",tempo:"30min",panel:"subs",
+    {id:"e4w",num:"1.4.2",trilha:"Questões",nome:"Criação do caderno de questões (sem comentários)",resp:"Assistente editorial / IA",tempo:"1h",upload:true,
+     uploadTitulo:"⬆ Word de questões (referência obrigatória da teoria)",uploadDesc:"Suba aqui o Word com as questões (sem comentários). Ele é a referência da teoria: toda questão deste Word precisa ter a resposta explicada na teoria.",
+     obj:"Montar o caderno de questões em Word, somente com as questões (sem comentários), a partir dos cadernos do TEC e do gabarito enviado. Este Word é a base da teoria e, depois, dos comentários.",
+     ativ:["Usar os cadernos revisados e o caderno com gabarito enviado na etapa anterior.","Montar o Word no template padrão: separado por tópico e por banca, em ordem decrescente de ano.","Incluir apenas enunciado e alternativas (sem comentários e sem resolução).","Conferir se a quantidade de questões bate com os cadernos do TEC.","Subir o Word no sistema (campo de upload abaixo)."],
+     res:"Word de questões (sem comentários) pronto e enviado ao sistema."},
+    {id:"e4s",num:"1.4.3",trilha:"Teoria",nome:"Sub-tópicos da teoria (sugeridos pela IA + sua revisão)",resp:"Revisão humana",tempo:"30min",panel:"subs",
      obj:"Antes de produzir a teoria, a IA sugere os sub-tópicos de cada tópico principal (os tópicos principais já foram definidos no planejamento). Você revisa um tópico por vez: aprova ou remove cada sub-tópico, comenta e, se quiser, informa o nº de páginas. Pode adicionar sub-tópicos novos. Seus comentários treinam a IA.",
      ativ:["Conferir os sub-tópicos sugeridos pela IA para o tópico.","Conferir se os sub-tópicos cobrem TODAS as questões do Word de questões (regra obrigatória).","Aprovar ou remover cada sub-tópico; adicionar os que faltarem.","Comentar o porquê (treina a IA) e informar páginas, se quiser.","Concluir o tópico e seguir para o próximo."],
      res:"Sub-tópicos aprovados para todos os tópicos da aula."},
@@ -323,6 +328,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
   function blankEtapa(){return {status:"todo",resp:"",checks:[],notas:"",links:[],doneAt:null};}
   function ensure(a){ // migrate/ensure etapa objects
     a.etapas=a.etapas||{};
+    if(!a.etapas.e4w&&a.etapas.e4&&a.etapas.e4.status==="done"){a.etapas.e4w=Object.assign(blankEtapa(),{status:"done",doneAt:Date.now(),notas:"Etapa criada depois; considerada concluída porque o Word de questões já havia sido montado. Suba o arquivo aqui para que a teoria use como referência."});}
     if(!a.etapas.e4s&&a.etapas.e5&&a.etapas.e5.status!=="todo"){a.etapas.e4s=Object.assign(blankEtapa(),{status:"done",doneAt:Date.now(),notas:"Etapa criada depois; considerada concluída porque a teoria já estava em andamento."});}
     STEPS.forEach(s=>{ if(!a.etapas[s.id]) a.etapas[s.id]=blankEtapa();
       const e=a.etapas[s.id]; if(!Array.isArray(e.checks))e.checks=[]; if(!Array.isArray(e.links))e.links=[]; if(!Array.isArray(e.log))e.log=[];
@@ -710,12 +716,12 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     const bl=await blobMod.upload("uploads/"+safeSeg(a.id)+"/"+safeSeg(f.name),f,{access:"public",handleUploadUrl:"/api/upload",multipart:f.size>8*1024*1024});
     return {name:safeSeg(f.name),size:f.size,url:bl.url,ts:Date.now()};
   }
-  function wordQuestoes(a){const e4=a.etapas&&a.etapas.e4;return ((e4&&e4.uploads)||[]).filter(u=>/\.docx?$/i.test(u.name));}
+  function wordQuestoes(a){const up=[];["e4w","e4"].forEach(k=>{const x=a.etapas&&a.etapas[k];if(x&&x.uploads)up.push(...x.uploads);});return up.filter(u=>/\.docx?$/i.test(u.name));}
   function regraQuestoes(a){
     const w=wordQuestoes(a);
     const b=el("div","regra");
     b.innerHTML='<b>📌 Regra obrigatória:</b> toda questão do Word de questões precisa ter a resposta explicada na teoria. '+
-      (w.length?"Word de referência: "+w.map(u=>'<a href="'+esc(u.url)+'" target="_blank" rel="noopener">'+esc(u.name)+"</a>").join(", ")+".":'<span class="warnw">⚠ O Word de questões ainda não foi enviado ao sistema (envie na etapa 1.4).</span>');
+      (w.length?"Word de referência: "+w.map(u=>'<a href="'+esc(u.url)+'" target="_blank" rel="noopener">'+esc(u.name)+"</a>").join(", ")+".":'<span class="warnw">⚠ O Word de questões ainda não foi enviado ao sistema (envie na etapa 1.4.2).</span>');
     return b;
   }
   // sugestões da IA (arquivo propostas.json publicado junto com o sistema)
@@ -860,7 +866,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       box.appendChild(el("div","block-lbl","📚 Produção da teoria, um tópico por vez"));
       box.appendChild(el("div","small muted","Cada tópico passa por revisão humana antes de o próximo começar. Seus comentários de revisão servem para a IA aprender e acertar melhor nos tópicos seguintes."));
       box.appendChild(regraQuestoes(a));
-      if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico cadastrado. Defina os tópicos e sub-tópicos na etapa 1.4.2."));return;}
+      if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico cadastrado. Defina os tópicos e sub-tópicos na etapa 1.4.3."));return;}
       const idxAtual=tops.findIndex(t=>t.teoria.status!=="aprovado");
       box.appendChild(el("div","pnl-sum",tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados"));
       tops.forEach((t,ti)=>{
@@ -881,7 +887,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
           card.appendChild(br);box.appendChild(card);return;
         }
         if(!isCur){card.appendChild(el("div","small muted","🔒 Libera após a aprovação do tópico anterior."));box.appendChild(card);return;}
-        if(t.subStatus!=="aprovado"){card.appendChild(el("div","small err","⚠ Aprove antes os sub-tópicos deste tópico (etapa 1.4.2)."));}
+        if(t.subStatus!=="aprovado"){card.appendChild(el("div","small err","⚠ Aprove antes os sub-tópicos deste tópico (etapa 1.4.3)."));}
         if(st==="aguardando"){
           const b=el("button","btn sm","▶ Iniciar produção deste tópico");
           b.onclick=()=>{T.status="producao";hist(t,"iniciado","");addLog(a,s,"Produção iniciada: "+t.nome);save();if(!syncDone(tops))draw();};
