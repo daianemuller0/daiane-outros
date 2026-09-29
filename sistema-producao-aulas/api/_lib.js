@@ -43,6 +43,8 @@ function safeEq(a, b) {
 }
 function isAuthed(req) {
   if (!secret()) return false;
+  // Acesso programático (ex.: a IA lendo/gravando o banco): cabeçalho x-app-password.
+  if (req.headers['x-app-password'] && checkPassword(req.headers['x-app-password'])) return true;
   const m = /(?:^|;\s*)ttpa=([a-f0-9]+)/.exec(req.headers.cookie || '');
   return !!m && safeEq(m[1], token());
 }
