@@ -1,0 +1,46 @@
+{
+  "versao": 1,
+  "aulas": {
+    "si02mp": {
+      "Antimalware": [
+        {"nome": "Conceito e função do antimalware", "nota": "O que é, onde atua (estação, servidor, e-mail, rede) e a diferença entre antivírus e antimalware."},
+        {"nome": "Métodos de detecção: assinatura, heurística e comportamental", "nota": "Como o antivírus identifica ameaças conhecidas e desconhecidas; limitações de cada método."},
+        {"nome": "Quarentena, desinfecção e falsos positivos", "nota": "Ações após a detecção (remover, isolar, reparar) e o problema dos alertas indevidos."},
+        {"nome": "Sandbox e análise dinâmica", "nota": "Execução isolada para observar o comportamento de arquivos suspeitos."},
+        {"nome": "EDR/XDR e antimalware moderno", "nota": "Detecção e resposta em endpoints; diferença para o antivírus tradicional."},
+        {"nome": "Boas práticas de proteção", "nota": "Atualização, varreduras, defesa em camadas e outros mecanismos complementares."}
+      ],
+      "Proxy": [
+        {"nome": "Conceito e funcionamento do proxy", "nota": "Intermediário entre cliente e servidor; o que ele faz com a requisição."},
+        {"nome": "Proxy direto (forward) × proxy reverso", "nota": "Quem protege quem: clientes internos × servidores internos."},
+        {"nome": "Proxy transparente × explícito", "nota": "Necessidade de configuração no cliente e implicações."},
+        {"nome": "Cache e filtragem de conteúdo", "nota": "Ganho de desempenho, controle de acesso, listas de bloqueio e autenticação de usuários."},
+        {"nome": "Proxy, anonimato e registro (logs)", "nota": "O que o proxy oculta ou revela; auditoria; proxies HTTP e SOCKS."}
+      ],
+      "Firewall": [
+        {"nome": "Conceito e finalidades do firewall", "nota": "Controle do tráfego entre redes com base em políticas; o que ele faz e o que não faz."},
+        {"nome": "Filtro de pacotes (stateless)", "nota": "Decisão por cabeçalhos (IP, porta, protocolo), sem memória de conexões."},
+        {"nome": "Inspeção de estado (stateful)", "nota": "Tabela de estados das conexões e vantagens sobre o filtro simples."},
+        {"nome": "Firewall de aplicação e proxy firewall (WAF)", "nota": "Inspeção na camada de aplicação."},
+        {"nome": "NGFW e UTM", "nota": "Firewalls de próxima geração e gerenciamento unificado de ameaças."},
+        {"nome": "Arquiteturas: DMZ, bastion host e sub-rede filtrada", "nota": "Posicionamento do firewall e segmentação da rede."},
+        {"nome": "Regras e políticas (ACL, negar por padrão)", "nota": "Ordem das regras, política padrão e boas práticas."}
+      ],
+      "IDS/IPS/Honeypot": [
+        {"nome": "IDS: conceito e funcionamento", "nota": "Detecção passiva de intrusões e geração de alertas."},
+        {"nome": "Detecção por assinatura × por anomalia", "nota": "Vantagens, limitações e taxa de falsos positivos e negativos."},
+        {"nome": "HIDS × NIDS", "nota": "IDS baseado em host × baseado em rede; onde cada um é instalado."},
+        {"nome": "IPS: prevenção ativa e posicionamento", "nota": "Atuação em linha (inline) e bloqueio automático."},
+        {"nome": "Comparativo IDS × IPS × Firewall", "nota": "Diferenças de função, posicionamento e reação."},
+        {"nome": "Honeypot e honeynet", "nota": "Sistemas-isca para atrair e estudar atacantes; riscos e usos."}
+      ],
+      "VPN": [
+        {"nome": "Conceito e finalidades da VPN", "nota": "Túnel seguro sobre rede pública; confidencialidade, integridade e autenticação."},
+        {"nome": "Tipos: acesso remoto e site-to-site", "nota": "Cenários de uso e diferenças de arquitetura."},
+        {"nome": "IPSec: AH, ESP, modo túnel e modo transporte", "nota": "Serviços de cada protocolo e quando usar cada modo."},
+        {"nome": "Protocolos: PPTP, L2TP e SSL/TLS VPN", "nota": "Comparação entre os protocolos mais comuns."},
+        {"nome": "Tunelamento e encapsulamento", "nota": "Como o pacote original é encapsulado e transportado."}
+      ]
+    }
+  }
+}
