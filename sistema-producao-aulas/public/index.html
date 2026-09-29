@@ -64,6 +64,8 @@
   .subqs{flex:1;min-width:160px}
   .sub2-top .subname{flex:1;min-width:0;font-weight:700}
   .sub2-ctl .subpag{width:90px}
+  .tnote.ok{background:#eaf7f0;border-left-color:#1a9d5a}
+  .nd .sub2{margin:6px 0}
   .sub2-cm{margin-top:8px}.sub2-cm textarea{width:100%}
   .regra{background:#fff7e0;border:1px solid #f0d58a;border-radius:9px;padding:8px 12px;font-size:13px;margin:8px 0}
   .regra .warnw{color:#c0392b;font-weight:700}
@@ -705,7 +707,6 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     a.topicos.forEach(t=>{if(!t.teoria)t.teoria=novoTopico("").teoria;if(!Array.isArray(t.subs))t.subs=[];if(!t.teoria.arquivos)t.teoria.arquivos=[];if(!t.teoria.links)t.teoria.links=[];if(!t.teoria.historico)t.teoria.historico=[];});
     return a.topicos;
   }
-  function subsAtivas(t){return t.subs.filter(x=>x.estado!=="removido");}
   function addLicao(a,obj){DB.licoes=DB.licoes||[];DB.licoes.push(Object.assign({ts:Date.now(),aulaId:a.id,aula:a.titulo||"",disciplina:a.disciplina||""},obj));save();}
   function safeSeg(x){return String(x||"").replace(/[^\w\-. ()À-ſ]/g,"_");}
   async function blobUpload(a,f){
@@ -738,15 +739,86 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     });
     if(mudou)save();
   }
+  // ---------- sumário em árvore (tópicos > sub-tópicos > itens) ----------
+  function novoNo(nome){return {id:uid(),nome:nome,pag:"",qs:"",comentario:"",subs:[],origem:"humano",estado:"aprovado"};}
+  function parseQs(str){return (String(str||"").match(/\d+/g)||[]).map(Number);}
+  function qsDoNo(n){const st=new Set(parseQs(n.qs));(n.subs||[]).forEach(c=>qsDoNo(c).forEach(x=>st.add(x)));return st;}
+  function flatNos(subs,prefixo){const out=[];(subs||[]).forEach((n,i)=>{const num=prefixo+"."+(i+1);out.push({num:num,nome:n.nome,pag:n.pag,qs:n.qs,comentario:n.comentario,nivel:num.split(".").length,node:n});out.push(...flatNos(n.subs,num));});return out;}
+  function subsAtivas(t,ti){return flatNos(t.subs,String((ti||0)+1));}
+  function contaNos(subs){return (subs||[]).reduce((n,x)=>n+1+contaNos(x.subs),0);}
+  function fmtQs(set){return Array.from(set).sort((a,b)=>a-b).map(x=>"Q"+x).join(", ");}
+  // mapa de questões do Word por item do sumário (public/mapas.json, feito pela IA)
+  function aplicarMapa(M){
+    if(!M||!M.aulas)return false;let mudou=false;
+    DB.aulas.forEach(a=>{
+      const ma=M.aulas[a.id];if(!ma)return;
+      topicosOf(a).forEach(t=>{
+        const mt=Object.keys(ma.topicos).find(k=>norm(k)===norm(t.nome));if(!mt)return;
+        const info=ma.topicos[mt];t.totalQ=info.total;
+        const nos={};Object.keys(info.nos).forEach(k=>{nos[norm(k)]=info.nos[k];});
+        (function rec(arr){arr.forEach(n=>{
+          const q=nos[norm(n.nome)];
+          if(q&&!n.qsManual){const v=q.map(x=>"Q"+x).join(", ");if(n.qs!==v){n.qs=v;n.qsIA=true;mudou=true;}}
+          rec(n.subs||[]);});})(t.subs);
+      });
+    });
+    if(mudou)save();return mudou;
+  }
+  // importa o sumário colado/enviado (1., 1.1, 1.2.1 …) e cria a estrutura dos tópicos
+  function importarSumario(a,texto){
+    const linhas=texto.replace(/[⁠​‌‍﻿­]/g,"").replace(/ /g," ").split(/\r?\n/);
+    const antigos=topicosOf(a);const memo={};
+    antigos.forEach(t=>{(function rec(arr){arr.forEach(n=>{memo[norm(n.nome)]=n;rec(n.subs||[]);});})(t.subs);});
+    const novos=[];let pilha=[];let nNos=0;
+    linhas.forEach(l=>{
+      const m=/^\s*(\d+(?:\.\d+)*)\.?\s+(.+?)\s*$/.exec(l);if(!m)return;
+      const nivel=m[1].split(".").length;let rest=m[2],nome;
+      if(rest.indexOf("\t")>=0){nome=rest.split("\t").map(x=>x.trim()).filter(Boolean)[0]||"";}
+      else{nome=rest.replace(/\s+\d{1,3}$/,"").trim();}
+      if(!nome)return;
+      if(nivel===1){
+        const ex=antigos.find(t=>norm(t.nome)===norm(nome));
+        const t=ex||novoTopico(nome);t.nome=nome;t.subs=[];novos.push(t);pilha=[{nivel:1,ref:t}];
+      }else{
+        while(pilha.length&&pilha[pilha.length-1].nivel>=nivel)pilha.pop();
+        const pai=pilha.length?pilha[pilha.length-1].ref:null;if(!pai)return;
+        const n=novoNo(nome);const old=memo[norm(nome)];
+        if(old){n.pag=old.pag||"";n.qs=old.qs||"";n.comentario=old.comentario||"";n.qsManual=old.qsManual;n.qsIA=old.qsIA;}
+        pai.subs.push(n);pilha.push({nivel:nivel,ref:n});nNos++;
+      }
+    });
+    if(!novos.length)return {ok:false};
+    novos.forEach(t=>{if(t.subs.length&&t.subStatus==="vazio")t.subStatus="proposto";});
+    a.topicos=novos;save();
+    return {ok:true,topicos:novos.length,itens:nNos};
+  }
+
   function SubsPanel(a,s,e){
-    const box=el("div","pnl");
+    const box=el("div","pnl");const abertos=new Set();
     function draw(){
       const tops=topicosOf(a);
       box.innerHTML="";
-      box.appendChild(el("div","block-lbl","🧩 Sub-tópicos da teoria, um tópico por vez"));
-      box.appendChild(el("div","small muted","Cadastre manualmente os sub-tópicos de cada tópico principal, na ordem em que a teoria deve seguir. Nº de páginas e comentário são opcionais; o comentário orienta a IA na produção da teoria."));
+      box.appendChild(el("div","block-lbl","🧩 Sumário da teoria: tópicos, sub-tópicos e itens"));
+      box.appendChild(el("div","small muted","Suba o sumário de uma vez (numeração 1., 1.1, 1.2.1…) ou monte manualmente, um tópico por vez. Nº de páginas e comentários são opcionais. O nº que aparece na frente de cada item é gerado automaticamente. As questões do Word de cada item (📎) são mapeadas pela IA e você pode ajustar."));
       box.appendChild(regraQuestoes(a));
-      if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico principal cadastrado. Adicione abaixo os tópicos definidos no planejamento."));}
+      const tools=el("div","pnl-tools");
+      const bp=el("button","btn ghost sm","📥 Subir sumário em massa");
+      const pa=el("div","pnl-paste");pa.style.display="none";
+      pa.innerHTML='<div class="small muted">Cole o sumário (ou escolha um arquivo .txt). Uma linha por item, com a numeração na frente: <code>1. Tópico</code>, <code>1.1 Sub-tópico</code>, <code>1.1.1. Item</code>… Os números de página no fim da linha são ignorados. Isto substitui a estrutura atual da aula.</div>';
+      const ta=el("textarea");ta.rows=10;ta.placeholder="1. Antimalware\n1.1 Antivírus\n1.2 Outras ferramentas antimalware\n1.2.1. Antispyware\n2. Proxy\n2.1 Conceito de Proxy";
+      const fi=el("input");fi.type="file";fi.accept=".txt,.md,.csv";fi.onchange=()=>{const f=fi.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{ta.value=r.result;};r.readAsText(f);};
+      const bok=el("button","btn sm","Importar sumário");
+      bok.onclick=()=>{
+        if(tops.some(t=>t.subs.length)&&!confirm("Isto substitui os tópicos e sub-tópicos atuais desta aula pelo sumário colado (o que for igual mantém páginas e comentários). Continuar?"))return;
+        const r=importarSumario(a,ta.value);
+        if(!r.ok){alert("Não encontrei linhas numeradas no texto (ex.: “1. Antimalware”).");return;}
+        aplicarMapa(window.__MAPAS);view.subOpen=null;alert(r.topicos+" tópico(s) e "+r.itens+" item(ns) importados.");draw();
+      };
+      pa.appendChild(ta);pa.appendChild(fi);pa.appendChild(bok);
+      bp.onclick=()=>{pa.style.display=pa.style.display==="none"?"block":"none";};
+      tools.appendChild(bp);box.appendChild(tools);box.appendChild(pa);
+
+      if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico principal cadastrado. Suba o sumário acima ou adicione abaixo."));}
       const nFeitos=tops.filter(t=>t.subStatus==="aprovado").length;
       box.appendChild(el("div","pnl-sum",nFeitos+" de "+tops.length+" tópicos concluídos"));
       const idxAtual=tops.findIndex(t=>t.subStatus!=="aprovado");
@@ -761,51 +833,71 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         const done=t.subStatus==="aprovado";
         const aberto=view.subOpen?view.subOpen===t.id:ti===idxAtual;
         if(!aberto)return;
-        const bloqueado=!done&&idxAtual>=0&&ti>idxAtual;
+        const bloqueado=false;
         const card=el("div","tcard"+(done?" ok":" cur"));
         const hd=el("div","tcard-h");
         hd.appendChild(el("b","tname-ro","Tópico "+(ti+1)+" — "+esc(t.nome)));
         hd.appendChild(el("span","tpill "+(done?"ok":"warn"),done?"Concluído":"Em definição"));
         card.appendChild(hd);
         if(bloqueado){card.appendChild(el("div","small muted","🔒 Conclua o tópico anterior primeiro."));box.appendChild(card);return;}
-        card.appendChild(el("div","sublbl","Sub-tópicos deste tópico:"));
-        if(!t.subs.length)card.appendChild(el("div","small muted","Nenhum sub-tópico ainda. Adicione abaixo."));
-        t.subs.forEach((sb,si)=>{
+        // cobertura das questões do Word
+        const cov=new Set();t.subs.forEach(n=>qsDoNo(n).forEach(x=>cov.add(x)));
+        if(t.totalQ){
+          const falt=[];for(let q=1;q<=t.totalQ;q++)if(!cov.has(q))falt.push(q);
+          card.appendChild(el("div",falt.length?"tnote warn":"tnote ok",falt.length?"⚠ Questões do Word sem lugar no sumário ("+falt.length+" de "+t.totalQ+"): "+falt.map(x=>"Q"+x).join(", ")+". Cada uma precisa ser explicada na teoria.":"✓ Todas as "+t.totalQ+" questões do Word deste tópico estão mapeadas no sumário."));
+        }
+        card.appendChild(el("div","sublbl","Sub-tópicos e itens:"));
+        if(!t.subs.length)card.appendChild(el("div","small muted","Nenhum sub-tópico ainda. Adicione abaixo ou suba o sumário."));
+        function noRow(n,arr,idx,num,depth){
+          const wrap=el("div","nd");wrap.style.marginLeft=(depth*18)+"px";
           const row=el("div","sub2 aprovado");
           const top=el("div","sub2-top");
-          top.appendChild(el("span","obadge vc",String(si+1)));
-          const ni=el("input","subname");ni.value=sb.nome;ni.disabled=done;ni.oninput=()=>{sb.nome=ni.value;save();};
+          top.appendChild(el("span","obadge vc",num));
+          const ni=el("input","subname");ni.value=n.nome;ni.disabled=done;ni.oninput=()=>{n.nome=ni.value;save();};
           top.appendChild(ni);row.appendChild(top);
           const ctl=el("div","sub2-ctl");
-          const pg=el("input","subpag");pg.type="number";pg.min="0";pg.placeholder="Nº págs";pg.title="Número de páginas (opcional)";pg.value=sb.pag||"";pg.disabled=done;
-          pg.oninput=()=>{sb.pag=pg.value;save();};ctl.appendChild(pg);
-          const qi=el("input","subqs");qi.placeholder="Questões do Word (opcional)";qi.title="Questões do Word que este sub-tópico cobre";qi.value=sb.qs||"";qi.disabled=done;
-          qi.oninput=()=>{sb.qs=qi.value;save();};ctl.appendChild(qi);
-          const bC=el("button","seg cm"+(sb.comentario?" on":""),"💬 Comentário"+(sb.comentario?" ●":""));
-          const cw=el("div","sub2-cm");cw.style.display=sb.comentario?"block":"none";
-          const ct=el("textarea");ct.rows=2;ct.value=sb.comentario||"";ct.disabled=done;ct.placeholder="Comentário (opcional): o que enfatizar, o que evitar…";
-          ct.oninput=()=>{sb.comentario=ct.value;save();};cw.appendChild(ct);
+          const pg=el("input","subpag");pg.type="number";pg.min="0";pg.placeholder="Nº págs";pg.title="Número de páginas (opcional)";pg.value=n.pag||"";pg.disabled=done;
+          pg.oninput=()=>{n.pag=pg.value;save();};ctl.appendChild(pg);
+          const qi=el("input","subqs");qi.placeholder="Questões do Word (ex.: Q1, Q4)";qi.title="Questões do Word que este item cobre (mapeado pela IA; você pode ajustar)";qi.value=n.qs||"";qi.disabled=done;
+          qi.oninput=()=>{n.qs=qi.value;n.qsManual=true;save();};ctl.appendChild(qi);
+          if((n.subs||[]).length){const ag=qsDoNo(n);if(ag.size)ctl.appendChild(el("span","small qs","(com itens: "+ag.size+" questão(ões))"));}
+          const bC=el("button","seg cm"+(n.comentario?" on":""),"💬"+(n.comentario?" ●":""));bC.title="Comentário";
+          const cw=el("div","sub2-cm");cw.style.display=n.comentario?"block":"none";
+          const ct=el("textarea");ct.rows=2;ct.value=n.comentario||"";ct.disabled=done;ct.placeholder="Comentário (opcional): o que enfatizar, o que evitar…";
+          ct.oninput=()=>{n.comentario=ct.value;save();};cw.appendChild(ct);
           bC.onclick=()=>{cw.style.display=cw.style.display==="none"?"block":"none";if(cw.style.display==="block")ct.focus();};
           ctl.appendChild(bC);
           if(!done){
-            const up=el("button","seg","↑");up.title="Mover para cima";up.disabled=si===0;up.onclick=()=>{t.subs.splice(si-1,0,t.subs.splice(si,1)[0]);save();draw();};
-            const dn=el("button","seg","↓");dn.title="Mover para baixo";dn.disabled=si===t.subs.length-1;dn.onclick=()=>{t.subs.splice(si+1,0,t.subs.splice(si,1)[0]);save();draw();};
-            const x=el("button","seg rm","🗑");x.title="Excluir sub-tópico";x.onclick=()=>{t.subs.splice(si,1);save();draw();};
-            ctl.appendChild(up);ctl.appendChild(dn);ctl.appendChild(x);
+            const up=el("button","seg","↑");up.title="Mover para cima";up.disabled=idx===0;up.onclick=()=>{arr.splice(idx-1,0,arr.splice(idx,1)[0]);save();draw();};
+            const dn=el("button","seg","↓");dn.title="Mover para baixo";dn.disabled=idx===arr.length-1;dn.onclick=()=>{arr.splice(idx+1,0,arr.splice(idx,1)[0]);save();draw();};
+            const ad=el("button","seg","＋ item");ad.title="Adicionar item abaixo deste";ad.onclick=()=>{abertos.add(n.id);draw();};
+            const x=el("button","seg rm","🗑");x.title="Excluir (com os itens abaixo dele)";x.onclick=()=>{if((n.subs||[]).length&&!confirm("Excluir também os "+contaNos(n.subs)+" item(ns) abaixo?"))return;arr.splice(idx,1);save();draw();};
+            ctl.appendChild(up);ctl.appendChild(dn);ctl.appendChild(ad);ctl.appendChild(x);
           }
-          row.appendChild(ctl);row.appendChild(cw);card.appendChild(row);
-        });
+          row.appendChild(ctl);row.appendChild(cw);wrap.appendChild(row);
+          if(abertos.has(n.id)){
+            const ar=el("div","subrow add");ar.style.marginLeft="18px";
+            const ai=el("input","subname");ai.placeholder="Novo item dentro de “"+n.nome+"”…";
+            const ab=el("button","btn ghost sm","Adicionar");
+            ab.onclick=()=>{const v=ai.value.trim();if(!v)return;n.subs=n.subs||[];n.subs.push(novoNo(v));save();draw();};
+            ai.onkeydown=ev=>{if(ev.key==="Enter")ab.onclick();};
+            ar.appendChild(ai);ar.appendChild(ab);wrap.appendChild(ar);
+          }
+          (n.subs||[]).forEach((c,ci)=>wrap.appendChild(noRow(c,n.subs,ci,num+"."+(ci+1),1)));
+          return wrap;
+        }
+        t.subs.forEach((n,si)=>card.appendChild(noRow(n,t.subs,si,(ti+1)+"."+(si+1),0)));
         if(!done){
           const ar=el("div","subrow add");
-          const ai=el("input","subname");ai.placeholder="+ Novo sub-tópico…";
-          const ap=el("input","subpag");ap.type="number";ap.min="0";ap.placeholder="Nº págs";
+          const ai=el("input","subname");ai.placeholder="+ Novo sub-tópico de “"+t.nome+"”…";
           const ab=el("button","btn ghost sm","Adicionar");
-          ab.onclick=()=>{const v=ai.value.trim();if(!v)return;t.subs.push({id:uid(),nome:v,pag:ap.value,qs:"",comentario:"",origem:"humano",estado:"aprovado"});t.subStatus="proposto";save();draw();};
+          ab.onclick=()=>{const v=ai.value.trim();if(!v)return;t.subs.push(novoNo(v));if(t.subStatus==="vazio")t.subStatus="proposto";save();draw();};
           ai.onkeydown=ev=>{if(ev.key==="Enter")ab.onclick();};
-          ar.appendChild(ai);ar.appendChild(ap);ar.appendChild(ab);card.appendChild(ar);
+          ar.appendChild(ai);ar.appendChild(ab);card.appendChild(ar);
         }
-        const tot=t.subs.reduce((n,x)=>n+(parseInt(x.pag,10)||0),0);
-        card.appendChild(el("div","small muted",t.subs.length+" sub-tópico(s)"+(tot?" · "+tot+" página(s) previstas":"")));
+        const flat=flatNos(t.subs,String(ti+1));
+        const tot=flat.reduce((n,x)=>n+(parseInt(x.pag,10)||0),0);
+        card.appendChild(el("div","small muted",flat.length+" item(ns) no sumário"+(tot?" · "+tot+" página(s) previstas":"")));
         const cm=el("div","fld");cm.appendChild(el("label","","Comentário geral sobre este tópico (opcional)"));
         const ct=el("textarea");ct.rows=2;ct.value=t.subComentario||"";ct.disabled=done;ct.placeholder="Algo que a IA deva levar em conta ao produzir a teoria deste tópico…";
         ct.oninput=()=>{t.subComentario=ct.value;save();};cm.appendChild(ct);card.appendChild(cm);
@@ -819,10 +911,10 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
           bap.onclick=()=>{
             t.subStatus="aprovado";view.subOpen=null;
             addLicao(a,{tipo:"subtopicos",topico:t.nome,
-              adicionados:t.subs.map(x=>x.nome),
-              detalhes:t.subs.map(x=>({sub:x.nome,origem:"humano",estado:"aprovado",pag:x.pag||"",comentario:x.comentario||"",qs:x.qs||""})),
+              adicionados:flat.map(x=>x.num+" "+x.nome),
+              detalhes:flat.map(x=>({sub:x.num+" "+x.nome,origem:"humano",estado:"aprovado",pag:x.pag||"",comentario:x.comentario||"",qs:x.qs||""})),
               comentario:t.subComentario||""});
-            addLog(a,s,"Sub-tópicos definidos: "+t.nome+" ("+t.subs.length+").");draw();
+            addLog(a,s,"Sumário definido: "+t.nome+" ("+flat.length+" itens).");draw();
           };
           ac.appendChild(bap);
         }
@@ -866,8 +958,9 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         const lbl={aguardando:"Aguardando",producao:"Em produção",revisao:"Em revisão humana",aprovado:"Aprovado"}[st]||st;
         hd.appendChild(el("span","tpill "+(st==="aprovado"?"ok":st==="aguardando"?"":"warn"),lbl+(T.versao>1?" · v"+T.versao:"")));
         card.appendChild(hd);
-        const at=subsAtivas(t);
-        card.appendChild(el("div","small muted","Sub-tópicos: "+(at.length?at.map(x=>esc(x.nome)+(x.pag?" ("+esc(x.pag)+"p)":"")).join(" · "):"—")));
+        const at=subsAtivas(t,ti);
+        const dt=el("details","small");dt.innerHTML="<summary>Sumário deste tópico ("+at.length+" itens)</summary>"+(at.length?at.map(x=>'<div style="margin-left:'+((x.nivel-2)*14)+'px">'+esc(x.num)+" "+esc(x.nome)+(x.pag?" ("+esc(x.pag)+"p)":"")+(x.qs?' <span class="qs">📎 '+esc(x.qs)+"</span>":"")+"</div>").join(""):"<div>—</div>");
+        card.appendChild(dt);
         if(st==="aprovado"){
           if(T.revComentario)card.appendChild(el("div","small","💬 Revisão: "+esc(T.revComentario)));
           if(T.arquivos.length||T.links.length)card.appendChild(filesRow(T));
@@ -908,12 +1001,12 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
           bok.disabled=!T.cobertura;bok.title=T.cobertura?"":"Marque a conferência das questões do Word para aprovar";
           cb.onchange=()=>{T.cobertura=cb.checked;save();bok.disabled=!cb.checked;bok.title=cb.checked?"":"Marque a conferência das questões do Word para aprovar";};
           bok.onclick=()=>{T.status="aprovado";hist(t,"aprovado",T.revComentario);
-            addLicao(a,{tipo:"revisao-teoria",decisao:"aprovado",topico:t.nome,versao:T.versao,subtopicos:at.map(x=>x.nome),coberturaQuestoes:true,comentario:T.revComentario||""});
+            addLicao(a,{tipo:"revisao-teoria",decisao:"aprovado",topico:t.nome,versao:T.versao,subtopicos:at.map(x=>x.num+" "+x.nome),coberturaQuestoes:true,comentario:T.revComentario||""});
             addLog(a,s,"Tópico aprovado: "+t.nome+(T.versao>1?" (v"+T.versao+")":""));if(!syncDone(tops))draw();};
           const baj=el("button","btn danger sm","↩ Pedir ajustes");
           baj.onclick=()=>{if(!(T.revComentario||"").trim()&&!(T.lacunas||"").trim()){alert("Escreva o que precisa ser ajustado (comentário ou lacunas das questões do Word) — é isso que a IA usa para melhorar.");return;}
             const c=[(T.revComentario||"").trim(),(T.lacunas||"").trim()?"Lacunas em relação às questões do Word: "+T.lacunas.trim():""].filter(Boolean).join(" | ");hist(t,"ajustes",c);
-            addLicao(a,{tipo:"revisao-teoria",decisao:"ajustes",topico:t.nome,versao:T.versao,subtopicos:at.map(x=>x.nome),comentario:c});
+            addLicao(a,{tipo:"revisao-teoria",decisao:"ajustes",topico:t.nome,versao:T.versao,subtopicos:at.map(x=>x.num+" "+x.nome),comentario:c});
             T.status="producao";T.versao++;T.revComentario="";T.lacunas="";T.cobertura=false;save();draw();};
           ac.appendChild(bok);ac.appendChild(baj);card.appendChild(ac);
         }
@@ -1132,6 +1225,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
   }
   async function __init(){try{const r=await fetch('/api/db',{cache:'no-store',credentials:'include'});if(r.status===401)return __login();const d=await r.json();DB=(d&&Array.isArray(d.aulas))?d:{aulas:[]};}catch(e){DB={aulas:[]};}
     try{const er=await fetch('/api/entregas',{cache:'no-store',credentials:'include'});if(er.ok)aplicarEntregas(await er.json());}catch(e){}
+    try{const mr=await fetch('/mapas.json',{cache:'no-store'});if(mr.ok){window.__MAPAS=await mr.json();aplicarMapa(window.__MAPAS);}}catch(e){}
     render();}
   __init();
 })();
