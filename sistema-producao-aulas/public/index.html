@@ -86,7 +86,11 @@
   .txview th,.txview td{border:1px solid var(--line);padding:5px 8px;text-align:left;font-size:13px}.txview th{background:#eef2fb}
   .tx-az{color:#0070C0;font-weight:700}.tx-vm{color:#d00000;font-weight:700}
   .pedido{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:10px 12px;font-size:12px;max-height:280px;overflow:auto}
-  .callout{background:#fff8e1;border-left:3px solid #e29a00;padding:6px 10px;margin:8px 0;border-radius:4px;font-size:13px}
+  .callout{background:#f3f8ff;border-left:3px solid #0E57C4;padding:6px 10px;margin:8px 0;border-radius:4px;font-size:13px}
+  .callout-t{font-weight:800;color:#0E57C4;font-size:12px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px}
+  .callout p{margin:3px 0}.callout ul{margin:3px 0 3px 18px;padding:0}
+  .callout.c-atencao{background:#fff5f2;border-left-color:#e5483a}.callout.c-atencao .callout-t{color:#e5483a}
+  .callout.c-bizu{background:#f0f8ff}
   /* header */
   header.top{background:linear-gradient(100deg,var(--navy) 0%,var(--navy2) 60%,#1c3a86 100%);color:#fff;box-shadow:0 2px 10px rgba(0,32,96,.18)}
   header.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
@@ -962,7 +966,15 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       if(!l.trim()){i++;continue;}
       if(/^\s*\[figura[^\]]*\]\s*$/i.test(l)){out+='<p><b style="background:#fff200">[figura]</b></p>';i++;continue;}
       const mq=/^\s*>\s*\[([^\]]+)\]\s*:?\s*(.*)$/.exec(l);
-      if(mq){out+='<div class="callout">'+(/^barra$/i.test(mq[1])?"":"<b>"+esc(mq[1])+":</b> ")+inl(mq[2])+"</div>";i++;continue;}
+      if(mq){
+        const grp=[mq[2]];i++;
+        while(i<lines.length&&/^\s*>/.test(lines[i])&&!/^\s*>\s*\[[^\]]+\]/.test(lines[i])){grp.push(lines[i].replace(/^\s*>\s?/,""));i++;}
+        const ICON={esclarecendo:"💡",exemplificando:"🛠️","atenção":"⚠️",atencao:"⚠️",bizu:"🧠",dica:"✅"};
+        const tp=mq[1].trim();const cls=tp.toLowerCase().replace("ç","c").replace("ã","a");
+        let h='<div class="callout c-'+cls+'"><div class="callout-t">'+(ICON[tp.toLowerCase()]||"")+" "+esc(tp)+"</div>",lst=false;
+        grp.forEach(g=>{if(/^\s*[-*•]\s+/.test(g)){if(!lst){h+="<ul>";lst=true;}h+="<li>"+inl(g.replace(/^\s*[-*•]\s+/,""))+"</li>";}else{if(lst){h+="</ul>";lst=false;}if(g.trim())h+="<p>"+inl(g)+"</p>";}});
+        if(lst)h+="</ul>";out+=h+"</div>";continue;
+      }
       out+="<p>"+inl(l)+"</p>";i++;
     }
     return out;

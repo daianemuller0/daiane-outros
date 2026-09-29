@@ -11,7 +11,7 @@
       "maxDuration": 60
     },
     "api/docx.js": {
-      "includeFiles": "templates/teoria-modelo-SI01.docx",
+      "includeFiles": "templates/**",
       "maxDuration": 30
     }
   }

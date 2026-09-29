@@ -37,18 +37,37 @@ function runs(text, base = {}) {
   return out.join('');
 }
 
+// ---- quadros com cabeçalho de ícone (Atenção, Bizu, Dica, Exemplificando, Esclarecendo) ----
+const QUADROS = {
+  'atenção': { arq: 'atencao.png', cx: 1585519, cy: 317032, estilo: 'Ateno', nome: 'Atenção' },
+  'atencao': { arq: 'atencao.png', cx: 1585519, cy: 317032, estilo: 'Ateno', nome: 'Atenção' },
+  'bizu': { arq: 'bizu.png', cx: 1078992, cy: 372640, estilo: 'Bizu', nome: 'Bizu' },
+  'dica': { arq: 'dica.png', cx: 922020, cy: 317515, estilo: 'Barralateral', nome: 'Dica' },
+  'exemplificando': { arq: 'exemplificando.png', cx: 2047875, cy: 323850, estilo: 'Barralateral', nome: 'Exemplificando' },
+  'esclarecendo': { arq: 'esclarecendo.png', cx: 1809750, cy: 361950, estilo: 'Barralateral', nome: 'Esclarecendo' },
+};
+const RID_QUADRO = (arq) => 'rIdQuadro_' + arq.replace(/\W/g, '_');
+let docPrId = 91000;
+function bannerXml(q) {
+  const id = docPrId++;
+  return `<w:p><w:pPr><w:pStyle w:val="${q.estilo}"/><w:keepNext/></w:pPr><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${q.cx}" cy="${q.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${id}" name="Quadro ${q.nome}" descr="${q.nome}"/><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="${id}" name="${q.arq}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${RID_QUADRO(q.arq)}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${q.cx}" cy="${q.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>`;
+}
+// Um quadro = cabeçalho com ícone + parágrafos no estilo do quadro (e marcadores, se houver "- ")
+function quadro(q, linhas) {
+  let x = bannerXml(q);
+  linhas.forEach((l) => {
+    if (/^\s*[-*•]\s+/.test(l)) {
+      x += `<w:p><w:pPr><w:pStyle w:val="${q.estilo}"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="${NUM_LISTA}"/></w:numPr></w:pPr>${runs(l.replace(/^\s*[-*•]\s+/, ''))}</w:p>`;
+    } else if (l.trim()) {
+      x += `<w:p><w:pPr><w:pStyle w:val="${q.estilo}"/></w:pPr>${runs(l.trim())}</w:p>`;
+    }
+  });
+  return x + '<w:p><w:pPr><w:spacing w:after="60"/></w:pPr></w:p>';
+}
+
 // ---- blocos de parágrafo ----
 const para = (text, ppr = '', base) => `<w:p>${ppr ? `<w:pPr>${ppr}</w:pPr>` : ''}${runs(text, base)}</w:p>`;
 const item = (text) => `<w:p><w:pPr><w:pStyle w:val="PargrafodaLista"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="${NUM_LISTA}"/></w:numPr></w:pPr>${runs(text)}</w:p>`;
-const CALLOUT = {
-  'atenção': { style: 'Ateno', rot: 'Atenção: ' },
-  'atencao': { style: 'Ateno', rot: 'Atenção: ' },
-  'bizu': { style: 'Bizu', rot: 'Bizu: ' },
-  'dica': { style: 'Barralateral', rot: 'Dica: ' },
-  'exemplificando': { style: 'Barralateral', rot: 'Exemplificando: ' },
-  'esclarecendo': { style: 'Barralateral', rot: 'Esclarecendo: ' },
-  'barra': { style: 'Barralateral', rot: '' },
-};
 function tabela(linhas) {
   const cel = (c) => c.trim().replace(/^\||\|$/g, '');
   const linhasOk = linhas.filter((l) => !/^\s*\|?[\s:\-|]+\|?\s*$/.test(l));
@@ -86,9 +105,16 @@ function blocos(texto) {
     } else if (/^\s*[-*•]\s+/.test(l)) {
       out.push(item(l.replace(/^\s*[-*•]\s+/, '')));
     } else if (/^\s*>\s*\[([^\]]+)\]/.test(l)) {
+      // Quadro: "> [Tipo] texto" seguido de linhas "> ..." que continuam o mesmo quadro
       const m = /^\s*>\s*\[([^\]]+)\]\s*:?\s*(.*)$/.exec(l);
-      const c = CALLOUT[m[1].trim().toLowerCase()] || { style: 'Barralateral', rot: m[1].trim() + ': ' };
-      out.push(para(c.rot ? `**${c.rot}**${m[2]}` : m[2], `<w:pStyle w:val="${c.style}"/>`));
+      const tag = m[1].trim().toLowerCase();
+      const grupo = [m[2]];
+      while (i + 1 < L.length && /^\s*>/.test(L[i + 1]) && !/^\s*>\s*\[[^\]]+\]/.test(L[i + 1])) {
+        i++;
+        grupo.push(L[i].replace(/^\s*>\s?/, ''));
+      }
+      const q = QUADROS[tag] || (tag === 'barra' ? QUADROS['esclarecendo'] : QUADROS['esclarecendo']);
+      out.push(quadro(q, grupo));
     } else {
       out.push(para(l.trim()));
     }
@@ -192,6 +218,17 @@ async function montarDocx(aula) {
   });
   corpo += ser.serializeToString(sectPr);
 
+  // imagens dos cabeçalhos dos quadros
+  let rels = await zip.file('word/_rels/document.xml.rels').async('string');
+  const arqs = Array.from(new Set(Object.values(QUADROS).map((q) => q.arq)));
+  arqs.forEach((arq) => {
+    zip.file('word/media/quadro_' + arq, fs.readFileSync(path.join(__dirname, '..', 'templates', 'quadros', arq)));
+    rels = rels.replace('</Relationships>', `<Relationship Id="${RID_QUADRO(arq)}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/quadro_${arq}"/></Relationships>`);
+  });
+  zip.file('word/_rels/document.xml.rels', rels);
+  let ct = await zip.file('[Content_Types].xml').async('string');
+  if (!/Extension="png"/i.test(ct)) ct = ct.replace('</Types>', '<Default Extension="png" ContentType="image/png"/></Types>');
+  zip.file('[Content_Types].xml', ct);
   const ini = docXml.slice(0, docXml.indexOf('<w:body>') + 8);
   zip.file('word/document.xml', ini + corpo + '</w:body></w:document>');
   return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });

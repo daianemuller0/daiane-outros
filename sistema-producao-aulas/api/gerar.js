@@ -13,12 +13,12 @@ PRINCÍPIO CENTRAL: TEXTO CURTO E DE LEITURA RÁPIDA
 A teoria TI TOTAL é enxuta: uma aula inteira tem cerca de 3.500 palavras. Em poucos segundos o aluno precisa entender o conceito. Não coloque tudo o que se sabe sobre o assunto: detalhes e pegadinhas entram só quando ajudam em prova. Densidade demais faz um conceito simples parecer complicado.
 
 PARÁGRAFOS CURTOS (feedback do professor especialista)
-Quebre os parágrafos: nenhum parágrafo pode passar de 3 linhas no Word (cerca de 35 a 40 palavras, no máximo 2 ou 3 frases curtas). Parágrafos maiores cansam o aluno. Cada parágrafo traz UMA ideia; se o texto tiver duas ideias, faça dois parágrafos. Vale também para as frases dentro de marcadores e da Barra lateral (até 2 linhas cada) e para os quadros.
+Quebre os parágrafos: nenhum parágrafo pode passar de 3 linhas no Word (cerca de 35 a 40 palavras, no máximo 2 ou 3 frases curtas). Parágrafos maiores cansam o aluno. Cada parágrafo traz UMA ideia; se o texto tiver duas ideias, faça dois parágrafos. Vale também para as frases dentro de marcadores e dos quadros (até 2 linhas cada).
 
 TAMANHO E FORMA POR TIPO DE ITEM (o pedido informa o tipo)
 1. ABERTURA DO TÓPICO: 2 ou 3 parágrafos curtos (60 a 90 palavras no total): o que é o tema, sua importância ou evolução; termina com uma linha [figura].
 2. ITEM COM SUB-ITENS: só 1 ou 2 frases (20 a 40 palavras) que apresentam o assunto e como ele se divide. Não aprofunde o que pertence aos sub-itens.
-3. ITEM FOLHA SIMPLES (a maioria): UMA frase de definição, com o termo em **negrito** e o núcleo conceitual em {{az:azul}}, mais no máximo mais uma ou duas frases de complemento (20 a 60 palavras no total). Sem lista, sem quadro.
+3. ITEM FOLHA SIMPLES (a maioria): UMA frase de definição, com o termo em **negrito** e o núcleo conceitual em {{az:azul}}, mais no máximo mais uma ou duas frases de complemento (20 a 60 palavras no total). Sem lista. Um quadro só se acrescentar algo útil (veja QUADROS).
 4. ITEM FOLHA CONCEITUAL (conceitos centrais, ou quando as questões exigem): definição + no máximo mais 1 ou 2 parágrafos curtos, uma linha de fluxo em negrito quando houver (ex.: **Cliente → Proxy → Servidor de destino**), [figura] se um esquema ajudar, e uma lista "Suas principais características são:" com 3 a 6 marcadores. Até 180 palavras.
 Nunca passe de 250 palavras num item. Comece sempre direto pela definição: sem contextualização, sem repetir o título.
 
@@ -27,8 +27,14 @@ RECURSOS (o sistema converte para o Word)
 - {{az:texto}}: NEGRITO AZUL = núcleo conceitual (o que é): a definição direta, poucas palavras. Só o núcleo.
 - {{vm:texto}}: NEGRITO VERMELHO = negação conceitual (o que NÃO é): ausência de propriedade, exclusão, armadilha, limite. Nunca use azul ou vermelho só para destacar, nem em frases inteiras.
 - Lista com marcadores: linhas "- **Rótulo:** frase curta (até 20 palavras)." Usada em "Suas principais características são:".
-- Barra lateral: linhas "> [Barra] texto". Use para enumerar TIPOS, CLASSIFICAÇÕES ou EXEMPLOS: a primeira linha é a frase de abertura ("Podem ser classificados quanto a…:") e as seguintes são "> [Barra] **Tipo:** descrição curta".
-- Atenção: "> [Atenção] frase" (1 a 3 linhas, uma frase cada) só onde há risco real de confusão: não são sinônimos, exceções, limites do conceito. Bizu: "> [Bizu] frase" para memorização curta. Não use [Exemplificando], [Dica] nem [Esclarecendo] a menos que o professor peça.
+- QUADROS: cada quadro tem um cabeçalho com ícone (feito pelo sistema). Sintaxe: a primeira linha é "> [Tipo] texto" e as linhas seguintes do MESMO quadro começam com "> " (use "> - " para marcadores). Uma linha em branco encerra o quadro. Tipos:
+  - [Esclarecendo]: aprofunda ou detalha um conceito sem repetir a definição: distinções, nuances, relações entre termos e, principalmente, LISTAS DE TIPOS ou CLASSIFICAÇÕES ("Os IDS podem ser dos seguintes tipos:" + marcadores "> - **Tipo:** descrição curta").
+  - [Exemplificando]: mostra a aplicação prática: caso real, cenário de prova, analogia técnica ou situação concreta, sempre DEPOIS da explicação abstrata.
+  - [Atenção]: alerta sobre erro comum ou pegadinha (não são sinônimos, exceções, limites do conceito, interpretações perigosas); só quando há risco real de confusão.
+  - [Bizu]: memorização rápida: macete, padrão de cobrança, atalho mental; curto e direto.
+  - [Dica]: orientação estratégica de estudo ou de resolução de prova (como abordar, o que observar na leitura).
+  Frequência (medida na aula-modelo de SI02: cerca de 11 quadros em 45 itens, ou seja, 1 quadro a cada 3 ou 4 itens): a maioria dos itens NÃO leva quadro; nunca mais de 2 por item, sem empilhar. O mais comum é o [Esclarecendo] (6 vezes: sempre que o item tem uma LISTA de tipos, métodos, metodologias ou classificações, como os tipos de IDS, os métodos do antivírus, os tipos de firewall), depois [Atenção] (3 vezes: só para pegadinha real, como "não são ferramentas excludentes" ou "proxy não é sinônimo de firewall") e [Exemplificando] (2 vezes: um cenário prático curto, como o funcionário que usa VPN de casa). [Bizu] e [Dica] são raros (0 na aula-modelo): use só se uma questão ou o professor pedir claramente. Use o tipo que combina com o conteúdo; não force variedade e não use [Atenção] como quadro padrão.
+  Distinção: Dica = estratégia; Bizu = memorização. Escolha o tipo que realmente combina com o conteúdo, sem repetir o que o texto já diz; nenhum tipo deve aparecer por obrigação, e o texto de um quadro nunca passa de 3 linhas por parágrafo.
 - Fluxos: uma linha em negrito com setas (→). Figura: uma linha só com [figura] (o esquema é desenhado depois).
 - Tabela Markdown só para comparar conceitos próximos e apenas quando as questões pedirem a comparação.
 - Sem títulos (#): o sistema já coloca o título. Sem esquemas, mapas mentais, questões, resoluções ou gabaritos.
@@ -78,7 +84,7 @@ Suas principais características são:
 - **Monitoramento e registro:** Mantém logs das conexões e dos acessos realizados.
 - **Cache:** Um proxy pode armazenar temporariamente conteúdos frequentemente acessados, reduzindo o tráfego e o tempo de resposta.
 
-[Item com classificação em Barra lateral: Antivírus]
+[Item com classificação em quadro Esclarecendo: Antivírus]
 O **antivírus** é um software de segurança que {{az:detecta, previne e remove códigos maliciosos}} de dispositivos e sistemas.
 
 Suas principais características são:
@@ -86,12 +92,18 @@ Suas principais características são:
 - **Detecção:** Identifica arquivos, programas ou comportamentos associados a códigos maliciosos.
 - **Proteção em tempo real:** Monitora continuamente arquivos, downloads e atividades do sistema, podendo bloquear uma ameaça antes ou durante sua execução.
 
-> [Barra] Quanto ao método de detecção, os antivírus geralmente utilizam:
-> [Barra] **Assinatura (primeira geração)**: scanner simples que usa a assinatura dos vírus para identificá-los. Limitado a vírus conhecidos.
-> [Barra] **Heurística (segunda geração)**: baseia-se nas estruturas, instruções e características do código malicioso.
-> [Barra] **Comportamento (terceira geração)**: baseia-se no comportamento apresentado pelo código malicioso quando executado.
+> [Esclarecendo] Quanto ao método de detecção, os antivírus geralmente utilizam:
+> - **Assinatura (primeira geração):** scanner simples que usa a assinatura dos vírus para identificá-los. Limitado a vírus conhecidos.
+> - **Heurística (segunda geração):** baseia-se nas estruturas, instruções e características do código malicioso.
+> - **Comportamento (terceira geração):** baseia-se no comportamento apresentado pelo código malicioso quando executado.
 
 **Antivírus e antimalware** {{vm:não são ferramentas excludentes ou concorrentes.}}
+
+[Item com Exemplificando: Conceito de VPN]
+A **VPN (Virtual Private Network)** é uma tecnologia que cria uma {{az:conexão lógica e protegida sobre uma rede pública ou não confiável}}, como a Internet, permitindo a comunicação segura entre dispositivos ou redes.
+
+> [Exemplificando] Um funcionário trabalha de casa e precisa acessar um servidor interno da empresa. Ele usa uma VPN para criar uma conexão protegida entre o seu computador e a rede corporativa.
+> **Computador do funcionário → Internet → VPN → Rede corporativa → Servidor interno**
 
 [Item com Atenção: Conceito de firewall]
 O **firewall** é um mecanismo de segurança que {{az:controla e filtra o tráfego de uma rede ou dispositivo}}, com base em regras de segurança previamente definidas.
@@ -155,7 +167,7 @@ function montarPedido(b, questoes) {
   } else if (b.no.temFilhos) {
     partes.push('TIPO: ITEM COM SUB-ITENS (os sub-itens são escritos depois). Escreva só 1 ou 2 frases (20 a 40 palavras) que apresentem o assunto e como ele se divide.');
   } else {
-    partes.push('TIPO: ITEM FOLHA' + (b.no.nivel ? ' (nível ' + b.no.nivel + ')' : '') + '. Decida entre "simples" (uma frase de definição com o núcleo em azul, 20 a 60 palavras) e "conceitual" (definição, fluxo/[figura] e lista de características, até 180 palavras), conforme a importância do item e as questões abaixo. Prefira o simples sempre que as questões permitirem.');
+    partes.push('TIPO: ITEM FOLHA' + (b.no.nivel ? ' (nível ' + b.no.nivel + ')' : '') + '. Decida entre "simples" (uma frase de definição com o núcleo em azul, 20 a 60 palavras) e "conceitual" (definição, fluxo/[figura], lista de características e, se ajudar, um quadro, até 180 palavras), conforme a importância do item e as questões abaixo. Prefira o simples sempre que as questões permitirem.');
   }
   if (b.anteriores && b.anteriores.length) partes.push('ITENS JÁ ESCRITOS NESTE TÓPICO (não repetir o conteúdo deles):\n' + b.anteriores.join('\n'));
   if (b.orientacoes) partes.push('ORIENTAÇÕES DO PROFESSOR (prioridade):\n' + b.orientacoes);
