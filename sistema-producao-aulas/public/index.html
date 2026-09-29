@@ -1106,7 +1106,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       const tops=topicosOf(a);
       box.innerHTML="";
       box.appendChild(el("div","block-lbl","📚 Produção da teoria, um tópico por vez"));
-      box.appendChild(el("div","small muted","Cada tópico passa por revisão humana antes de o próximo começar. Seus comentários de revisão servem para a IA aprender e acertar melhor nos tópicos seguintes."));
+      box.appendChild(el("div","small muted","Cada tópico passa por revisão humana e você pode produzir os tópicos na ordem que quiser. Seus comentários de revisão servem para a IA aprender e acertar melhor nos tópicos seguintes."));
       box.appendChild(regraQuestoes(a));
       if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico cadastrado. Defina os tópicos e sub-tópicos na etapa 1.4.2."));return;}
       const PCT={aguardando:0,producao:33,revisao:66,aprovado:100};
@@ -1131,8 +1131,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       box.appendChild(el("div","pnl-sum",tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados"));
       tops.forEach((t,ti)=>{
         const T=t.teoria,st=T.status;
-        const isCur=ti===idxAtual;
-        const card=el("div","tcard"+(st==="aprovado"?" ok":isCur?" cur":" dim"));
+        const card=el("div","tcard"+(st==="aprovado"?" ok":" cur"));
         const hd=el("div","tcard-h");
         hd.appendChild(el("b","tname-ro",(ti+1)+". "+esc(t.nome)));
         const lbl={aguardando:"Aguardando",producao:"Em produção",revisao:"Em revisão humana",aprovado:"Aprovado"}[st]||st;
@@ -1152,7 +1151,6 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
           const br=el("button","btn ghost sm","↺ Reabrir tópico");br.onclick=()=>{T.status="producao";T.versao++;T.cobertura=false;hist(t,"reaberto","");save();if(!syncDone(tops))draw();};
           card.appendChild(br);box.appendChild(card);return;
         }
-        if(!isCur){card.appendChild(el("div","small muted","🔒 Libera após a aprovação do tópico anterior."));box.appendChild(card);return;}
         if(t.subStatus!=="aprovado"){card.appendChild(el("div","small err","⚠ Defina antes os sub-tópicos deste tópico (etapa 1.4.2)."));}
         if(st==="aguardando"){
           const b=el("button","btn sm","▶ Iniciar produção deste tópico");
