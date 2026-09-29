@@ -1,0 +1,599 @@
+{
+ "aulas": [
+  {
+   "id": "si01ex",
+   "criadaEm": 1789324279155,
+   "titulo": "SI01 — Ataques e ameaças",
+   "disciplina": "Segurança da Informação",
+   "escopo": "Ataques para obtenção de informações; negação de serviço (DoS/DDoS); nível de aplicação; malwares; outros ataques. Inclui Essencial de Prova, esquemas e mapa mental.",
+   "paginas": "70",
+   "etapas": {
+    "e1": {
+     "status": "done",
+     "resp": "Arquiteto da disciplina",
+     "checks": [
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "5 tópicos definidos; ~70 páginas.",
+     "links": [],
+     "log": [],
+     "doneAt": 1789324279155,
+     "timeSpent": 0
+    },
+    "e2": {
+     "status": "done",
+     "resp": "Estagiário",
+     "checks": [
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "210 questões favoritadas (Cebraspe, FGV, FCC, Vunesp).",
+     "links": [],
+     "log": [],
+     "doneAt": 1789410679155,
+     "timeSpent": 0
+    },
+    "e3": {
+     "status": "done",
+     "resp": "Assistente editorial / IA",
+     "checks": [
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "",
+     "links": [],
+     "log": [
+      {
+       "ts": 1789497079155,
+       "text": "Pasta 'TI TOTAL - SI01 - Ataques e ameaças' criada e cadernos gerados no TEC: por tópico (geral + CEBRASPE/FCC/FGV), questões integradas e geral da aula."
+      }
+     ],
+     "doneAt": 1789497079155,
+     "timeSpent": 0
+    },
+    "e4": {
+     "status": "done",
+     "resp": "Assistente editorial / IA",
+     "checks": [
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "",
+     "links": [],
+     "log": [
+      {
+       "ts": 1789583479155,
+       "text": "Word de questões montado (por tópico e banca, ano decrescente)."
+      }
+     ],
+     "doneAt": 1789583479155,
+     "timeSpent": 0
+    },
+    "e5": {
+     "status": "done",
+     "resp": "Estagiário / IA",
+     "checks": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "",
+     "links": [],
+     "log": [],
+     "doneAt": 1789756279155,
+     "timeSpent": 0
+    },
+    "e6": {
+     "status": "done",
+     "resp": "Professor Especialista",
+     "checks": [
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "",
+     "links": [],
+     "log": [],
+     "doneAt": 1789842679155,
+     "timeSpent": 0
+    },
+    "e7": {
+     "status": "doing",
+     "resp": "Assistente editorial / IA",
+     "checks": [
+      true,
+      false,
+      false
+     ],
+     "notas": "Aplicando o template visual e gerando o arquivo auxiliar de trechos da teoria.",
+     "links": [],
+     "log": [],
+     "doneAt": null,
+     "timeSpent": 0
+    },
+    "e3r": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e4u": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e8": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e9": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e10": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e11": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e12": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e13": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e14": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    }
+   }
+  },
+  {
+   "id": "si02mp",
+   "criadaEm": 1790091079155,
+   "titulo": "TI TOTAL - SI02 - Mecanismos de Proteção",
+   "disciplina": "Segurança da Informação",
+   "escopo": "Antimalware, Proxy, Firewall, IDS/IPS/Honeypot, VPN. Bancas: CEBRASPE, FCC, FGV. (sem cadernos \"*\")",
+   "paginas": "",
+   "etapas": {
+    "e1": {
+     "status": "done",
+     "resp": "Arquiteto da disciplina",
+     "checks": [
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "Definido ao criar a aula. Tópicos: Antimalware, Proxy, Firewall, IDS/IPS/Honeypot, VPN.",
+     "links": [],
+     "log": [],
+     "doneAt": 1790091079155,
+     "timeSpent": 0
+    },
+    "e2": {
+     "status": "done",
+     "resp": "Estagiário",
+     "checks": [
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "Questões favoritadas no TEC: SI02-1 Antimalware (25), 2 Proxy (11), 3 Firewall (159), 4 IDS/IPS/Honeypot (88), 5 VPN (61), Integradas (21).",
+     "links": [],
+     "log": [],
+     "doneAt": 1790094679155,
+     "timeSpent": 0
+    },
+    "e3": {
+     "status": "done",
+     "resp": "Assistente editorial / IA",
+     "checks": [
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "📌 PADRÃO DE NOME DOS CADERNOS: SEM a palavra 'Caderno' na frente.\n   Ex.: TI TOTAL - SI02 - 2 - Proxy   /   TI TOTAL - SI02 - 2 - Proxy (CEBRASPE)\n✅ FEITO: os 27 cadernos foram renomeados (removido o 'Caderno ' da frente).\n\n✅ Cadernos da SI02 criados no TEC — 27 no total, contagens conferidas. Tempo real desta etapa: ~58 min (cronômetro).\n\n⚠️ EXCLUIR NO TEC — 7 cadernos de teste/duplicados (dos experimentos até eu achar o método). Identifique pelo NOME + Nº DE QUESTÕES:\n\nNa pasta 'TI TOTAL - SI02 - Mecanismos de Proteção':\n• \"Caderno TI TOTAL - SI02 - 3 - Firewall\" → o de 77 questões  (há outro igual com 159 — MANTENHA o de 159)\n• \"Caderno TI TOTAL - SI02 - Mecanismos de Proteção\" → o de 36 questões\n• \"Caderno TI TOTAL - SI02 - Mecanismos de Proteção\" → o de 51 questões  (há outro com 365 — MANTENHA o de 365)\n• \"ZZ TEST IDS CEB semPasta\" → 45 questões  (o IDS (CEBRASPE) certo já existe com nome correto, também 45q)\n\nEm 'Sem Classificação':\n• \"Caderno de Estudo\" → 11 questões\n• \"__CAP__ Proxy geral\" → 11 questões\n• \"CAPTURE TESTE\" → 11 questões\nNÃO excluir o \"Caderno de Estudo\" de 1 questão — é antigo, não é da SI02.\n\n=== CADERNOS CORRETOS (pasta 'TI TOTAL - SI02 - Mecanismos de Proteção') ===\nT1 Antimalware: geral 25 / CEBRASPE 16 / FCC 1 / FGV 2\nT2 Proxy: geral 11 / CEBRASPE 6 / FGV 4  (FCC 0, pulado)\nT3 Firewall: geral 159 / CEBRASPE 82 / FCC 19 / FGV 31\nT4 IDS, IPS e Honeypot: geral 88 / CEBRASPE 45 / FCC 10 / FGV 21\nT5 VPN: geral 61 / CEBRASPE 30 / FCC 8 / FGV 11\nIntegradas: geral 21 / CEBRASPE 4 / FCC 7 / FGV 8\nGeral da aula (Mecanismos de Proteção): geral 365 / CEBRASPE 183 / FCC 45 / FGV 77",
+     "links": [
+      {
+       "url": "https://www.tecconcursos.com.br/questoes/pastas",
+       "label": "Minhas pastas (TEC)"
+      }
+     ],
+     "log": [
+      {
+       "ts": 1790101879155,
+       "text": "Pasta 'TI TOTAL - SI02 - Mecanismos de Proteção' criada no TEC."
+      },
+      {
+       "ts": 1790102073461,
+       "text": "Plano de cadernos definido (padrão SI01, 3 bancas, sem '*'). Próximo: criar os cadernos por tópico e banca."
+      },
+      {
+       "ts": 1790103289519,
+       "text": "Tópico 1 (Antimalware): 4 cadernos criados na pasta — geral (25q), CEBRASPE (16q), FCC (1q), FGV (2q)."
+      },
+      {
+       "ts": 1790107056341,
+       "text": "Método de criação otimizado: em vez de clicar campo a campo, crio cada caderno direto pela API do TEC (POST /cadernos/gerar-caderno) pela sua sessão logada. Descoberta: a API deduplica questões já usadas na mesma sessão de geração — por isso crio em 'Sem Classificação' e recarrego a página entre cadernos que se sobrepõem, depois movo tudo para a pasta (multiple-set). Contagens conferidas por API antes de gerar."
+      },
+      {
+       "ts": 1790107056342,
+       "text": "Tópico 2 (Proxy): geral 11q, CEBRASPE 6q, FGV 4q. FCC = 0 questões → pulado (padrão 'quando houver')."
+      },
+      {
+       "ts": 1790107056343,
+       "text": "Tópico 3 (Firewall): geral 159q, CEBRASPE 82q, FCC 19q, FGV 31q."
+      },
+      {
+       "ts": 1790107056344,
+       "text": "Tópico 4 (IDS, IPS e Honeypot): geral 88q, CEBRASPE 45q, FCC 10q, FGV 21q."
+      },
+      {
+       "ts": 1790107056345,
+       "text": "Tópico 5 (VPN): geral 61q, CEBRASPE 30q, FCC 8q, FGV 11q."
+      },
+      {
+       "ts": 1790107056346,
+       "text": "Questões integradas: geral 21q, CEBRASPE 4q, FCC 7q, FGV 8q."
+      },
+      {
+       "ts": 1790107056347,
+       "text": "Geral da aula (Mecanismos de Proteção): geral 365q, CEBRASPE 183q, FCC 45q, FGV 77q."
+      },
+      {
+       "ts": 1790107056348,
+       "text": "TODOS os cadernos da SI02 criados na pasta (27 no total, contagens conferidas). Restam 7 cadernos de teste/duplicados MEUS para você excluir no TEC: na pasta → 'Firewall' 77q (id 104010418), 'Mecanismos de Proteção' 36q (104010443) e 51q (104011595), 'ZZ TEST IDS CEB semPasta' 45q (104010939); em Sem Classificação → 'Caderno de Estudo' 11q (104006555), '__CAP__ Proxy geral' 11q (104007289), 'CAPTURE TESTE' 11q (104007052). (Deixe o 'Caderno de Estudo' de 1q id 97961775 — esse é antigo, não é meu.)"
+      },
+      {
+       "ts": 1790169581988,
+       "text": "OBS de nomenclatura registrada: nome dos cadernos é SEM 'Caderno' na frente (ex.: 'TI TOTAL - SI02 - 2 - Proxy'). Os 27 atuais serão renomeados removendo 'Caderno ' DEPOIS do Word de questões."
+      },
+      {
+       "ts": 1790171358405,
+       "text": "27 cadernos renomeados (removido 'Caderno ' do início). Nomes agora no padrão 'TI TOTAL - SI02 - ...'."
+      }
+     ],
+     "doneAt": null,
+     "timeSpent": 3501955,
+     "timerStart": null
+    },
+    "e3r": {
+     "status": "done",
+     "resp": "Revisão humana",
+     "checks": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "✅ Revisão concluída: pasta com os 27 cadernos corretos (contagens conferidas) e nomes no padrão 'TI TOTAL - SI02 - ...' (sem 'Caderno'). Cadernos de teste excluídos.",
+     "links": [
+      {
+       "url": "https://www.tecconcursos.com.br/questoes/pastas",
+       "label": "Pastas no TEC"
+      }
+     ],
+     "log": [
+      {
+       "ts": 1790166844780,
+       "text": "Etapa criada: revisão humana da criação dos cadernos (princípio: tudo o que a IA faz precisa de revisão humana). Aguardando você conferir e excluir os cadernos de teste sinalizados."
+      },
+      {
+       "ts": 1790171358405,
+       "text": "Revisão humana concluída: cadernos de teste/duplicados excluídos (pasta ficou com os 27 corretos) e 27 cadernos renomeados para o padrão sem 'Caderno'."
+      }
+     ],
+     "doneAt": 1790171358405,
+     "timeSpent": 0,
+     "timerStart": null
+    },
+    "e4": {
+     "status": "done",
+     "resp": "",
+     "checks": [
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "✅ Word das questões da SI02 montado: 'TI TOTAL - SI02 - Questões.docx' (150 questões, formato igual ao de Ataques e Ameaças).\nOrganização: por tópico → banca → ano decrescente. Resolução em branco (comentários vêm na etapa 8). Sumário (TOC), Questões Comentadas, Lista de Questões e Gabarito.\nSeleção proporcional aos 5 tópicos: Antimalware 11 | Proxy 5 | Firewall 69 | IDS 38 | VPN 27.\nSó as 3 bancas: CEBRASPE, FCC, FGV. Fonte: cadernos com gabarito enviados no passo 1.4.1 + metadados do TEC.\nOBS: ao abrir no Word, atualizar o sumário (F9) — ele já vem marcado para atualizar sozinho.",
+     "links": [],
+     "log": [
+      {
+       "ts": 1790167939989,
+       "text": "Início da etapa 4 — preparação editorial das questões da SI02 (transpor as questões dos cadernos do TEC para o Word, por tópico e banca, ordem decrescente de ano, com espaço para comentário e gabarito)."
+      },
+      {
+       "ts": 1790169312658,
+       "text": "Conteúdo das questões (enunciado, alternativas, banca, órgão, ano, assunto) pode ser extraído direto do TEC pela API. Falta o gabarito — que o TEC só libera no PDF de impressão. Criado o passo 1.4.1 para você exportar/subir o caderno com gabarito. Cronômetro pausado aguardando o upload."
+      },
+      {
+       "ts": 1790170934191,
+       "text": "Entregável criado: 'TI TOTAL - SI02 - Questões.docx' com 150 questões (Antimalware 11, Proxy 5, Firewall 69, IDS 38, VPN 27), por tópico→banca→ano, resolução em branco. Salvo no Downloads."
+      }
+     ],
+     "doneAt": 1790170934191,
+     "timeSpent": 1372669,
+     "timerStart": null
+    },
+    "e4u": {
+     "status": "done",
+     "resp": "Revisão humana",
+     "checks": [
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "notas": "✅ Recebidos os cadernos com gabarito: GERAL (200q, gabarito inline) + IDS (88q) + VPN (61q, gabarito em lista no fim). Cobertura completa dos 5 tópicos.\n\n📌 OBSERVAÇÃO IMPORTANTE (para as próximas aulas): a impressão do TEC CORTA em 200 questões. Então, se o caderno GERAL da aula tiver MAIS de 200 questões, NÃO exporte o geral — exporte/imprima CADA UM DOS 5 TÓPICOS separadamente (todos com gabarito) e suba os 5 aqui de uma vez. Assim nenhuma questão fica de fora e todos os tópicos ficam bem representados.\n(Os cadernos por tópico trazem o gabarito como uma lista no fim — funciona igual.)",
+     "links": [
+      {
+       "url": "https://www.tecconcursos.com.br/questoes/pastas",
+       "label": "Pastas no TEC"
+      }
+     ],
+     "log": [
+      {
+       "ts": 1790169246341,
+       "text": "Passo criado: exportar caderno com gabarito e subir no sistema (o gabarito é necessário para a teoria e os comentários)."
+      },
+      {
+       "ts": 1790169693491,
+       "text": "Arquivo enviado no sistema: Caderno Caderno TI TOTAL - SI02 - Mecanismos de Protec_a_o.pdf (1.4 MB)."
+      },
+      {
+       "ts": 1790170349975,
+       "text": "Caderno geral processado: 200 questões com gabarito. Cobertura ok em Firewall/Antimalware/Proxy, mas IDS e VPN foram cortados pela exportação. Pedido: subir também os cadernos de IDS (88q) e VPN (61q)."
+      },
+      {
+       "ts": 1790170635790,
+       "text": "Recebidos IDS (88q) e VPN (61q) com gabarito. Observação registrada: se o geral tiver +200 questões, exportar os 5 tópicos separadamente. Tudo pronto para montar o Word."
+      }
+     ],
+     "uploads": [
+      {
+       "name": "Caderno Caderno TI TOTAL - SI02 - 4 - IDS, IPS e Honeypot.pdf",
+       "size": 638333,
+       "url": "/uploads/si02mp/Caderno Caderno TI TOTAL - SI02 - 4 - IDS, IPS e Honeypot.pdf"
+      },
+      {
+       "name": "Caderno Caderno TI TOTAL - SI02 - 5 - VPN.pdf",
+       "size": 513504,
+       "url": "/uploads/si02mp/Caderno Caderno TI TOTAL - SI02 - 5 - VPN.pdf"
+      },
+      {
+       "name": "Caderno Caderno TI TOTAL - SI02 - Mecanismos de Protec_a_o.pdf",
+       "size": 1444294,
+       "url": "/uploads/si02mp/Caderno Caderno TI TOTAL - SI02 - Mecanismos de Protec_a_o.pdf"
+      },
+      {
+       "name": "Caderno SI02 Geral (gabarito).pdf",
+       "size": 36,
+       "url": "/uploads/si02mp/Caderno SI02 Geral (gabarito).pdf"
+      },
+      {
+       "name": "TI TOTAL - SI02 - Teoria.docx",
+       "size": 43267,
+       "url": "/uploads/si02mp/TI TOTAL - SI02 - Teoria.docx"
+      }
+     ],
+     "doneAt": 1790170635790,
+     "timeSpent": 0,
+     "timerStart": null
+    },
+    "e5": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "✅ Teoria REFEITA no padrão real do Manual TI TOTAL:\n• Estilos reais do Manual (Teoria-N1/N2, margens, fontes Montserrat/Segoe).\n• QUADRO 'Essencial de Prova' REAPROVEITADO do template (caixa arredondada + ícone), no INÍCIO de cada tópico, com auto-ajuste e SEM cores.\n• Corpo do texto com a regra de cores: AZUL = o que é (definição), VERMELHO = o que não é (negação/pegadinha).\n• Capa (fundo TI TOTAL) + sumário funcional (atualiza no Word com F9).\nPendências: esquemas/mapas mentais são da etapa 7; a capa pode ganhar sangria total; Bizu/Atenção pontuais podem ser adicionados se você quiser.",
+     "links": [],
+     "doneAt": null,
+     "log": [
+      {
+       "ts": 1790171539984,
+       "text": "Início da produção da Teoria da SI02 (5 tópicos: Antimalware, Proxy, Firewall, IDS/IPS/Honeypot, VPN), foco em concurso."
+      },
+      {
+       "ts": 1790171749033,
+       "text": "Teoria da SI02 criada (docx, 5 tópicos, foco em prova, com tabelas comparativas e caixas 'Na prova'). Salva no Downloads e na pasta de uploads do sistema."
+      },
+      {
+       "ts": 1790173512808,
+       "text": "Teoria refeita no padrão TI TOTAL: capa + sumário funcional + subseções numeradas + quadros (Essencial de Prova, Bizu, Atenção). Consultados o modelo SI01-Teoria e o Manual."
+      },
+      {
+       "ts": 1790180352111,
+       "text": "Teoria refeita reaproveitando o quadro real do Manual (Essencial de Prova com ícone, no início de cada tópico) e aplicando azul/vermelho no corpo. Estilos, margens e fontes do Manual."
+      },
+      {
+       "ts": 1790186231776,
+       "text": "Teoria completa dos 5 tópicos com profundidade real (39 subseções, ~19 páginas): conceitos detalhados, exemplos, distinções e pegadinhas — suficiente para resolver as questões. Quadros Essencial de Prova corrigidos (sem corte + espaçamento). Falta só edição (capa/sumário) e esquemas (etapa 7)."
+      }
+     ],
+     "timeSpent": 209049,
+     "timerStart": null,
+     "uploads": [
+      {
+       "name": "TI TOTAL - SI02 - Teoria.docx",
+       "size": 43267,
+       "url": "/uploads/si02mp/TI TOTAL - SI02 - Teoria.docx"
+      }
+     ]
+    },
+    "e6": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e7": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e8": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "⚠️ ORDEM: o comentário das questões só é feito DEPOIS da teoria. A teoria (etapa 5) fundamenta os comentários — primeiro produz a teoria, depois comenta as questões reaproveitando os trechos da teoria.",
+     "links": [],
+     "doneAt": null,
+     "log": [
+      {
+       "ts": 1790171539984,
+       "text": "Observação: comentário de questões é sempre após a teoria (a teoria embasa os comentários)."
+      }
+     ],
+     "timeSpent": 0
+    },
+    "e9": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e10": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e11": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e12": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e13": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    },
+    "e14": {
+     "status": "todo",
+     "resp": "",
+     "checks": [],
+     "notas": "",
+     "links": [],
+     "doneAt": null,
+     "log": [],
+     "timeSpent": 0
+    }
+   }
+  }
+ ]
+}
