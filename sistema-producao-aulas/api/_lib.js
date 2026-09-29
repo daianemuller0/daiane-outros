@@ -21,23 +21,14 @@ async function redis(cmd) {
   return d.result;
 }
 
-// Compare-and-set atômico: só grava se a versão ainda for a esperada.
-const CAS = `local cur = redis.call('GET', KEYS[1])
-local ver = 0
-if cur then ver = cjson.decode(cur).version end
-if ver ~= tonumber(ARGV[1]) then return 0 end
-redis.call('SET', KEYS[1], ARGV[2])
-return 1`;
-
 async function readDb() {
   const raw = await redis(['GET', KEY]);
-  return raw ? JSON.parse(raw) : null;
+  // Banco ainda vazio: começa com as aulas do db.json original (seed/db.json).
+  return raw ? JSON.parse(raw) : require('../seed/db.json');
 }
 
-async function writeDb(expectedVersion, data) {
-  const doc = JSON.stringify({ version: expectedVersion + 1, data });
-  const ok = await redis(['EVAL', CAS, '1', KEY, String(expectedVersion), doc]);
-  return ok === 1 ? expectedVersion + 1 : null;
+async function writeDb(data) {
+  await redis(['SET', KEY, JSON.stringify(data)]);
 }
 
 function secret() {
