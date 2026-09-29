@@ -71,6 +71,22 @@
   .regra .warnw{color:#c0392b;font-weight:700}
   .qs{color:#0E57C4}.tnote.warn{background:#fdecea;border-left-color:#c0392b}
   .cobre{display:block;margin:10px 0 4px;font-size:13px;font-weight:700;color:var(--navy)}
+  .conclusao{background:#f4f8ff;border:1px solid #d5e4fb;border-radius:10px;padding:10px 12px;margin:10px 0}
+  .conclusao-h{display:flex;justify-content:space-between;font-size:14px;color:var(--navy)}
+  .conclusao .bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0}
+  .conclusao .bar i{display:block;height:100%;background:var(--ok);transition:width .3s}
+  .pipe{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+  .pipe-i{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:#eef1f7;color:#8a93a8}
+  .pipe-i.fei{background:#d8f3e5;color:#1a7f4b}.pipe-i.atu{background:#fff0cc;color:#9a6a00;box-shadow:0 0 0 1px #e6c66a}
+  .iabox{border:1px solid #d5e4fb;background:#f9fbff;border-radius:10px;padding:10px 12px;margin:10px 0}
+  .iabox-h{margin-bottom:4px}
+  .txlist{margin-top:8px}.txitem{border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:6px 0;background:#fff}
+  .txitem summary{cursor:pointer}
+  .txview{font-size:14px;line-height:1.6;padding:6px 2px}.txview table{border-collapse:collapse;margin:8px 0;width:100%}
+  .txview th,.txview td{border:1px solid var(--line);padding:5px 8px;text-align:left;font-size:13px}.txview th{background:#eef2fb}
+  .tx-az{color:#0070C0;font-weight:700}.tx-vm{color:#d00000;font-weight:700}
+  .pedido{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:10px 12px;font-size:12px;max-height:280px;overflow:auto}
+  .callout{background:#fff8e1;border-left:3px solid #e29a00;padding:6px 10px;margin:8px 0;border-radius:4px;font-size:13px}
   /* header */
   header.top{background:linear-gradient(100deg,var(--navy) 0%,var(--navy2) 60%,#1c3a86 100%);color:#fff;box-shadow:0 2px 10px rgba(0,32,96,.18)}
   header.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
@@ -271,7 +287,7 @@
      obj:"Antes de produzir a teoria, você define manualmente os sub-tópicos de cada tópico principal (os tópicos principais já foram definidos no planejamento), um tópico por vez. Nº de páginas e comentários são opcionais; a teoria é produzida seguindo esses sub-tópicos.",
      ativ:["Conferir os tópicos principais definidos no planejamento.","Cadastrar os sub-tópicos de cada tópico, na ordem da teoria.","Conferir se os sub-tópicos cobrem TODAS as questões do Word de questões (regra obrigatória).","Informar nº de páginas e comentários, se quiser.","Concluir o tópico e seguir para o próximo."],
      res:"Sub-tópicos definidos para todos os tópicos da aula."},
-    {id:"e5",num:"1.5",trilha:"Teoria",nome:"Produção da Teoria (um tópico por vez)",resp:"Estagiário / IA",tempo:"10h",panel:"teoria",
+    {id:"e5",num:"1.5",trilha:"Teoria",nome:"Produção da Teoria (um tópico por vez)",resp:"Estagiário / IA",tempo:"10h",panel:"teoria",semRodarIA:true,
      obj:"Produzir a teoria em partes, um tópico por vez. Após cada tópico há uma revisão humana, com comentários que a IA usa para melhorar os tópicos seguintes.",
      ativ:["Produzir o tópico seguindo os sub-tópicos aprovados, com foco em concursos.","Garantir que toda questão do Word deste tópico tenha a resposta explicada na teoria (regra obrigatória).","Priorizar explicações objetivas, definições, comparações e exemplos.","Enviar o tópico para revisão humana.","Registrar os comentários da revisão (a IA aprende para os demais tópicos).","Repetir até todos os tópicos estarem aprovados."],
      res:"Teoria de todos os tópicos produzida e aprovada, tópico a tópico."},
@@ -544,7 +560,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     row.setAttribute("data-step",s.id);
     const head=el("div","step-head");
     const pill=`<span class="pill ${st}"><span class="dot"></span>${st==="done"?"Feito":st==="doing"?"Fazendo":"A fazer"}</span>`;
-    const isIA=/IA/.test(s.resp);
+    const isIA=/IA/.test(s.resp)&&!s.semRodarIA;
     head.innerHTML=`<div class="step-num">${s.num.replace("1.","")}</div>
       <div style="flex:1"><div class="nm">${esc(s.nome)}${isIA?'<span class="ia-badge">🤖 IA</span>':''}</div><div class="rp">👤 ${esc(s.resp)} · ⏱ ${esc(s.tempo)}</div></div>
       ${pill}<div class="chev">▶</div>`;
@@ -663,7 +679,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     box.appendChild(g);
 
     // IA note + run button (for steps executed by the IA)
-    const isIA=/IA/.test(s.resp);
+    const isIA=/IA/.test(s.resp)&&!s.semRodarIA;
     if(isIA){
       const note=el("div","ia-note",'🤖 <b>Etapa executada pela IA.</b> Clique em “Rodar com a IA” para eu executar esta etapa pelo seu navegador/ferramentas.');
       box.appendChild(note);
@@ -930,6 +946,152 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     draw();return box;
   }
 
+  // ---------- produção da teoria pela IA (api/gerar) ----------
+  const GEN={};  // estado em memória por tópico: {rodando,parar,feitos,total,erro,atual}
+  const TXT={};  // textos gerados por tópico: {noId:{texto,ts}}
+  function mdLite(src){
+    const inl=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\{\{az:(.+?)\}\}/g,'<span class="tx-az">$1</span>').replace(/\{\{vm:(.+?)\}\}/g,'<span class="tx-vm">$1</span>');
+    const lines=String(src||"").split(/\r?\n/);let out="",i=0;
+    while(i<lines.length){
+      const l=lines[i];
+      if(/^\s*\|/.test(l)){const rows=[];while(i<lines.length&&/^\s*\|/.test(lines[i])){rows.push(lines[i]);i++;}
+        const cells=r=>r.trim().replace(/^\||\|$/g,"").split("|").map(c=>c.trim());
+        const body=rows.filter(r=>!/^\s*\|?[\s:\-|]+\|?\s*$/.test(r));
+        out+="<table>"+body.map((r,k)=>"<tr>"+cells(r).map(c=>"<"+(k?"td":"th")+">"+inl(c)+"</"+(k?"td":"th")+">").join("")+"</tr>").join("")+"</table>";continue;}
+      if(/^\s*[-*•]\s+/.test(l)){out+="<ul>";while(i<lines.length&&/^\s*[-*•]\s+/.test(lines[i])){out+="<li>"+inl(lines[i].replace(/^\s*[-*•]\s+/,""))+"</li>";i++;}out+="</ul>";continue;}
+      if(!l.trim()){i++;continue;}
+      const mq=/^\s*>\s*\[([^\]]+)\]\s*:?\s*(.*)$/.exec(l);
+      if(mq){out+='<div class="callout"><b>'+esc(mq[1])+":</b> "+inl(mq[2])+"</div>";i++;continue;}
+      out+="<p>"+inl(l)+"</p>";i++;
+    }
+    return out;
+  }
+  function itensDoTopico(t,ti){
+    const itens=flatNos(t.subs,String(ti+1)).map(x=>({id:x.node.id,num:x.num,nome:x.nome,node:x.node,temFilhos:(x.node.subs||[]).length>0,tipo:"item"}));
+    itens.push({id:"essencial",num:"Essencial de Prova",nome:"Essencial de Prova",node:null,temFilhos:false,tipo:"essencial"});
+    return itens;
+  }
+  async function carregarTextos(a,t){
+    try{const r=await fetch("/api/texto?aula="+encodeURIComponent(a.id)+"&topico="+encodeURIComponent(t.id),{credentials:"include",cache:"no-store"});
+      if(r.ok){const d=await r.json();TXT[t.id]=d.nos||{};}}catch(e){}
+    return TXT[t.id]||{};
+  }
+  function corpoPedido(a,t,ti,itens,k,tx,sumario,orient,opt){
+    const it=itens[k];const T=t.teoria;const refazer=!!(opt&&opt.refazer);
+    const feitosAntes=itens.slice(0,k).filter(x=>x.tipo==="item"&&tx[x.id]).map(x=>x.num+" "+x.nome+": "+String(tx[x.id].texto||"").replace(/\s+/g," ").slice(0,160)+"…");
+    return {aulaId:a.id,aula:a.titulo,disciplina:a.disciplina||"",topico:t.nome,topicoId:t.id,topicoIdx:ti+1,
+      sumario:sumario,no:{id:it.id,num:it.num,nome:it.nome,temFilhos:it.temFilhos},tipo:it.tipo,
+      qs:it.node?parseQs(it.node.qs):(function(){const s=new Set();t.subs.forEach(n=>qsDoNo(n).forEach(x=>s.add(x)));return Array.from(s);})(),
+      anteriores:feitosAntes.slice(-8),
+      orientacoes:orient.concat(it.node&&it.node.comentario?["Sobre este item: "+it.node.comentario]:[]).join("\n"),
+      feedback:(opt&&opt.feedback)||"",textoAnterior:refazer&&tx[it.id]?tx[it.id].texto:"",versao:T.versao};
+  }
+  function contextoGeracao(a,t){
+    const licoes=(DB.licoes||[]).filter(l=>l.aulaId===a.id&&l.tipo==="revisao-teoria"&&l.comentario).slice(-6).map(l=>"- ("+l.topico+") "+l.comentario);
+    return [t.subComentario?"Sobre o tópico: "+t.subComentario:"",licoes.length?"Comentários das revisões anteriores nesta aula (aprenda com eles):\n"+licoes.join("\n"):""].filter(Boolean);
+  }
+  async function verPedido(a,t,ti){
+    const itens=itensDoTopico(t,ti);const tx=await carregarTextos(a,t);
+    let k=itens.findIndex(x=>!tx[x.id]);if(k<0)k=0;
+    const sumario=itens.filter(x=>x.tipo==="item").map(x=>x.num+" "+x.nome);
+    const body=corpoPedido(a,t,ti,itens,k,tx,sumario,contextoGeracao(a,t),{});
+    const r=await fetch("/api/gerar?simular=1",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){alert(d.error||"Erro");return;}
+    const m=el("div","modal modal-wide");
+    m.innerHTML='<span class="mx">✕</span><h2>👁 O que será enviado à IA</h2><div class="sub muted small">Item de exemplo: '+esc(itens[k].num+" "+itens[k].nome)+' · modelo '+esc(d.modelo)+'</div>'
+      +'<div class="small" style="margin:8px 0"><b>Tamanho aproximado deste pedido:</b> '+d.tokensAprox.toLocaleString("pt-BR")+' tokens de entrada ('+d.caracteres.toLocaleString("pt-BR")+' caracteres). A resposta da IA (o texto do item) vem além disso. Nenhuma chamada foi feita e nada foi cobrado.</div>'
+      +'<div class="block-lbl">Instruções fixas (enviadas em todos os itens)</div><pre class="pedido">'+esc(d.sistema)+'</pre>'
+      +'<div class="block-lbl">Pedido deste item</div><pre class="pedido">'+esc(d.pedido)+'</pre><div class="foot"><button class="btn" id="pd-ok">Fechar</button></div>';
+    m.querySelector(".mx").onclick=closeModal;m.querySelector("#pd-ok").onclick=closeModal;showModal(m);
+  }
+  async function gerarTopico(a,t,ti,redraw,opt){
+    const g=GEN[t.id]=GEN[t.id]||{};if(g.rodando)return;
+    const T=t.teoria;const itens=itensDoTopico(t,ti);
+    g.rodando=true;g.parar=false;g.erro="";g.total=itens.length;
+    const tx=await carregarTextos(a,t);
+    const refazer=!!(opt&&opt.refazer);
+    g.feitos=refazer?0:itens.filter(x=>tx[x.id]).length;
+    const sumario=itens.filter(x=>x.tipo==="item").map(x=>x.num+" "+x.nome);
+    const orient=contextoGeracao(a,t);
+    redraw();
+    for(let k=0;k<itens.length;k++){
+      const it=itens[k];
+      if(g.parar)break;
+      if(!refazer&&tx[it.id])continue;
+      g.atual=it.num+" "+it.nome;redraw();
+      const body=corpoPedido(a,t,ti,itens,k,tx,sumario,orient,opt);
+      try{
+        const r=await fetch("/api/gerar",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+        const d=await r.json().catch(()=>({}));
+        if(!r.ok)throw new Error(d.error||("Erro "+r.status));
+        tx[it.id]={texto:d.texto,ts:Date.now()};g.feitos++;
+        T.tokIn=(T.tokIn||0)+((d.usage&&d.usage.entrada)||0);T.tokOut=(T.tokOut||0)+((d.usage&&d.usage.saida)||0);save();
+        if(d.truncado)g.aviso="Um item foi cortado por tamanho; refaça-o se precisar.";
+      }catch(e){g.erro="Parou em “"+it.num+" "+it.nome+"”: "+e.message;break;}
+      redraw();
+    }
+    g.rodando=false;g.atual="";
+    if(!g.erro&&!g.parar&&g.feitos>=g.total){T.geradoEm=Date.now();T.versaoGerada=T.versao;addLog(a,STEPS.find(x=>x.id==="e5"),"Teoria gerada pela IA: "+t.nome+" (v"+T.versao+").");save();}
+    redraw();
+  }
+  function blocoIA(a,t,ti,card,redraw,T){
+    const g=GEN[t.id]=GEN[t.id]||{};
+    const itens=itensDoTopico(t,ti);
+    const tx=TXT[t.id]||{};
+    const feitosN=g.rodando?g.feitos:itens.filter(x=>tx[x.id]).length;
+    const pct=Math.round(feitosN/itens.length*100);
+    const box=el("div","iabox");
+    box.appendChild(el("div","iabox-h","<b>🤖 Produção pela IA</b>"+(T.tokOut?' <span class="small muted">· '+(T.tokIn||0).toLocaleString("pt-BR")+" tokens de entrada / "+(T.tokOut||0).toLocaleString("pt-BR")+" de saída (v"+T.versao+")</span>":"")));
+    const bar=el("div","conclusao");
+    bar.innerHTML='<div class="conclusao-h"><span>Itens escritos</span><span>'+feitosN+" de "+itens.length+" · "+pct+'%</span></div><div class="bar"><i style="width:'+pct+'%"></i></div>'+(g.rodando&&g.atual?'<div class="small">✍️ Escrevendo: '+esc(g.atual)+"…</div>":"");
+    box.appendChild(bar);
+    if(g.erro)box.appendChild(el("div","tnote warn","⚠ "+esc(g.erro)));
+    if(g.aviso)box.appendChild(el("div","tnote",esc(g.aviso)));
+    const ultimo=T.historico.length?T.historico[T.historico.length-1]:null;
+    const temAjuste=ultimo&&ultimo.acao==="ajustes"&&T.versaoGerada!==T.versao;
+    const ac=el("div","tcard-a");
+    if(g.rodando){
+      const bp=el("button","btn danger sm","⏹ Parar");bp.onclick=()=>{g.parar=true;bp.disabled=true;bp.textContent="Parando…";};ac.appendChild(bp);
+    }else{
+      if(feitosN<itens.length){
+        const b=el("button","btn sm",(feitosN?"▶ Continuar produção":"🤖 Produzir este tópico com a IA"));
+        b.onclick=()=>gerarTopico(a,t,ti,redraw,{});ac.appendChild(b);
+      }
+      if(temAjuste&&feitosN){
+        const b2=el("button","btn sm","🤖 Refazer com os ajustes pedidos");
+        b2.onclick=()=>gerarTopico(a,t,ti,redraw,{refazer:true,feedback:ultimo.comentario});ac.appendChild(b2);
+      }else if(feitosN===itens.length){
+        const b3=el("button","btn ghost sm","↻ Refazer tudo");
+        b3.onclick=()=>{if(confirm("Refazer todos os itens deste tópico? Os textos atuais serão substituídos."))gerarTopico(a,t,ti,redraw,{refazer:true});};ac.appendChild(b3);
+      }
+    }
+    const bv=el("button","btn ghost sm","👁 Ver o que será enviado");bv.onclick=()=>verPedido(a,t,ti);ac.appendChild(bv);
+    box.appendChild(ac);
+    // textos gerados
+    if(Object.keys(tx).length){
+      const lst=el("div","txlist");
+      itens.forEach(it=>{
+        const x=tx[it.id];if(!x)return;
+        const d=el("details","txitem");
+        d.innerHTML="<summary><b>"+esc(it.num===it.nome?it.nome:it.num+" "+it.nome)+"</b>"+(x.editado?' <span class="small muted">(editado)</span>':"")+"</summary>";
+        const view=el("div","txview");view.innerHTML=mdLite(x.texto);d.appendChild(view);
+        const bar2=el("div","tcard-a");
+        const be=el("button","btn ghost sm","✏ Editar");
+        be.onclick=()=>{
+          view.innerHTML="";const ta=el("textarea");ta.rows=12;ta.value=x.texto;ta.style.width="100%";view.appendChild(ta);
+          be.style.display="none";const bs=el("button","btn ok sm","Salvar");
+          bs.onclick=async()=>{const r=await fetch("/api/texto",{method:"PUT",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({aulaId:a.id,topicoId:t.id,noId:it.id,texto:ta.value})});
+            if(r.ok){x.texto=ta.value;x.editado=true;redraw();}else alert("Não foi possível salvar.");};
+          bar2.appendChild(bs);};
+        bar2.appendChild(be);d.appendChild(bar2);lst.appendChild(d);
+      });
+      box.appendChild(lst);
+    }else if(!TXT[t.id]){carregarTextos(a,t).then(()=>{if(Object.keys(TXT[t.id]||{}).length)redraw();});}
+    card.appendChild(box);
+    return itens.every(x=>tx[x.id]);
+  }
+
   function TeoriaPanel(a,s,e){
     const box=el("div","pnl");
     function syncDone(tops){
@@ -947,6 +1109,24 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       box.appendChild(el("div","small muted","Cada tópico passa por revisão humana antes de o próximo começar. Seus comentários de revisão servem para a IA aprender e acertar melhor nos tópicos seguintes."));
       box.appendChild(regraQuestoes(a));
       if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico cadastrado. Defina os tópicos e sub-tópicos na etapa 1.4.2."));return;}
+      const PCT={aguardando:0,producao:33,revisao:66,aprovado:100};
+      const pctTot=Math.round(tops.reduce((n,t)=>n+(PCT[t.teoria.status]||0),0)/tops.length);
+      const barra=el("div","conclusao");
+      barra.innerHTML='<div class="conclusao-h"><b>Conclusão da teoria</b><span>'+pctTot+'%</span></div><div class="bar"><i style="width:'+pctTot+'%"></i></div><div class="small muted">'+tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados · "+tops.filter(t=>t.teoria.status==="revisao").length+" em revisão · "+tops.filter(t=>t.teoria.status==="producao").length+" em produção · "+tops.filter(t=>t.teoria.status==="aguardando").length+" aguardando</div>";
+      box.appendChild(barra);
+      const bw=el("button","btn ghost sm","📄 Baixar teoria em Word (o que já foi produzido)");
+      bw.onclick=async()=>{
+        bw.disabled=true;const t0=bw.textContent;bw.textContent="Montando o Word…";
+        try{
+          const topicos=tops.map((t,ti)=>({id:t.id,nome:t.nome,itens:flatNos(t.subs,String(ti+1)).map(x=>({id:x.node.id,nivel:x.nivel,nome:x.nome}))}));
+          const r=await fetch("/api/docx",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({aulaId:a.id,titulo:a.titulo,arquivo:(a.titulo||"Aula")+" - Teoria",topicos:topicos})});
+          if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||("Erro "+r.status));}
+          const blob=await r.blob();const url=URL.createObjectURL(blob);const an=document.createElement("a");
+          an.href=url;an.download=(a.titulo||"Aula")+" - Teoria.docx";document.body.appendChild(an);an.click();an.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+        }catch(err){alert("Não foi possível montar o Word: "+err.message);}
+        bw.disabled=false;bw.textContent=t0;
+      };
+      box.appendChild(bw);
       const idxAtual=tops.findIndex(t=>t.teoria.status!=="aprovado");
       box.appendChild(el("div","pnl-sum",tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados"));
       tops.forEach((t,ti)=>{
@@ -958,6 +1138,11 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         const lbl={aguardando:"Aguardando",producao:"Em produção",revisao:"Em revisão humana",aprovado:"Aprovado"}[st]||st;
         hd.appendChild(el("span","tpill "+(st==="aprovado"?"ok":st==="aguardando"?"":"warn"),lbl+(T.versao>1?" · v"+T.versao:"")));
         card.appendChild(hd);
+        const ETP=[["aguardando","Aguardando"],["producao","Produção"],["revisao","Revisão humana"],["aprovado","Aprovado"]];
+        const ordem=ETP.findIndex(x=>x[0]===st);
+        const pipe=el("div","pipe");
+        ETP.forEach((x,i)=>{pipe.appendChild(el("span","pipe-i"+(i<ordem?" fei":i===ordem?" atu":""),(i<ordem?"✓ ":"")+x[1]));});
+        card.appendChild(pipe);
         const at=subsAtivas(t,ti);
         const dt=el("details","small");dt.innerHTML="<summary>Sumário deste tópico ("+at.length+" itens)</summary>"+(at.length?at.map(x=>'<div style="margin-left:'+((x.nivel-2)*14)+'px">'+esc(x.num)+" "+esc(x.nome)+(x.pag?" ("+esc(x.pag)+"p)":"")+(x.qs?' <span class="qs">📎 '+esc(x.qs)+"</span>":"")+"</div>").join(""):"<div>—</div>");
         card.appendChild(dt);
@@ -977,14 +1162,18 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         if(st==="producao"){
           if(T.historico.length&&T.historico[T.historico.length-1].acao==="ajustes")
             card.appendChild(el("div","tnote","↩ Ajustes pedidos: "+esc(T.historico[T.historico.length-1].comentario||"(sem comentário)")));
-          card.appendChild(el("div","small muted","A IA produz este tópico. Quando terminar, anexe a parte produzida e envie para revisão."));
+          const completo=blocoIA(a,t,ti,card,draw,T);
+          card.appendChild(el("div","small muted","Se preferir, anexe também a parte produzida por fora (arquivo ou link)."));
           card.appendChild(filesRow(T,true,draw));
           card.appendChild(uploadRow(a,T,draw));
           const bs=el("button","btn ok sm","📨 Enviar para revisão humana");
+          const rodando=!!(GEN[t.id]&&GEN[t.id].rodando);
+          if(rodando||(!completo&&!T.arquivos.length&&!T.links.length)){bs.disabled=true;bs.title=rodando?"Aguarde a IA terminar":"Produza o tópico com a IA (ou anexe a parte produzida) antes de enviar";}
           bs.onclick=()=>{T.status="revisao";hist(t,"enviado","");save();draw();};
           card.appendChild(bs);
         }
         if(st==="revisao"){
+          blocoIA(a,t,ti,card,draw,T);
           card.appendChild(filesRow(T,true,draw));
           const cm=el("div","fld");cm.appendChild(el("label","","Comentários da revisão (a IA aprende para os próximos tópicos)"));
           const ct=el("textarea");ct.rows=3;ct.value=T.revComentario||"";ct.placeholder="Ex.: muito extenso; faltou destacar pegadinhas; usar mais quadros comparativos…";
