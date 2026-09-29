@@ -96,6 +96,17 @@ Ele consiste em uma solução de hardware, software ou combinação de ambos, po
 > [Atenção] Proxy {{vm:não é sinônimo}} de firewall.
 > [Atenção] O firewall tem o foco em segurança e filtragem de ameaças, enquanto o proxy foca em intermediação, cache e controle de uso.
 
+QUADRO "ESSENCIAL DE PROVA" (quando o tipo do pedido for esse)
+É um resumo de UMA LINHA por conceito: o aluno relembra rapidamente os conceitos que mais caem em prova. Formato: uma linha de abertura ("Os ataques para obtenção de informações são:") e depois um marcador para cada conceito importante do tópico, na ordem do sumário (normalmente os itens folha): "- **Termo:** definição de no máximo 12 palavras." Sem explicações, sem exemplos, sem comparações, sem subdivisões, sem quadros. Modelo:
+
+Ataques para obtenção de informações são:
+- **Vasculhar o lixo:** procura informações no lixo.
+- **Engenharia social:** manipulação de pessoas.
+- **Furto de identidade (identity theft):** utilizar dados pessoais de outra pessoa.
+- **Phishing:** se passar por pessoa ou instituição confiável.
+- **Análise de pacotes (packet sniffing):** captura e monitoramento de informações pela rede.
+- **Força bruta (brute force):** testar repetidamente diferentes combinações de usuários e senhas.
+
 REGRA OBRIGATÓRIA DE COBERTURA
 Recebe, para cada item, as questões reais que ele precisa cobrir. O texto deve conter, de forma explícita e correta e SEM ficar longo, o conhecimento necessário para justificar o gabarito de CADA questão listada. Se uma pegadinha das questões importar, resolva-a em um [Atenção] curto ou em uma frase, não em vários parágrafos. Não cite números de questão nem escreva "gabarito".
 
@@ -104,7 +115,7 @@ QUALIDADE
 - Nunca afirme o que uma banca já cobrou, decidiu ou considerou. Não cite bancas.
 - Siga as orientações do professor quando houver; elas têm prioridade.
 - Retorne somente o texto do item, sem introdução nem despedida.
-- Quadro "Essencial de Prova" (quando pedido): resumo sintético dos pontos mais cobrados do tópico, em linhas curtas iniciadas por "- ", cada uma com no máximo cerca de 20 palavras. Deve caber em uma página.`;
+- Quadro "Essencial de Prova": siga o modelo acima (uma linha por conceito, até 12 palavras cada).`;
 
 function questoesDoTopico(aulaId, topicoNome, topicoIdx) {
   try {
@@ -130,7 +141,7 @@ function montarPedido(b, questoes) {
     `ITEM A ESCREVER: ${b.no.num} ${b.no.nome}`,
   ];
   if (b.tipo === 'essencial') {
-    partes.push('TIPO: quadro "Essencial de Prova". Escreva de 6 a 10 linhas curtas (até cerca de 20 palavras cada), iniciadas por "- ", com os pontos que mais caem em prova neste tópico, com base no sumário e nas questões abaixo. Não repita títulos.');
+    partes.push('TIPO: quadro "Essencial de Prova". Escreva uma linha de abertura ("Os <tema do tópico> são:") e depois UM marcador por conceito importante do sumário do tópico, na ordem do sumário, no formato "- **Termo:** definição de no máximo 12 palavras." Sem explicações, exemplos ou comparações. Use os itens folha do sumário; pule os itens que forem só agrupadores. Use as questões abaixo apenas para decidir quais conceitos incluir.');
   } else if (b.tipo === 'abertura') {
     partes.push('TIPO: ABERTURA DO TÓPICO. Escreva 2 ou 3 parágrafos curtos (60 a 90 palavras no total) que apresentem o tema do tópico, sua importância ou evolução, e terminem com uma linha [figura]. Não defina cada item do sumário.');
   } else if (b.no.temFilhos) {
