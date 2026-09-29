@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TI TOTAL - Produção de Aulas</title>
+<style>
+:root{--navy:#002060;--blue:#0E57C4;--bg:#f4f6fb;--card:#fff;--txt:#1b2333;--mut:#6b7488;--ok:#1a9d5a;--warn:#e29a00;--line:#dfe4ef}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
+header{background:var(--navy);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
+header h1{font-size:18px;margin:0;flex:1}
+button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:8px 14px;background:var(--blue);color:#fff}
+button.sec{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+button.ghost{background:transparent;color:#fff;border:1px solid #ffffff66}
+button.danger{background:#c0392b}
+input,textarea,select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;width:100%;background:#fff;color:var(--txt)}
+textarea{min-height:80px;resize:vertical}
+main{max-width:1000px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--ok)}
+.mut{color:var(--mut);font-size:13px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--line)}
+.pill.ok{background:#d8f3e5;color:var(--ok)}.pill.and{background:#fff0cc;color:#9a6a00}
+.steps{display:grid;grid-template-columns:260px 1fr;gap:16px}
+.step{padding:10px;border-radius:8px;cursor:pointer;display:flex;gap:8px;align-items:center;border:1px solid transparent}
+.step:hover{background:#eef2fb}.step.sel{background:#e3ecff;border-color:var(--blue)}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line);flex:none}
+.dot.ok{background:var(--ok)}.dot.and{background:var(--warn)}
+.timer{font-size:28px;font-variant-numeric:tabular-nums;color:var(--navy);font-weight:600}
+.login{max-width:340px;margin:12vh auto}
+.hidden{display:none}
+@media(max-width:720px){.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const ETAPAS_PADRAO = Array.from({length:14},(_,i)=>'Etapa '+(i+1));
+const $app = document.getElementById('app');
+let DB = null, VERSION = 0, view = {tela:'painel'}, tick = null, saving = Promise.resolve();
+
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2,10);
+const fmt = s => { s=Math.floor(s); const h=Math.floor(s/3600),m=Math.floor(s%3600/60); return (h?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); };
+
+async function api(path, opts={}){
+  const r = await fetch('/api/'+path, {credentials:'include', headers:{'Content-Type':'application/json'}, ...opts});
+  const d = await r.json().catch(()=>({}));
+  return {status:r.status, ok:r.ok, d};
+}
+
+async function load(){
+  const r = await api('db');
+  if (r.status===401) return false;
+  if (!r.ok) throw new Error(r.d.error||'Falha ao carregar');
+  VERSION = r.d.version;
+  DB = r.d.data || {etapas:ETAPAS_PADRAO.slice(), aulas:[]};
+  return true;
+}
+
+// Salva o estado inteiro; em conflito, avisa e recarrega a versão do servidor.
+function save(){
+  saving = saving.then(async()=>{
+    const r = await api('db',{method:'PUT',body:JSON.stringify({version:VERSION,data:DB})});
+    if (r.ok) { VERSION = r.d.version; return; }
+    if (r.status===409){
+      alert('Outra pessoa alterou os dados ao mesmo tempo. Vou recarregar a versão mais recente.');
+      VERSION = r.d.current.version; DB = r.d.current.data; render();
+    } else if (r.status===401){ location.reload(); }
+    else alert('Erro ao salvar: '+(r.d.error||r.status));
+  });
+  return saving;
+}
+
+const aula = id => DB.aulas.find(a=>a.id===id);
+function estado(a,i){ return (a.etapas[i]||{}).status||'pendente'; }
+function progresso(a){ const n=DB.etapas.length; return Math.round(DB.etapas.filter((_,i)=>estado(a,i)==='concluida').length/n*100); }
+function tempoEtapa(e){ return (e.tempo||0) + (e.inicio ? (Date.now()-e.inicio)/1000 : 0); }
+
+function loginView(msg=''){
+  clearInterval(tick);
+  $app.innerHTML = `<div class="card login"><h2>TI TOTAL</h2><p class="mut">Sistema de Produção de Aulas</p>
+    <form id="f"><input type="password" id="pw" placeholder="Senha" autofocus><p style="color:#c0392b">${esc(msg)}</p>
+    <button style="width:100%">Entrar</button></form></div>`;
+  document.getElementById('f').onsubmit = async e=>{
+    e.preventDefault();
+    const r = await api('login',{method:'POST',body:JSON.stringify({senha:document.getElementById('pw').value})});
+    if (!r.ok) return loginView(r.d.error||'Erro');
+    init();
+  };
+}
+
+function shell(inner){
+  return `<header><h1>TI TOTAL · Produção de Aulas</h1>
+    <button class="ghost" onclick="go('painel')">Painel</button>
+    <button class="ghost" onclick="go('config')">Etapas</button>
+    <button class="ghost" onclick="sair()">Sair</button></header><main>${inner}</main>`;
+}
+async function sair(){ await api('login',{method:'DELETE'}); location.reload(); }
+function go(tela,id,etapa){ view={tela,id,etapa:etapa??0}; render(); }
+
+function painel(){
+  const cards = DB.aulas.map(a=>{
+    const p=progresso(a), tot=Object.values(a.etapas).reduce((s,e)=>s+tempoEtapa(e),0);
+    return `<div class="card"><div class="row"><b style="flex:1">${esc(a.codigo)}</b><span class="pill ${p===100?'ok':p>0?'and':''}">${p}%</span></div>
+      <div>${esc(a.nome)}</div><div class="bar"><i style="width:${p}%"></i></div>
+      <div class="mut">Tempo total: ${fmt(tot)}</div>
+      <div class="row" style="margin-top:10px"><button onclick="go('aula','${a.id}')">Abrir</button>
+      <button class="sec" onclick="excluirAula('${a.id}')">Excluir</button></div></div>`;}).join('');
+  return shell(`<div class="card"><h3 style="margin-top:0">Nova aula</h3><form id="nova" class="row">
+    <input id="cod" placeholder="Código (ex.: SI02)" style="flex:1;min-width:120px" required>
+    <input id="nom" placeholder="Nome (ex.: Mecanismos de Proteção)" style="flex:3;min-width:200px" required>
+    <button>Criar</button></form></div>
+    <div class="grid">${cards||'<p class="mut">Nenhuma aula ainda.</p>'}</div>`);
+}
+function excluirAula(id){ if(confirm('Excluir esta aula e todo o progresso?')){ DB.aulas=DB.aulas.filter(a=>a.id!==id); save(); render(); } }
+
+function telaAula(){
+  const a=aula(view.id); if(!a) return painel();
+  const i=view.etapa, e=a.etapas[i]||(a.etapas[i]={status:'pendente',notas:'',links:[],tempo:0,inicio:null});
+  const lista = DB.etapas.map((n,k)=>`<div class="step ${k===i?'sel':''}" onclick="go('aula','${a.id}',${k})">
+    <span class="dot ${estado(a,k)==='concluida'?'ok':estado(a,k)==='andamento'?'and':''}"></span><span>${k+1}. ${esc(n)}</span></div>`).join('');
+  const links=(e.links||[]).map((l,k)=>`<div class="row"><a href="${esc(l.url)}" target="_blank" rel="noopener" style="flex:1">${esc(l.nome||l.url)}</a><button class="sec" onclick="rmLink(${k})">×</button></div>`).join('');
+  return shell(`<div class="row"><h2 style="flex:1;margin:0">${esc(a.codigo)} — ${esc(a.nome)}</h2><span class="pill">${progresso(a)}% concluída</span></div>
+    <div class="bar"><i style="width:${progresso(a)}%"></i></div>
+    <div class="steps"><div class="card" style="padding:8px">${lista}</div>
+    <div class="card"><h3 style="margin-top:0">${i+1}. ${esc(DB.etapas[i])}</h3>
+      <div class="row"><span class="timer" id="tm">${fmt(tempoEtapa(e))}</span>
+        <button onclick="toggleTimer()">${e.inicio?'Pausar':'Iniciar'}</button>
+        <select id="st" onchange="setStatus(this.value)" style="width:auto">
+          ${['pendente','andamento','concluida'].map(s=>`<option value="${s}" ${e.status===s?'selected':''}>${{pendente:'Pendente',andamento:'Em andamento',concluida:'Concluída'}[s]}</option>`).join('')}</select></div>
+      <h4>Notas</h4><textarea id="nt" onchange="setNotas(this.value)">${esc(e.notas||'')}</textarea>
+      <h4>Links e arquivos</h4>${links||'<p class="mut">Nenhum anexo.</p>'}
+      <div class="row" style="margin-top:8px"><input id="lu" placeholder="Cole um link (ex.: caderno do TEC)" style="flex:1"><button class="sec" onclick="addLink()">Adicionar</button></div>
+      <div class="row" style="margin-top:8px"><input type="file" id="fl" style="flex:1"><button class="sec" onclick="upload()">Enviar arquivo (até 4 MB)</button></div>
+      <div class="row" style="margin-top:14px">${i>0?`<button class="sec" onclick="go('aula','${a.id}',${i-1})">← Anterior</button>`:''}
+      ${i<DB.etapas.length-1?`<button onclick="concluirEProxima()">Concluir e ir para a próxima →</button>`:''}</div>
+    </div></div>`);
+}
+function cur(){ const a=aula(view.id); return a.etapas[view.etapa]; }
+function pararTimer(e){ if(e.inicio){ e.tempo=(e.tempo||0)+(Date.now()-e.inicio)/1000; e.inicio=null; } }
+function toggleTimer(){ const e=cur(); if(e.inicio) pararTimer(e); else { e.inicio=Date.now(); if(e.status==='pendente') e.status='andamento'; } save(); render(); }
+function setStatus(v){ const e=cur(); e.status=v; if(v==='concluida') pararTimer(e); save(); render(); }
+function setNotas(v){ cur().notas=v; save(); }
+function addLink(){ const u=document.getElementById('lu').value.trim(); if(!u) return; (cur().links=cur().links||[]).push({url:u,nome:u}); save(); render(); }
+function rmLink(k){ cur().links.splice(k,1); save(); render(); }
+function concluirEProxima(){ const e=cur(); e.status='concluida'; pararTimer(e); save(); go('aula',view.id,view.etapa+1); }
+async function upload(){
+  const f=document.getElementById('fl').files[0]; if(!f) return;
+  if(f.size>4*1024*1024) return alert('Arquivo maior que 4 MB. Suba em outro lugar (Drive) e cole o link.');
+  const r=await fetch('/api/upload?nome='+encodeURIComponent(f.name),{method:'POST',credentials:'include',body:f});
+  const d=await r.json(); if(!r.ok) return alert('Erro no upload: '+d.error);
+  (cur().links=cur().links||[]).push({url:d.url,nome:d.nome}); save(); render();
+}
+
+function config(){
+  return shell(`<div class="card"><h3 style="margin-top:0">Nomes das etapas</h3><p class="mut">Edite os nomes conforme o Processo de Produção de Aulas.</p>
+    <form id="cf">${DB.etapas.map((n,k)=>`<div class="row" style="margin-bottom:6px"><span style="width:28px">${k+1}.</span><input value="${esc(n)}" data-k="${k}" style="flex:1"></div>`).join('')}
+    <button style="margin-top:8px">Salvar</button></form></div>`);
+}
+
+function render(){
+  clearInterval(tick);
+  if (view.tela==='aula') $app.innerHTML=telaAula();
+  else if (view.tela==='config') $app.innerHTML=config();
+  else $app.innerHTML=painel();
+  const f=document.getElementById('nova'); if(f) f.onsubmit=ev=>{ev.preventDefault();
+    DB.aulas.push({id:uid(),codigo:document.getElementById('cod').value.trim(),nome:document.getElementById('nom').value.trim(),etapas:{}}); save(); render();};
+  const c=document.getElementById('cf'); if(c) c.onsubmit=ev=>{ev.preventDefault();
+    c.querySelectorAll('input').forEach(i=>DB.etapas[+i.dataset.k]=i.value.trim()||('Etapa '+(+i.dataset.k+1))); save(); go('painel');};
+  if (view.tela==='aula'){ const a=aula(view.id); const e=a&&a.etapas[view.etapa];
+    if(e&&e.inicio) tick=setInterval(()=>{const t=document.getElementById('tm'); if(t) t.textContent=fmt(tempoEtapa(e));},1000); }
+}
+
+async function init(){
+  try { if(!(await load())) return loginView(); render(); }
+  catch(e){ $app.innerHTML='<div class="card login">Erro: '+esc(e.message)+'</div>'; }
+}
+init();
+</script>
+</body>
+</html>
