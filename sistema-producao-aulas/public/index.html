@@ -960,6 +960,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         out+="<table>"+body.map((r,k)=>"<tr>"+cells(r).map(c=>"<"+(k?"td":"th")+">"+inl(c)+"</"+(k?"td":"th")+">").join("")+"</tr>").join("")+"</table>";continue;}
       if(/^\s*[-*•]\s+/.test(l)){out+="<ul>";while(i<lines.length&&/^\s*[-*•]\s+/.test(lines[i])){out+="<li>"+inl(lines[i].replace(/^\s*[-*•]\s+/,""))+"</li>";i++;}out+="</ul>";continue;}
       if(!l.trim()){i++;continue;}
+      if(/^\s*\[figura[^\]]*\]\s*$/i.test(l)){out+='<p><b style="background:#fff200">[figura]</b></p>';i++;continue;}
       const mq=/^\s*>\s*\[([^\]]+)\]\s*:?\s*(.*)$/.exec(l);
       if(mq){out+='<div class="callout"><b>'+esc(mq[1])+":</b> "+inl(mq[2])+"</div>";i++;continue;}
       out+="<p>"+inl(l)+"</p>";i++;
