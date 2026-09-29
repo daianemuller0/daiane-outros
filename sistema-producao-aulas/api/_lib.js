@@ -66,4 +66,4 @@ async function readBody(req) {
   return raw ? JSON.parse(raw) : {};
 }
 
-module.exports = { readDb, writeDb, isAuthed, checkPassword, sessionCookie, readBody };
+module.exports = { redis, readDb, writeDb, isAuthed, checkPassword, sessionCookie, readBody };

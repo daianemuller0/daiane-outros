@@ -1,0 +1,931 @@
+{
+"aulas": {
+"si02mp": [
+{
+"topico": "Antimalware",
+"questoes": [
+{
+"n": 1,
+"ref": "(CEBRASPE – 2026 – ANSA – PNM (ANSA))",
+"texto": "No que concerne às rotinas de proteção e segurança, que envolvem conhecimentos relativos a ataques cibernéticos, julgue o item que se segue.\nOs antivírus de ambiente corporativo, também denominados endpoints, são soluções projetadas para proteger dispositivos como computadores, servidores e smartphones contra vírus que podem corromper ou apagar dados.",
+"gabarito": "Certo"
+},
+{
+"n": 2,
+"ref": "(CEBRASPE – 2026 – PGE RN – Ana Jur (PGE RN))",
+"texto": "Assinale a opção que apresenta o método de detecção que permite que um antivírus identifique uma ameaça totalmente nova, que ainda não possui uma assinatura conhecida.\na) detecção por worms\nb) detecção heurística\nc) detecção baseada em assinatura\nd) inspeção de pacotes\ne) filtragem por lista negra",
+"gabarito": "Letra B"
+},
+{
+"n": 3,
+"ref": "(CEBRASPE – 2026 – UNEAL – AAD (UNEAL))",
+"texto": "Julgue o próximo item, relativos a sites de busca e de pesquisa na Internet, a noções de organização e de gerenciamento de arquivos e a aplicativos para segurança da informação.\nSoftwares antivírus baseados exclusivamente em assinaturas são capazes de detectar, com alta eficácia, ameaças desconhecidas (zero-day), mesmo sem atualizações recentes.",
+"gabarito": "Errado"
+},
+{
+"n": 4,
+"ref": "(CEBRASPE – 2025 – IBAMA – AAmb (IBAMA))",
+"texto": "Julgue o item seguinte, considerando a arquitetura e os aspectos operacionais do MS Windows, bem como os aspectos funcionais de aplicativos de segurança da informação.\nUm antivírus que utiliza um modelo de aprendizado de máquina treinado com um conjunto de dados abrangente e diversificado de malware, combinado com técnicas de análise heurística e análise de comportamento em tempo real, é capaz de detectar, com alta probabilidade de sucesso, variantes do malware conhecidas e desconhecidas.",
+"gabarito": "Certo"
+},
+{
+"n": 5,
+"ref": "(CEBRASPE – 2025 – PF – Adm (PF))",
+"texto": "Julgue o próximo item, relativos a ambiente Windows, segurança da informação e redes de computadores.\nAinda que aplicativos potencialmente indesejados (PUA) não sejam tecnicamente considerados vírus, o Microsoft Defender Antivirus detecta esses aplicativos e permite que se bloqueie qualquer tentativa de baixá-los, movê-los, executá-los ou instalá-los.",
+"gabarito": "Certo"
+},
+{
+"n": 6,
+"ref": "(CEBRASPE – 2025 – FUB – Adm (FUB))",
+"texto": "Acerca de redes de computadores, julgue o item a seguir.\nAntispywares baseados em assinaturas dependem de bancos de dados atualizados para detectar novas ameaças.",
+"gabarito": "Certo"
+},
+{
+"n": 7,
+"ref": "(CEBRASPE – 2025 – SEFAZ SE – AFT (SEFAZ SE))",
+"texto": "No contexto da segurança de redes de computadores, a prevenção contra ataques cibernéticos e malwares exige o uso de ferramentas como firewalls e sistemas de monitoramento de tráfego. Assinale a opção em que é apresentada uma abordagem integrada que possibilita tanto a proteção de redes contra ataques quanto a análise do tráfego de dados.\na) configuração de uma VPN para garantir a confidencialidade dos dados em trânsito\nb) utilização de antivírus para detecção de malwares e realização de análises periódicas de tráfego para identificação de vulnerabilidades em redes corporativas\nc) adoção de políticas de segurança que priorizem a proteção contra ataques cibernéticos como DDoS\nd) configuração de um firewall para bloquear acessos externos e utilização de um sistema de detecção de intrusão (IDS) para monitorar atividades suspeitas\ne) implementação de um sistema de monitoramento de tráfego que analise pacotes de dados e identifique padrões de ataques cibernéticos como phishing e ransomware",
+"gabarito": "Letra ANULADA"
+},
+{
+"n": 8,
+"ref": "(CEBRASPE – 2025 – TCE RS – APE (TCE-RS))",
+"texto": "Acerca de segurança da informação, noções de malware, firewall e procedimentos de backup, julgue o item a seguir.\nA instalação de um antivírus no computador garante proteção contra um malware.",
+"gabarito": "Errado"
+},
+{
+"n": 9,
+"ref": "(FCC – 2026 – MPE SE – Tec (MPE SE))",
+"texto": "Um técnico em suporte do Ministério Público (MP), está tentando resolver um problema no PC de um funcionário com o navegador Microsoft Edge, quando, repentinamente, uma janela pop-up aparece alertando: “SEU COMPUTADOR ESTÁ INFECTADO COM 5 VÍRUS! BAIXE URGENTEMENTE O ANTIVÍRUS EDGE SECURITY PRO PARA REMOVER AS AMEAÇAS”. A mensagem inclui um botão “PROTEGER AGORA” e simula uma interface similar à do Windows.\nPara tentar resolver essa situação o técnico deve\na) configurar um servidor proxy da intranet para acessar a VPN do MP.\nb) fechar o pop-up e, na sequência, ativar o Bloqueador de Scareware do Edge para proteger contra scams técnicos.\nc) fechar o pop-up e habilitar pop-up seguro em configurações do site.\nd) clicar em “PROTEGER AGORA” para instalar o software recomendado e verificar sua eficácia.\ne) reiniciar o navegador no modo de compatibilidade do Internet Explorer para carregar a página corretamente.",
+"gabarito": "Letra B"
+},
+{
+"n": 10,
+"ref": "(FGV – 2026 – ALEGO – Ass Leg (ALEGO))",
+"texto": "O adware é um software indesejado capaz de exibir anúncios e coletar informações sobre o comportamento dos usuários. Ao exibir anúncios online, o adware gera receita para seus criadores. No entanto, diferentemente do marketing digital legítimo, o adware costuma ser instalado sem o consentimento explícito ou o pleno conhecimento do usuário.\nCom relação às formas evitar esse tipo de programas se instalem nos computadores, analise as alternativas a seguir.\nI. Manter o sistema operacional atualizado e ter cuidado onde se clica.\nII. Sempre ler todos os termos e acordos de caixa de seleção e ler avaliações e resenhas de programas antes de instalar.\nIII. Baixar apenas programas recomendados por colegas respeitáveis mesmo de sites não confiáveis sem HTTPS.\nEstá correto o que se afirma em\na) I, apenas.\nb) II, apenas.\nc) III, apenas.\nd) I e II, apenas.\ne) II e III, apenas.",
+"gabarito": "Letra D"
+},
+{
+"n": 11,
+"ref": "(FGV – 2025 – TCE PE – AG (TCE-PE))",
+"texto": "Considere que um agente mal-intencionado usa um ransomware para criptografar os dados dos usuários de uma organização, impedindo o acesso a arquivos, bancos de dados e aplicativos. Em seguida, é exigido o pagamento de um resgate para a liberação do acesso. Sabe-se que a organização foi, de fato, atacada, que houve negligência por parte do gestor de segurança, e que o ransomware apresentará uma mensagem de sequestro na tela ou adicionará um arquivo de texto (mensagem) nas pastas afetadas.\nCom base no caso relatado, analise as afirmativas a seguir sobre formas de proteção contra ataques do tipo ransomware.\nI. Fazer backup dos dados de modo regular e manter pelo menos um backup completo off-line.\nII. Manter todos os softwares, incluindo os sistemas operacionais, atualizados e com patches de segurança.\nIII. Combinar boas práticas como monitoramento, softwares antimalware, treinamento e conscientização dos usuários.\nEstá correto o que se afirma em:\na) II e III, apenas.\nb) I e III, apenas.\nc) III, apenas.\nd) II, apenas.\ne) I, II e III.",
+"gabarito": "Letra E"
+}
+]
+},
+{
+"topico": "Proxy",
+"questoes": [
+{
+"n": 1,
+"ref": "(CEBRASPE – 2024 – CAU BR – Ana (CAU BR))",
+"texto": "No que se refere ao funcionamento de proxy em organizações, julgue o item a seguir.\nFiltros em proxies podem ser configurados para impedir o acesso a determinados sítios ou serviços da web que violam uma política da organização.",
+"gabarito": "Certo"
+},
+{
+"n": 2,
+"ref": "(CEBRASPE – 2024 – CAU BR – Ana (CAU BR))",
+"texto": "No que se refere ao funcionamento de proxy em organizações, julgue o item a seguir.\nProxies transparentes servem como um canal entre os clientes e a Internet; por característica, são incapazes de interceptar as conexões realizadas, já que são transparentes para os usuários.",
+"gabarito": "Errado"
+},
+{
+"n": 3,
+"ref": "(CEBRASPE – 2024 – CAPES – Ana CT (CAPES))",
+"texto": "Com relação a dispositivos de segurança, julgue o item subsequente.\nConsidere uma aplicação executada em um host A que responde por requisições a partir de um host B, que, por sua vez, funciona como intermediário entre o usuário final e o host A e executa a aplicação. Nessa hipótese, o host intermediário atua como um proxy.",
+"gabarito": "Certo"
+},
+{
+"n": 4,
+"ref": "(FGV – 2025 – Pref Canaã Carajás – Ag ST (Pref Canaã Carajás))",
+"texto": "Sobre servidores proxies, analise as afirmativas a seguir\nI. É um software que impede que os usuários conheçam detalhes do endereçamento dos recursos da rede acessada; ele interpreta uma solicitação e, caso possa ser atendida, a remete para um servidor interno cujo endereço é desconhecido para o remetente.\nII. É um elemento que se encontra com frequência em roteadores Wi-Fi de redes locais, mas também em servidores de correios eletrônico e de bancos de dados.\nIII. Pode-se ter uma máquina na rede periférica tão somente com a função de proxy; neste caso, por extensão, a máquina é também denominada proxy (processador ou computador ou servidor proxy). Como normalmente a máquina proxy é um roteador, ela é, por si só, um firewall.\nEstá correto o que se afirma em\na) I, apenas.\nb) II, apenas.\nc) III, apenas.\nd) I e II apenas.\ne) II e III apenas.",
+"gabarito": "Letra E"
+},
+{
+"n": 5,
+"ref": "(FGV – 2024 – TRF 1 – AJ (TRF 1ª Região))",
+"texto": "A equipe de tecnologia da informação (TI) de um órgão está enfrentando dificuldades de disponibilidade de seu site de Internet após a divulgação de novos serviços com prazos rígidos para seus clientes. O site de Internet não está suportando o volume de acessos simultâneos. Para incrementar a disponibilidade do site, a equipe de TI replicou os servidores web e contratou uma solução que instalou um equipamento na frente das várias réplicas do site. Esse equipamento recebe as solicitações dos usuários da Internet, direcionando-as para os diversos servidores web internos, balanceando a carga entre eles. O certificado digital foi instalado nele para reduzir o processamento dos servidores web interno.\nO equipamento da solução contratada é um Proxy:\na) de encaminhamento;\nb) transparente;\nc) anônimo;\nd) reverso;\ne) de distorção.",
+"gabarito": "Letra D"
+}
+]
+},
+{
+"topico": "Firewall",
+"questoes": [
+{
+"n": 1,
+"ref": "(CEBRASPE – 2026 – UDESC – TUD (UDESC))",
+"texto": "Acerca de criptografia, tecnologias de segurança, assinatura e certificação digital, julgue o item subsequente.\nEm arquiteturas que utilizam mecanismo de inspeção de estado baseado no acompanhamento de conexões nas camadas de rede e transporte, a correlação entre pacotes pertencentes ao mesmo fluxo consiste em mecanismo de inspeção semântica de protocolos de aplicação que trafegam em conexões estabelecidas.",
+"gabarito": "Errado"
+},
+{
+"n": 2,
+"ref": "(CEBRASPE – 2026 – TCE RN – Ana Adm (TCE RN))",
+"texto": "Acerca das tecnologias de segurança, bem como da assinatura e da certificação digital, julgue o item que se segue.\nOs firewalls de aplicação são capazes de inspecionar o conteúdo das requisições, permitindo controle mais granular em comparação a firewalls de filtragem de pacotes.",
+"gabarito": "Certo"
+},
+{
+"n": 3,
+"ref": "(CEBRASPE – 2026 – TCE RN – AudCE (TCE RN))",
+"texto": "Acerca de fundamentos de Linux, de criptografia, de noções de roteamento e switching e de segurança em redes de computadores e dispositivos de proteção, julgue o item a seguir.\nOs firewalls de inspeção de estado mantêm uma tabela dinâmica que registra as conexões ativas, avaliando os pacotes de rede com base no contexto da sessão TCP.",
+"gabarito": "Certo"
+},
+{
+"n": 4,
+"ref": "(CEBRASPE – 2026 – TCE RN – Med (TCE RN))",
+"texto": "Julgue o próximo item, relativo a Microsoft Office, segurança da informação, ferramentas de comunicação e colaboração, inteligência artificial (IA) generativa e proteção de dados pessoais.\nA principal função do firewall é permitir a realização de conexão entre dois pontos, como, por exemplo, entre um funcionário que trabalha remotamente e a infraestrutura de rede da empresa que o emprega, de forma a proporcionar acesso a recursos compartilhados, como servidores de arquivos.",
+"gabarito": "Errado"
+},
+{
+"n": 5,
+"ref": "(CEBRASPE – 2026 – ANSA – PNM (ANSA))",
+"texto": "No que concerne às rotinas de proteção e segurança, que envolvem conhecimentos relativos a ataques cibernéticos, julgue o item que se segue.\nO firewall web é uma ferramenta que cria uma conexão segura e criptografada entre um dispositivo e a Internet por meio de túnel digital, protegendo os dados de interceptações e mascaramento.",
+"gabarito": "Errado"
+},
+{
+"n": 6,
+"ref": "(CEBRASPE – 2026 – UNEAL – AAD (UNEAL))",
+"texto": "No que se refere a prevenção e combate a ataques a redes de computadores, a sistemas criptográficos simétricos, a antispam e a firewalls, julgue o item a seguir.\nFirewalls com inspeção de estado mantêm tabelas de estado das conexões e, com base nessas informações, correlacionam os fluxos de ida e retorno, permitindo o reconhecimento de tráfego pertencente a sessões ou fluxos previamente estabelecidos por meio da associação a entradas existentes na tabela de estados, inclusive quando utilizam portas efêmeras dinamicamente alocadas, tipicamente no lado do cliente.",
+"gabarito": "Certo"
+},
+{
+"n": 7,
+"ref": "(CEBRASPE – 2026 – UNEAL – AAD (UNEAL))",
+"texto": "Julgue o próximo item, relativos a sites de busca e de pesquisa na Internet, a noções de organização e de gerenciamento de arquivos e a aplicativos para segurança da informação.\nOs firewalls pessoais atuais têm como função bloquear acessos externos não autorizados, não sendo capazes de controlar conexões iniciadas por aplicações internas do próprio sistema.",
+"gabarito": "Errado"
+},
+{
+"n": 8,
+"ref": "(CEBRASPE – 2026 – FUNPRESP-JUD – Adv (FUNPRESP-JUD))",
+"texto": "Julgue o item seguinte, a respeito de segurança da informação e mecanismos de proteção utilizados em ambientes computacionais.\nOs firewalls são aplicativos de segurança que, projetados para examinar o disco rígido do computador em busca de vírus e arquivos maliciosos previamente instalados, bloqueiam sua execução no sistema operacional.",
+"gabarito": "Errado"
+},
+{
+"n": 9,
+"ref": "(CEBRASPE – 2025 – INSA – Pesq A-I (INSA))",
+"texto": "Acerca de conhecimentos em informática, julgue o seguinte item.\nAlgumas falhas no armazenamento de dados na área da informática são classificadas como catastróficas, podendo ser recuperadas com a restauração do firewall",
+"gabarito": "Errado"
+},
+{
+"n": 10,
+"ref": "(CEBRASPE – 2025 – AEB – Tecno (AEB))",
+"texto": "O firewall do tipo bridge, também conhecido como\na) NAT firewall, é capaz de inspecionar, filtrar e mover pacotes de rede entre interfaces.\nb) firewall transparente, é capaz de inspecionar, filtrar e mover quadros de rede entre interfaces.\nc) IP firewall, é capaz de inspecionar, filtrar e mover pacotes de rede entre interfaces.\nd) firewall de transporte, é capaz de inspecionar, filtrar e mover pacotes de rede entre interfaces.\ne) firewall de aplicação, é capaz de inspecionar, filtrar e mover dados da aplicação.",
+"gabarito": "Letra B"
+},
+{
+"n": 11,
+"ref": "(CEBRASPE – 2025 – SEFAZ RJ – AFRE RJ)",
+"texto": "O WAF (web application firewalls)\na) elimina a necessidade de desenvolvimento de código seguro nas aplicações web.\nb) protege as aplicações web contra todos os tipos de ataques cibernéticos conhecidos.\nc) funciona exclusivamente no nível de rede (camada 3 do modelo OSI) para proteger aplicações web.\nd) substitui outras práticas de segurança, como o uso de SSL/TLS e a implementação de políticas de segurança de rede.\ne) pode ser implementado em modo de detecção (passivo) ou em modo de prevenção (ativo).",
+"gabarito": "Letra E"
+},
+{
+"n": 12,
+"ref": "(CEBRASPE – 2025 – EMBRAPA – Ana (EMBRAPA))",
+"texto": "Julgue o item a seguir, relativo a implementação e monitoramento de segurança em firewall, IDS, IPS e configuração e administração de redes de computadores.\nUm firewall configurado com o critério de filtragem baseado em regras independentes para cada pacote faz distinção do tráfego HTTP usado para navegação web e o tráfego HTTP usado para compartilhamento de arquivos peer-to-peer.",
+"gabarito": "Errado"
+},
+{
+"n": 13,
+"ref": "(CEBRASPE – 2025 – SUSEP – Ana Tec (SUSEP))",
+"texto": "Julgue o item a seguir, relativo à NBR ISO/IEC 27005, a gestão de identidades de acesso, privacidade por padrão, ataques e soluções para segurança da informação e autenticação em múltiplos fatores.\nPor concepção, firewalls perimetrais convencionais são suficientes para bloquear ataques DDoS baseados em amplificação DNS, desempenhando autonomamente o conjunto de funções necessárias à mitigação desse tipo de ataque em redes distribuídas, de forma equivalente às soluções especializadas.",
+"gabarito": "Errado"
+},
+{
+"n": 14,
+"ref": "(CEBRASPE – 2025 – PF – Adm (PF))",
+"texto": "Julgue o próximo item, relativos a ambiente Windows, segurança da informação e redes de computadores.\nO firewall é mais eficaz que um antivírus para a proteção contra cavalos de troia e ransomware, pois cada pacote de dados que trafega na rede é analisado pelo firewall, de modo a proteger o computador contra softwares maliciosos.",
+"gabarito": "Errado"
+},
+{
+"n": 15,
+"ref": "(CEBRASPE – 2025 – FUB – Adm (FUB))",
+"texto": "Acerca de redes de computadores, julgue o item a seguir.\nO uso de firewalls baseados apenas em filtragem de pacotes é suficiente para garantir a proteção completa de uma rede corporativa contra ataques avançados.",
+"gabarito": "Errado"
+},
+{
+"n": 16,
+"ref": "(CEBRASPE – 2025 – FUB – Tecno (FUB))",
+"texto": "Julgue o item a seguir, a respeito de criptografia, firewall, modelos de referência OSI e TCP e topologia e arquitetura.\nUma desvantagem do firewall é não fazer distinção entre o tráfego HTTP para navegação web e o tráfego HTTP para compartilhamento de arquivos peer-to-peer.",
+"gabarito": "Errado"
+},
+{
+"n": 17,
+"ref": "(CEBRASPE – 2025 – FUB – Assist (FUB))",
+"texto": "Acerca de firewall e aplicativos de segurança, julgue o item a seguir.\nO comportamento padrão do firewall é permitir todo o tráfego de saída e bloquear todo o tráfego de entrada, a menos que haja regra especificando o contrário.",
+"gabarito": "Certo"
+},
+{
+"n": 18,
+"ref": "(CEBRASPE – 2025 – FUB – Tec (FUB))",
+"texto": "Acerca de firewall e aplicativos de segurança, julgue o item a seguir.\nA filtragem por pacote, oferecida exclusivamente nos firewalls de hardware, compara cada pacote a uma lista de permissões.",
+"gabarito": "Errado"
+},
+{
+"n": 19,
+"ref": "(CEBRASPE – 2025 – FUB – Tec (FUB))",
+"texto": "Acerca de firewall e aplicativos de segurança, julgue o item a seguir.\nO firewall do tipo proxy espelha o computador, fornecendo uma barreira de proteção contra invasores.",
+"gabarito": "Certo"
+},
+{
+"n": 20,
+"ref": "(CEBRASPE – 2025 – TCE RS – APE (TCE-RS))",
+"texto": "Acerca de segurança da informação, noções de malware, firewall e procedimentos de backup, julgue o item a seguir.\nO firewall é um dispositivo de rede que regula o tráfego entre as redes interna e externa, filtrando pacotes e impedindo acessos não autorizados.",
+"gabarito": "Certo"
+},
+{
+"n": 21,
+"ref": "(CEBRASPE – 2025 – TCE RS – APE (TCE-RS))",
+"texto": "Acerca de sistemas operacionais e serviços de rede, julgue o próximo item.\nPor padrão, o Windows Defender Firewall bloqueia toda a comunicação de saída da rede e libera toda a comunicação de entrada, exigindo configuração manual para permitir o funcionamento de aplicações comuns.",
+"gabarito": "Errado"
+},
+{
+"n": 22,
+"ref": "(CEBRASPE – 2025 – TCE RS – APE (TCE-RS))",
+"texto": "No que se refere a firewall e a filtro de pacotes, bem como a assinatura e certificado digitais, julgue os itens a seguir.\nA permissão de passagem de um pacote por um firewall de camada três evidencia que o pacote está de acordo com a política de segurança implementada no firewall.",
+"gabarito": "Certo"
+},
+{
+"n": 23,
+"ref": "(CEBRASPE – 2025 – TCE RS – APE (TCE-RS))",
+"texto": "No que se refere a firewall e a filtro de pacotes, bem como a assinatura e certificado digitais, julgue os itens a seguir.\nUm firewall presente na camada de enlace é capaz de entender a codificação HTML de um pacote HTTP.",
+"gabarito": "Errado"
+},
+{
+"n": 24,
+"ref": "(CEBRASPE – 2025 – TCE RS – OCE (TCE-RS))",
+"texto": "No que se refere a armazenamento de dados na nuvem, pragas virtuais e firewall, julgue o item subsequente.\nUm firewall é um sistema de controle de tráfego digital que garante mais segurança a redes e dispositivos, funcionando como primeira linha de defesa contra acessos indesejados.",
+"gabarito": "Certo"
+},
+{
+"n": 25,
+"ref": "(CEBRASPE – 2025 – TCE MS – AECE (TCE MS))",
+"texto": "Assinale a opção correta a respeito da DMZ (demilitarized zone).\na) A implementação de DMZ substitui o uso de IDS/IPS, pois concentra toda a proteção na configuração de roteadores e switches.\nb) A DMZ é implementada exclusivamente em ambientes de nuvem, não sendo aplicável em data centers locais.\nc) A DMZ é uma zona de rede que abriga serviços acessíveis externamente, separando-os da rede interna para reduzir o impacto de comprometimentos.\nd) A DMZ consiste em uma rede isolada que impede totalmente a comunicação entre servidores expostos e a rede interna, o que elimina a necessidade de regras de firewall.\ne) A função principal da DMZ é criptografar dados em trânsito entre clientes e servidores internos de forma a garantir a confidencialidade.",
+"gabarito": "Letra C"
+},
+{
+"n": 26,
+"ref": "(CEBRASPE – 2024 – CAU BR – Ass (CAU BR))",
+"texto": "Julgue o item que se segue, relativo à segurança de rede de computadores e spywares.\nO firewall de borda é o único mecanismo de proteção de rede apto a impedir ataques de spyware.",
+"gabarito": "Errado"
+},
+{
+"n": 27,
+"ref": "(CEBRASPE – 2024 – ANAC – ERAC (ANAC))",
+"texto": "Julgue o próximo item, relativo a Linux, MS Excel, firewalls e Google Chrome.\nOs firewalls são dispositivos constituídos pela combinação de software e hardware, utilizados para controlar o acesso entre redes de computadores; alguns programas de firewall permitem analisar continuamente o conteúdo das conexões, filtrando vírus de email, cavalos de troia e outros tipos de malware, antes mesmo que os antivírus entrem em ação.",
+"gabarito": "Certo"
+},
+{
+"n": 28,
+"ref": "(CEBRASPE – 2024 – MPE TO – Tec Min (MPE TO))",
+"texto": "Julgue o item a seguir, referente a vírus, worms, pragas virtuais e aplicativos de segurança.\nUm firewall é um software que controla o fluxo que entra e sai de uma rede de computadores, bloqueando aqueles que representam ameaças aos recursos disponibilizados naquela rede.",
+"gabarito": "Errado"
+},
+{
+"n": 29,
+"ref": "(CEBRASPE – 2024 – MPE TO – Tec Min (MPE TO))",
+"texto": "A respeito de Red Hat Enterprise Linux e Oracle Linux 9, julgue o item a seguir.\nCada zona de firewall, nas políticas, é associada a um conjunto específico de regras que determinam o tráfego permitido de forma unidirecional e com monitoramento de estado, sendo o retorno do tráfego permitido implicitamente devido à filtragem com monitoramento de estado pelo firewalld.",
+"gabarito": "Certo"
+},
+{
+"n": 30,
+"ref": "(CEBRASPE – 2024 – ANVISA – ERVS (ANVISA))",
+"texto": "Considerando um firewall com função de filtragem de pacotes entre uma rede local e a Internet, julgue o item a seguir.\nPara filtrar pacotes entre uma rede local e a Internet, o firewall, por padrão, faz NAT (network address translation).",
+"gabarito": "Errado"
+},
+{
+"n": 31,
+"ref": "(CEBRASPE – 2024 – ANVISA – ERVS (ANVISA))",
+"texto": "Considerando um firewall com função de filtragem de pacotes entre uma rede local e a Internet, julgue o item a seguir.\nEsse tipo de firewall trabalha na camada de enlace, impedindo os quadros de passarem de uma interface física para outra.",
+"gabarito": "Errado"
+},
+{
+"n": 32,
+"ref": "(CEBRASPE – 2024 – MPO – APO (MPO))",
+"texto": "Acerca de firewalls, julgue o item que se segue.\nUma diferença fundamental entre firewalls com e sem estado reside no fato de que os primeiros rastreiam o estado entre os pacotes, enquanto os segundos não são capazes de fazê-lo.",
+"gabarito": "Certo"
+},
+{
+"n": 33,
+"ref": "(CEBRASPE – 2024 – MPO – APO (MPO))",
+"texto": "Acerca de firewalls, julgue o item que se segue.\nNos tipos de ataques de rede em que seja necessário entender o contexto da conexão, deve-se empregar um firewall sem estado, que tem a capacidade para tanto.",
+"gabarito": "Errado"
+},
+{
+"n": 34,
+"ref": "(CEBRASPE – 2024 – Pref Cach Itapemirim – AgA (Cach Itapemirim))",
+"texto": "Com relação a programas de correio eletrônico, armazenamento de dados na nuvem, firewall e procedimentos de backup, julgue o próximo item.\nUm firewall é uma ferramenta que impede a entrada de arquivos maliciosos, como vírus, em uma rede privada.",
+"gabarito": "Errado"
+},
+{
+"n": 35,
+"ref": "(CEBRASPE – 2024 – Pref Cach Itapemirim – Enf (Pref Cach Itapemirim))",
+"texto": "Julgue o próximo item, a respeito de segurança da informação.\nO firewall pessoal é um tipo específico de proteção utilizado para proteger um computador contra acessos não autorizados vindos da Internet, como, por exemplo, bloquear as tentativas de invasão e de exploração de vulnerabilidades do computador.",
+"gabarito": "Certo"
+},
+{
+"n": 36,
+"ref": "(CEBRASPE – 2024 – TCE AC – ATI (TCE AC))",
+"texto": "A respeito das características de um ataque de negação de serviço distribuído, julgue o próximo item.\nUm firewall de borda é considerado como o elemento capaz de fazer a mitigação de ataques DDoS de maneira eficiente, já que o tráfego da camada de aplicação tem que ser bloqueado na entrada da rede.",
+"gabarito": "Errado"
+},
+{
+"n": 37,
+"ref": "(CEBRASPE – 2024 – CAGEPA – Ana Sist (CAGEPA))",
+"texto": "Em redes de computadores, um firewall\na) impede o acesso de usuário a sítios mediante o uso de códigos maliciosos.\nb) inspeciona todo e qualquer pacote que entra ou sai da rede.\nc) desempenha a função de proteção contra malware.\nd) impede ataques originados e destinados à rede interna.\ne) identifica fraude de endereço IP (falsificação de IP).",
+"gabarito": "Letra B"
+},
+{
+"n": 38,
+"ref": "(CEBRASPE – 2024 – CODEVASF – AnDR (CODEVASF))",
+"texto": "A respeito de mecanismos de proteções, julgue o item seguinte.\nFirewalls de aplicação são capazes de inspecionar e filtrar tráfegos como um ataque de SQL Injection.",
+"gabarito": "Certo"
+},
+{
+"n": 39,
+"ref": "(CEBRASPE – 2024 – SEBRAE – Ana Tec II (SEBRAE))",
+"texto": "O recurso de firewalls de última geração que, quando habilitado, torna o firewall ciente dos aplicativos que estão sendo executados e das portas que esses aplicativos estão usando, protegendo contra determinados tipos de malware cujo objetivo é encerrar um processo em execução e depois assumir o controle de sua porta, éo\na) application awareness.\nb) inspeção profunda de pacotes (DPI).\nc) sandboxing.\nd) identity awareness.",
+"gabarito": "Letra A"
+},
+{
+"n": 40,
+"ref": "(CEBRASPE – 2024 – TC DF – ACE (TC DF))",
+"texto": "Julgue o item a seguir, em relação a dispositivos de segurança e a softwares maliciosos.\nOs firewalls de rede fazem a filtragem de pacotes na rede e realizam um tipo de ação de acordo com as regras implementadas; em situações normais, trabalham nas camadas 3 e 4 da pilha TCP/IP.",
+"gabarito": "Certo"
+},
+{
+"n": 41,
+"ref": "(CEBRASPE – 2023 – Pref São Cristóvão – GM (São Cristóvão))",
+"texto": "O software que monitora uma rede de computadores e bloqueia ou permite a liberação do tráfego de dados a partir de regras predefinidas é denominado\na) antispyware.\nb) firewall.\nc) antivírus.\nd) antispam.",
+"gabarito": "Letra B"
+},
+{
+"n": 42,
+"ref": "(CEBRASPE – 2023 – MPE RO – Ana (MPE RO))",
+"texto": "O firewall capaz de rastrear conexões ativas, como fluxos de protocolo de controle de transmissão, é do tipo\na) statefull.\nb) stateless.\nc) web aplication.\nd) DNS.\ne) de camada física.",
+"gabarito": "Letra A"
+},
+{
+"n": 43,
+"ref": "(FCC – 2026 – ALERR – Ana Leg (ALERR))",
+"texto": "Considere a infraestrutura de TI de uma Assembleia Legislativa que possui sistema de processo legislativo eletrônico, portal institucional exposto à internet, integração com órgãos externos (como tribunais e portais de transparência) e estações de trabalho de gabinetes e áreas administrativas na mesma infraestrutura IP. Após um incidente de segurança com movimentação lateral entre sistemas internos, a arquitetura que melhor atende ao requisito de reduzir a exposição do perímetro e conter a propagação entre ambientes é a\na) disponibilização dos serviços de integração com órgãos externos diretamente na rede corporativa, com uso de listas de controle de acesso (ACLs) no roteamento central e monitoramento contínuo das conexões estabelecidas.\nb) replicação dos sistemas críticos da assembleia em sub-redes distintas, com conectividade operacional entre elas e prioridade para continuidade de serviço em caso de falhas localizadas.\nc) publicação do portal institucional em uma DMZ, com segmentação interna da rede por função e sensibilidade, definição de políticas explícitas de comunicação entre zonas e bloqueio por padrão de todo tráfego não autorizado entre os segmentos.\nd) concentração dos sistemas legislativos, administrativos e de apoio parlamentar em uma mesma VLAN lógica, com inspeção reforçada no tráfego de entrada e aplicação de controles adicionais nos dispositivos internos.\ne) concentração dos controles de segurança no firewall de borda, mantendo os sistemas legislativos, administrativos e de gabinetes no mesmo segmento interno, desde que o NAT oculte os endereços privados.",
+"gabarito": "Letra C"
+},
+{
+"n": 44,
+"ref": "(FCC – 2025 – TRT 15 – TJ TRT15)",
+"texto": "Um Técnico Judiciário esclarece a seus colegas de cargo que a principal e correta função de um firewall em uma rede de computadores é\na) centralizar todas as informações que transitam pela rede em um único nó, que é onde está instalado, para que possa criptografá-los.\nb) controlar o tráfego de dados entre redes, permitindo ou bloqueando conexões com base em regras predefinidas.\nc) detectar e remover vírus de arquivos e bloquear a comunicação de dados instantaneamente em toda a rede quando um malware se apresenta.\nd) contribuir para acelerar a velocidade de conexão à internet em conjunto com aplicativos aceleradores de tráfego.\ne) realizar backups automáticos dos dados da rede sempre que alguma ameaça externa é detectada.",
+"gabarito": "Letra B"
+},
+{
+"n": 45,
+"ref": "(FCC – 2025 – TRT 1 – TJ TRT1)",
+"texto": "Para aumentar a segurança da informação de um Tribunal Regional do Trabalho, diversas abordagens podem ser adotadas para proteger as redes contra acessos não autorizados e ataques cibernéticos, como\na) um firewall de próxima geração (NGFW), que utiliza deep packet inspection (DPI), para oferecer proteção em tempo real contra ameaças persistentes avançadas (APTs). Além de analisar o tráfego de rede, esses firewalls são application-aware, permitindo uma visibilidade granular do tráfego.\nb) as soluções SIEM, que realizam a análise detalhada de eventos de segurança. Embora aumentem bastante o tempo médio de detecção (MTTD) e o tempo médio de resposta (MTTR) das equipes de segurança de TI, são ferramentas essenciais.\nc) firewalls baseados em filtragem de pacotes, que operam na camada 7 (aplicação) do modelo OSI, permitindo uma análise profunda do tráfego baseado no conteúdo dos pacotes.\nd) um sniffer de rede, cujo modo promíscuo, denominado Wireshark, impede que os pacotes de tráfego não destinados ao dispositivo onde está sendo executado sejam coletados, garantindo a privacidade da rede.\ne) o monitoramento de tráfego de rede por meio de IDS (Intrusion Detection System) e IPS (Intrusion Prevention System), dispositivos que apresentam a vantagem de não exigirem análise de pacotes em tempo real, uma vez que funcionam com logs previamente armazenados.",
+"gabarito": "Letra A"
+},
+{
+"n": 46,
+"ref": "(FCC – 2025 – TRF 4 – AJ TRF4)",
+"texto": "Um tribunal mantém uma API pública que processa requisições de colaboradores espalhados por todo o território nacional. Recentemente, foram detectados ataques sofisticados, incluindo injeção de comandos em cabeçalhos HTTP, tentativas de bypass de autenticação via manipulação de cookies e roubo de dados sensíveis em trânsito. A solução mais adequada para proteger a API contra esses ataques, garantindo a confidencialidade dos dados e autenticação da identidade do servidor é\na) usar um firewall de host com filtragem de pacotes e um IDS para bloquear ataques na aplicação e criptografar dados sensíveis em tempo real.\nb) configurar um firewall de host para restringir o tráfego apenas à porta 80 (HTTP) e habilitar logging de requisições.\nc) implementar um IDS com análise de tráfego HTTP para bloquear manipulações de cabeçalhos, cookies e injeção de código, garantindo assim a confidencialidade dos dados em trânsito.\nd) instalar um WAF com regras personalizadas para bloquear injeções de comandos e manipulações de cookies, combinado com TLS/SSL para criptografia.\ne) habilitar TLS/SSH com autenticação mútua e configurar um VPS para impedir ataques de injeção de comandos e falhas de autenticação diretamente na aplicação.",
+"gabarito": "Letra D"
+},
+{
+"n": 47,
+"ref": "(FCC – 2025 – SEFAZ PI – Ag Trib (SEFAZ PI))",
+"texto": "Uma organização implementou um Next-Generation Firewall (NGFW) para fortalecer sua segurança cibernética. Esse tipo de firewall vai além das funções tradicionais, incorporando recursos avançados para proteger contra ameaças modernas. Representa as funcionalidades de um NGFW:\na) Proteção contra ataques de negação de serviço (DOoS), sem oferecer outras camadas de defesa.\nb) Antivírus tradicional embutido que analisa apenas arquivos baixados, sem atuar na inspeção do tráfego de rede.\nc) Filtragem de pacotes e Network Address Translation (NAT), apenas, sem análise avançada do tráfego de rede.\nd) Monitoramento passivo de tráfego, sem capacidade de bloquear ou mitigar ameaças em tempo real.\ne) Intrusion Prevention System (IPS) e inspeção profunda de pacotes (DPI), sem backup e recuperação de dados.",
+"gabarito": "Letra E"
+},
+{
+"n": 48,
+"ref": "(FCC – 2024 – CETESB – Adv (CETESB))",
+"texto": "Dentre os tipos de aplicativos de segurança, o proxy firewall\na) oferece uma segurança voltada para todos os protocolos. Tem a capacidade de realizar a comutação entre modelos de rede e em todas as suas camadas de aplicativos.\nb) é diferente dos tipos de firewall tradicionais porque tem a capacidade da junção de diversos outros firewalls oferecendo então uma maior quantidade de recursos. É também conhecido como NGFW.\nc) é responsável por realizar o controle de acesso à rede, isso quer dizer que todas as redes conectadas são analisadas. De maneira prática, é como uma esteira com diversas redes. Algumas são aceitas para passar ao próximo processo, outras são retiradas.\nd) avalia todo o tráfego de dados tentando verificar redes que estão de acordo com as regras. Realiza uma comparação em relação ao que está acontecendo naquele momento e o que é esperado que aconteça, garantindo, então, a segurança.\ne) tem como objetivo oferecer segurança entre um computador e uma rede ou até mesmo uma rede interna e outra rede. Geralmente é instalado em servidores que apresentam uma maior velocidade.",
+"gabarito": "Letra E"
+},
+{
+"n": 49,
+"ref": "(FCC – 2024 – TRT 7 – TJ TRT7)",
+"texto": "No Windows 11, em português, uma servidora pública, com a devida permissão, deseja garantir que apenas seu computador de trabalho possa se comunicar com o servidor de arquivos na rede da organização. A configuração correta e ideal que essa servidora pública deve fazer no firewall do Windows é criar uma regra\na) de entrada no seu computador bloqueando todos os endereços IP, exceto o seu.\nb) de entrada no servidor de arquivos permitindo apenas o endereço IP do seu computador.\nc) no seu computador que permita todas as conexões de entrada e saída.\nd) de entrada no seu computador permitindo todos os IPS de servidores de arquivos.\ne) de saída no servidor de arquivos permitindo apenas o endereço IP do seu computador.",
+"gabarito": "Letra B"
+},
+{
+"n": 50,
+"ref": "(FCC – 2024 – TRT 20 – AJ TRT20)",
+"texto": "Uma Analista de redes sugere a implementação de um Next-Generation Firewall (NGFW) para proteger os ativos da organização, pois os NGFWs oferecem funcionalidades que vão além das capacidades dos firewalls tradicionais. Uma funcionalidade de um NGFW, que não é encontrada em um firewall tradicional, é\na) o gerenciamento centralizado com uma interface gráfica amigável além de interface de linha de comando.\nb) a capacidade de realizar logs e relatórios básicos de tráfego de rede, inclusive em tempo real.\nc) a inspeção profunda de pacotes, verificando dados e comportamentos de tráfego além das camadas básicas.\nd) O bloqueio de portas TCP/UDP específicas para controlar o tráfego de rede e impedir tráfego mal-intencionado.\ne) a redundância e failover para garantir alta disponibilidade do firewall em ambientes de alta disponibilidade.",
+"gabarito": "Letra C"
+},
+{
+"n": 51,
+"ref": "(FGV – 2026 – AMAZUL – TDTND)",
+"texto": "Durante uma rotina corporativa, um colaborador percebeu que um determinado aplicativo, anteriormente funcional, passou a não conseguir mais estabelecer conexão com servidores específicos externos, embora outros aplicativos ainda consigam acessar normalmente a Internet. Após checagens iniciais, constatou-se que não havia falhas físicas no dispositivo, que a conexão com a rede seguia ativa e que as configurações do aplicativo estavam corretas.\nAo registrar um chamado, foi informado pela equipe de suporte que a interrupção ocorreu devido à aplicação de uma nova política de segurança da informação, voltada ao controle de acessos externos por software específico.\nConsiderando o contexto apresentado e somente as alternativas a seguir apresentadas, indique qual mecanismo adotado pela equipe de suporte mantém compatibilidade com o contexto descrito:\na) Adoção de criptografia para garantir a confidencialidade das conexões com a Internet.\nb) Ativação de filtro antispam para proteger o sistema contra mensagens suspeitas recebidas por e-mail.\nc) Atualização do antivírus para bloquear automaticamente softwares com acesso externo.\nd) Implementação de regras de firewall para restringir comunicações por endereço, porta ou aplicação.\ne) Realização de backup dos dados para prevenir perdas decorrentes de falhas no acesso à rede.",
+"gabarito": "Letra D"
+},
+{
+"n": 52,
+"ref": "(FGV – 2026 – AMAZUL – TDTND)",
+"texto": "Os firewalls Cisco baseados em zonas (Zone-Based Policy Firewall – ZFW) adotam um modelo de controle de tráfego que organiza interfaces em zonas de segurança e aplica políticas de inspeção entre essas zonas, substituindo o antigo paradigma baseado diretamente em interfaces. Esse modelo permite granularidade superior e maior consistência no tratamento do tráfego entre regiões da rede.\nConsiderando exclusivamente as características do Zone-Based Policy Firewall (ZFW), assinale a alternativa correta.\na) A Interface de Túnel Virtual (VTI) IPSec e o GRE+IPSec permitem o confinamento de conexões VPN site-to-site e de clientes em zonas de segurança multicast, posicionando as interfaces de túnel em nichos de segurança compatíveis com o protocolo.\nb) Firewalls com políticas baseadas em zonas demandam que a configuração da zona deve ser realizada antes da atribuição de interfaces a elas, sendo uma interface atribuída a apenas uma zona de segurança.\nc) Firewalls que utilizam política baseada em zonas (ZFW) adotam um modelo de configuração baseado na aplicação de uma política de inspeção em interface empregada a todo tráfego que pela interface passa.\nd) O conjunto de interfaces atribuídas a uma mesma zona, que integra regiões de segurança relativas em uma rede, apresentam proteção com níveis de segurança distintos, mutuamente exclusivos e complementares.\ne) O esquema de configuração de inspeções de um firewall baseados em zona mantém compatibilidade com a abordagem adotada pelos firewalls Cisco IOS Classic com controle de acesso baseados em contexto.",
+"gabarito": "Letra B"
+},
+{
+"n": 53,
+"ref": "(FGV – 2026 – ALEGO – Ana Leg (ALEGO))",
+"texto": "Há muitos tipos de firewalls que são categorizados de diversas formas. Correlacione os tipos de firewall listados a seguir às respectivas descrições.\n1. Firewall de rede.\n2. Firewall baseado em host. 3. Firewall de perímetro. 4. Firewall de próxima geração.\n( ) Este tipo de firewall é um programa que opera em um único dispositivo dentro de uma rede. Ele é instalado diretamente em computadores ou dispositivos individuais, oferecendo uma camada específica de proteção contra possíveis ameaças. Ao examinar o tráfego de entrada e saída desse dispositivo específico, ele filtra efetivamente o conteúdo nocivo, garantindo que malware, vírus e outras atividades mal- intencionadas não se infiltrem no sistema.\n( ) Este tipo de firewall amplia os recursos dos firewalls tradicionais, oferecendo soluções de segurança mais abrangentes. Diferentemente de seus antecessores, que se concentravam principalmente na inspeção de estado, esse tipo de firewall oferece recursos aprimorados para entender e controlar o tráfego de aplicativos, integrar mecanismos de prevenção contra ameaças e utilizar a inteligência de ameaças com base na nuvem. Além do controle de acesso, são capazes de enfrentar desafios modernos, como malware avançado e ataques sofisticados à camada de aplicativos.\n( ) Este tipo de firewall estabelece o limite entre uma rede privada e o domínio público da Internet. Funcionando como a defesa principal, esse tipo de firewall inspeciona meticulosamente cada byte de dados que tenta passar por ele. Isso protege a rede privada de dados injustificados e potencialmente prejudiciais. Uma função importante desse tipo de firewall envolve diferenciar e, posteriormente, permitir ou proibir o tráfego com base em parâmetros predefinidos, garantindo que somente os dados legítimos e seguros tenham acesso.\n( ) Este tipo de firewall está posicionado na junção entre redes confiáveis e não confiáveis, como sistemas internos e a Internet. Sua função principal é monitorar, controlar e decidir sobre a validade do tráfego de entrada e saída com base em um conjunto predefinido de regras. Essas regras foram criadas para impedir o acesso não autorizado e manter a integridade da rede. A função operacional desse tipo de firewall está em sua capacidade de examinar cada pacote de dados. Ao comparar os atributos dos pacotes, como endereços IP de origem e destino, protocolo e números de porta, com as regras estabelecidas, ele bloqueia com eficácia as possíveis ameaças ou o fluxo de dados indesejados.\nAssinale a opção que indica a relação correta, segundo a ordem apresentada.\na) 1 – 3 – 2 – 4.\nb) 3 – 1 – 4 – 2.\nc) 2 – 4 – 3 – 1.\nd) 4 – 3 – 1 – 2.\ne) 3 – 2 – 1 – 4.",
+"gabarito": "Letra C"
+},
+{
+"n": 54,
+"ref": "(FGV – 2026 – TJ RJ – AJ (TJ RJ))",
+"texto": "Uma equipe de analistas do TJRJ foi encarregada de aumentar o nível de proteção da rede 2 e, se possível, aprimorar sua gestão. Na rede 2, todas as aplicações web são hospedadas em servidores locais. Após uma análise detalhada, a equipe propôs a implementação de uma zona desmilitarizada (DMZ) na rede 2. As aplicações web voltadas ao público externo seriam movidas para a DMZ, enquanto os dados locais usados pelas aplicações permaneceriam fora dessa zona. Em sua análise, a equipe levou em consideração os princípios de defesa em profundidade e do menor privilégio.\nO objetivo da DMZ no cenário apresentado é:\na) diminuir a dependência de firewalls;\nb) simplificar o nível de segmentação da rede;\nc) criar uma rede interna segura para as aplicações web;\nd) isolar completamente os servidores locais da internet;\ne) atuar como uma camada adicional de segurança da rede.",
+"gabarito": "Letra E"
+},
+{
+"n": 55,
+"ref": "(FGV – 2025 – TCE PI – ACE (TCE-PI))",
+"texto": "No contexto de gestão de redes, os firewalls desempenham um papel essencial na segurança, controlando o tráfego de entrada e saída com base em um conjunto de regras de segurança pré- definidas. Os Next-Generation Firewalls (NGFWs), em particular, oferecem funcionalidades avançadas que vão além dos firewalls tradicionais.\nNesse sentido, comparando a um firewall tradicional, assinale a opção que apresenta funcionalidades exclusivas e avançadas de um firewall de próxima geração (NGFW).\na) Monitorar a largura de banda utilizada e limitar a velocidade de conexão para garantir qualidade de serviço.\nb) Monitorar o tráfego de rede e realizar logging de eventos, permitindo auditoria e análise das atividades de rede.\nc) Implementar regras de tradução de endereços de rede (NAT) que permitem que múltiplos dispositivos internos acessem a Internet usando um único endereço IP público.\nd) Fornecer conectividade VPN segura para acesso remoto de usuários externos à rede corporativa, garantindo comunicação segura entre os dispositivos e a rede interna.\ne) Detectar e bloquear intrusões e ataques direcionados por meio da análise profunda de pacotes e assinatura de ameaças conhecidas, além de aplicar políticas de segurança baseadas em aplicações, usuários e conteúdo.",
+"gabarito": "Letra E"
+},
+{
+"n": 56,
+"ref": "(FGV – 2025 – Pref Canaã Carajás – Ag (Pref Canaã Carajás))",
+"texto": "Na gestão de segurança da internet é uma tarefa crucial conhecer os equipamentos de segurança que ajudam a proteger a infraestrutura de tecnologia de informação e comunicação (TIC) e os dados sensíveis.\nSobre a função do firewall, considerando a segurança, assinale a afirmativa correta.\na) Permite que seus dispositivos Wi-Fi se conectem à rede.\nb) Controla as atividades na Internet, incluindo limite de tempo de uso e filtros por conteúdo.\nc) Conecta os dispositivos de sua rede e faz direcionamento de pacotes de dados entre redes.\nd) Estabelece a conexão da Internet com sua rede, atuando como porta de entrada, convertendo sinais digitais do provedor de internet em formatos compreensíveis para os dispositivos.\ne) Protege sua rede contra ataques vindos da Internet ao bloquear conexões não autorizadas de entrada para os dispositivos em sua rede, atuando como uma barreira entre uma rede interna e a internet.",
+"gabarito": "Letra E"
+},
+{
+"n": 57,
+"ref": "(FGV – 2025 – Pref Canaã Carajás – Ag (Pref Canaã Carajás))",
+"texto": "Jair necessita combater fake news sobre o uso de firewalls que circulam entre os usuários do setor de atendimento ao cidadão.\nSobre o firewall, analise as afirmativas a seguir.\nI. Firewall é spyware que impede que os usuários conheçam detalhes do endereçamento dos recursos da rede acessada; ele monitora usuários das redes wi-fi e bluetooth.\nII. A finalidade de um firewall é impedir que pessoas malintencionadas tenham acesso à rede interna da organização, uma vez que os equipamentos do firewall compõem uma espécie de rede periférica.\nIII. Todo firewall é montado a partir de um roteador a que se confere alguma capacidade de selecionar acessos, refutando aqueles que são considerados indesejados.\nEstá correto o que se afirma em\na) I, apenas.\nb) II, apenas.\nc) III, apenas.\nd) I e II apenas.\ne) II e III apenas.",
+"gabarito": "Letra E"
+},
+{
+"n": 58,
+"ref": "(FGV – 2024 – Pref SJC – TT (Pref SJC))",
+"texto": "Considere as seguintes afirmativas acerca de técnicas e aplicativos de segurança:\nI. Um programa antivírus bloqueia o acesso de usuários não autorizados ao computador local e adicionalmente pode determinar quais formatos de senha são seguros para serem utilizados.\nII. Um firewall analisa o tráfego de rede para determinar quais operações de entrada e saída podem ser executadas, a partir de um conjunto de regras.\nIII. Um firewall pode ser um aplicativo de software executando em um computador local.\nEstá correto o que se afirma em\na) I e II, apenas.\nb) II e III, apenas.\nc) III, apenas.\nd) I, apenas.\ne) I, II e III.",
+"gabarito": "Letra B"
+},
+{
+"n": 59,
+"ref": "(FGV – 2024 – CM SP – Tec Leg(CM SP))",
+"texto": "Firewalls são equipamentos de rede ou programas de computador que, por meio do bloqueio seletivo de conexões, baseados em uma política de segurança, buscam proteger redes de computadores.\nO tipo de firewall que guarda o estado das conexões ativas, permitindo apenas a passagem de pacotes que pertençam a determinadas conexões, é denominado\na) Globaladdress.\nb) Stateful.\nc) Localaddress.\nd) Coreless.\ne) Stateless.",
+"gabarito": "Letra B"
+},
+{
+"n": 60,
+"ref": "(FGV – 2024 – CM SP – Tec Leg(CM SP))",
+"texto": "Conectar uma rede privada à Internet oferece um alto risco para a segurança, devido à possibilidade de ocorrer um acesso não autorizado. A solução pode ser fornecida por mecanismos de controle de acesso que tornam uma rede segura verificando, controlando e bloqueando acessos indesejáveis na rede. Estes mecanismos são fornecidos por equipamentos que combinam hardware e software denominados\na) UPS.\nb) Modem.\nc) DNS.\nd) Firewall.\ne) Bridge.",
+"gabarito": "Letra D"
+},
+{
+"n": 61,
+"ref": "(FGV – 2024 – TJ AP – AJ (TJ AP))",
+"texto": "A arquitetura de firewall da empresa APP.TI utiliza uma sub-rede para isolar a rede interna e a internet.\nEssa é uma arquitetura de firewall do tipo:\na) Packet Filter;\nb) Screened Host;\nc) Screened Subnet;\nd) Dual-Homed Host;\ne) Stateful Inspection.",
+"gabarito": "Letra C"
+},
+{
+"n": 62,
+"ref": "(FGV – 2024 – TJ AP – TJ (TJ AP))",
+"texto": "Arnaldo, servidor do Tribunal de Justiça, preocupado com a alta quantidade de ataques cibernéticos advindos da Internet noticiados na mídia, resolveu focar seus estudos tendo em mente o equipamento firewall como a melhor aposta para a proteção da segurança de borda da rede corporativa da instituição.\nArnaldo já está ciente de que os firewalls podem ser classificados em três categorias: filtros de pacotes tradicionais, filtros de estado e gateways de aplicação.\nNo entanto, para aquisição do novo equipamento, falta o servidor entender que as categorias de firewalls com estado caracterizam-se por ter:\na) a incapacidade de detectar quando dados ilícitos estão sendo usados para se infiltrar na rede;\nb) a capacidade de registrar, mas não de armazenar, aspectos importantes das conexões de rede;\nc) a necessidade de que muitas portas estejam abertas para facilitar a comunicação sem intercorrências na conectividade;\nd) a capacidade de registrar o comportamento dos ataques e, em seguida, usar essas informações para evitar tentativas futuras;\ne) a incapacidade de aprender enquanto opera, o que não permite que ele tome decisões de proteção com base no que aconteceu no passado.",
+"gabarito": "Letra D"
+},
+{
+"n": 63,
+"ref": "(FGV – 2024 – ALEP – Tec Leg (ALEP))",
+"texto": "Uma agência governamental, que lida com dados sensíveis e enfrenta ameaças constantes de ataques cibernéticos e acessos maliciosos, precisa implementar estratégias robustas de prevenção para proteger suas operações e dados. Ela também busca implementar uma abordagem holística de segurança, combinando tecnologia, processos e conscientização dos funcionários.\nAssinale a opção que retrata a hipótese adequada, com relação aos conceitos de prevenção e medidas de proteção e segurança.\na) A agência subestima a eficácia dos ataques de phishing, considerando-os óbvios e fáceis de identificar.\nb) A agência prioriza a segurança física dos dispositivos e instalações para proteger dados sensíveis e utiliza criptografia tanto para dados em trânsito quanto armazenados.\nc) A agência acredita que os firewalls protegem contra todos os tipos de malware, eliminando a necessidade de outras medidas de segurança. Ela prefere firewalls de hardware, acreditando que são superiores aos baseados em software, e não utiliza firewalls em sua rede privada, pensando que são necessários apenas para conexões com a internet.\nd) A agência realiza auditorias de segurança apenas ocasionalmente, confiando na eficácia de suas medidas existentes.\ne) A agência implementa a segregação de deveres apenas em departamentos críticos e considera a segurança física menos crítica em comparação com a cibernética.",
+"gabarito": "Letra B"
+},
+{
+"n": 64,
+"ref": "(FGV – 2024 – CVM – Ana (CVM))",
+"texto": "Luís, analista da CVM, recebeu do encarregado de segurança a demanda de especificar um equipamento que seja capaz de fazer o controle de serviço, de direção, de usuário e de comportamento. Luís especificou um:\na) ids;\nb) snort;\nc) dnssec;\nd) firewall;\ne) proxy de aplicação.",
+"gabarito": "Letra D"
+},
+{
+"n": 65,
+"ref": "(FGV – 2024 – TCE PA – Aud CE (TCE-PA))",
+"texto": "Os firewalls desempenham um papel fundamental na proteção dos dados sigilosos que trafegam na rede corporativa de um órgão público. Há diversos tipos, como firewall filtro de pacotes, firewall em estado de conexão e firewall em nível de aplicação.\nO firewall filtro de pacotes\na) permite detectar diversas ameaças à rede, como por exemplo: spam, phishing e spyware.\nb) permite distinguir entre os diferentes tipos de tráfego HTTP.\nc) mapeia todos os pacotes que entram e saem da rede interna, relacionando-os às conexões TCP/IP ativas.\nd) inspeciona apenas os endereços IP e as portas TCP/UDP dos pacotes que entram e saem de uma rede interna, descartando aqueles que não atendem aos critérios estabelecidos pelo administrador de rede.\ne) torna possível o envio de tráfego encriptado, garantindo assim a confidencialidade das informações e a privacidade dos dados.",
+"gabarito": "Letra D"
+},
+{
+"n": 66,
+"ref": "(FGV – 2024 – MACAEPREV – Asst Prev (MACAEPREV))",
+"texto": "A digitalização dos processos melhorou nossa vida em muitos aspectos, aumentando a possibilidade de comunicação, aproximando as pessoas e reduzindo o tempo de muitos processos burocráticos. Porém, um efeito negativo dessa digitalização é o aumento de ataques cibernéticos aos dispositivos pessoais e empresariais. Para dirimir tais efeitos, a segurança da informação implementa mecanismos para salvaguardar nossos equipamentos, sistemas, redes e internet como um todo.\nSobre segurança de equipamentos, sistemas, redes e internet, assinale a opção correta.\na) Um firewall tem como função principal detectar e remover vírus de um sistema.\nb) O uso de antivírus é suficiente para proteger um computador de todas as ameaças da internet, desde que ele esteja sempre atualizado.\nc) Phishing é uma técnica de proteção utilizada por empresas para evitar o roubo de informações sensíveis de seus clientes.\nd) O firewall pode bloquear tráfego indesejado, tanto de entrada quanto de saída, protegendo a rede de acessos não autorizados.\ne) Malwares são apenas vírus, e a melhor solução é sempre formatar o computador para resolver problemas causados por eles.",
+"gabarito": "Letra D"
+},
+{
+"n": 67,
+"ref": "(FGV – 2024 – TJ MT – AJ (TJ MT))",
+"texto": "Um firewall é uma ferramenta essencial para proteger uma rede de computadores contra acessos não autorizados e ameaças externas. O papel de um firewall em uma rede de computadores é\na) permitir o tráfego de dados sem qualquer restrição, garantindo que a rede esteja sempre disponível para comunicação.\nb) bloquear todo o tráfego de dados proveniente de redes externas, sem qualquer exceção, para proteger os dados da rede interna.\nc) monitorar e controlar o tráfego de rede com base em um conjunto de regras de segurança definidas, permitindo ou bloqueando o tráfego conforme a política configurada.\nd) substituir a necessidade de criptografia em redes, garantindo que todos os dados sejam transmitidos de forma segura.\ne) impedir que dispositivos internos da rede se comuniquem entre si, restringindo a troca de dados entre os usuários.",
+"gabarito": "Letra C"
+},
+{
+"n": 68,
+"ref": "(FGV – 2023 – BBTS – Tec (BBTS))",
+"texto": "Teresa administra a intranet de uma universidade. Para proteger os computadores dessa rede de ameaças e potenciais ataques cibernéticos por meio do monitoramento e filtragem do tráfego de rede de entrada e saída de dados, Teresa deve utilizar um\na) antivírus.\nb) firewall.\nc) gateway.\nd) roteador.\ne) spyware.",
+"gabarito": "Letra B"
+},
+{
+"n": 69,
+"ref": "(FGV – 2023 – DPE RS – Tec (DPE RS))",
+"texto": "A empresa X foi contratada pela DPE/RS para implementar um controle de tráfego dentro de sua rede interna. Esse processo consiste na instalação de uma solução que possua capacidade de examinar dentro dos pacotes trafegados, além do cabeçalho TCP, de forma a identificar o que a aplicação está executando. A solução permite distinguir entre o tráfego HTTP, usado na navegação Web, e o tráfego HTTP usado para compartilhamento de arquivos P2P.\nA solução implementada pela LTEC é:\na) Firewall filtro de pacotes;\nb) Firewall implementado como gateway em nível de aplicação;\nc) Firewall em estado de conexão;\nd) Zona desmilitarizada (DMZ);\ne) Virtual Private Network.",
+"gabarito": "Letra B"
+}
+]
+},
+{
+"topico": "IDS, IPS e Honeypot",
+"questoes": [
+{
+"n": 1,
+"ref": "(CEBRASPE – 2026 – TELEBRAS – Esp GT (TELEBRAS))",
+"texto": "Acerca do funcionamento e das características do IPS (intrusion prevention system), julgue o item a seguir.\nUm HIPS (host-based intrusion prevention system) atua diretamente no host, seja no sistema operacional ou na aplicação que está monitorando, bem como faz verificações de chamadas de sistema, processos e memória, procurando por ataques conhecidos em sua base de assinatura.",
+"gabarito": "Certo"
+},
+{
+"n": 2,
+"ref": "(CEBRASPE – 2026 – TELEBRAS – Esp GT (TELEBRAS))",
+"texto": "Acerca do funcionamento e das características do IPS (intrusion prevention system), julgue o item a seguir.\nPor definição, um IPS deve ser posicionado fora do caminho do tráfego a ser analisado.",
+"gabarito": "Errado"
+},
+{
+"n": 3,
+"ref": "(CEBRASPE – 2026 – TELEBRAS – Esp GT (TELEBRAS))",
+"texto": "Em relação a sistemas de detecção de intrusão, segurança de servidores e de sistemas operacionais, certificação digital e políticas de segurança, julgue o item seguinte.\nEm uma rede corporativa segmentada, um sistema de detecção de intrusão baseado em rede, quando implementado e posicionado no perímetro, é eficaz para identificar tentativas de intrusão realizadas por meio de tráfego criptografado entre hosts internos.",
+"gabarito": "Errado"
+},
+{
+"n": 4,
+"ref": "(CEBRASPE – 2026 – TCU – AUFC (TCU))",
+"texto": "A respeito de controles e testes de segurança para aplicações web, múltiplos fatores de autenticação e soluções para segurança da informação, julgue o item a seguir.\nO uso de um SIEM devidamente configurado para correlação em tempo real elimina a necessidade de mecanismos de prevenção de um IPS, já que os eventos consolidados permitem bloquear as atividades maliciosas diretamente a partir da análise centralizada.",
+"gabarito": "Errado"
+},
+{
+"n": 5,
+"ref": "(CEBRASPE – 2026 – TCE RN – Ana Adm (TCE RN))",
+"texto": "Acerca das tecnologias de segurança, bem como da assinatura e da certificação digital, julgue o item que se segue.\nSistemas de detecção de intrusão (IDS) podem atuar de forma passiva ou ativa, sendo capazes, em ambos os casos, de bloquear automaticamente atividades maliciosas identificadas.",
+"gabarito": "Errado"
+},
+{
+"n": 6,
+"ref": "(CEBRASPE – 2026 – SEPLAG AL – EGP (SEPLAG AL))",
+"texto": "Acerca dos sistemas de detecção de intrusão (IDS) e dos sistemas de prevenção de intrusão (IPS), julgue o item seguinte.\nUm IPS é um elemento de segurança considerado ativo em uma rede, está posicionado inline em relação ao fluxo de rede e utiliza técnicas de inspeção profunda de pacotes (deep packet inspection).",
+"gabarito": "Certo"
+},
+{
+"n": 7,
+"ref": "(CEBRASPE – 2026 – SEPLAG AL – EGP (SEPLAG AL))",
+"texto": "Acerca dos sistemas de detecção de intrusão (IDS) e dos sistemas de prevenção de intrusão (IPS), julgue o item seguinte.\nUm IDS é capaz de monitorar uma rede sem interferir diretamente em seu fluxo de dados.",
+"gabarito": "Certo"
+},
+{
+"n": 8,
+"ref": "(CEBRASPE – 2025 – BDMG – Ana Desen (BDMG))",
+"texto": "Considerando os conceitos de IDS (intrusion detection systems) e IPS (intrusion prevention systems), julgue o item a seguir.\nCaso um IPS com capacidade de operar inline detecte ataques, esse sistema adotará medidas adicionais para bloqueá-los em tempo real.",
+"gabarito": "Certo"
+},
+{
+"n": 9,
+"ref": "(CEBRASPE – 2025 – BDMG – Ana Desen (BDMG))",
+"texto": "Considerando os conceitos de IDS (intrusion detection systems) e IPS (intrusion prevention systems), julgue o item a seguir.\nIDS podem ser definidos como um tipo de ferramenta de software ou appliance capaz de detectar eventos com base em assinatura e em características que os tornam suspeitos na rede sob análise.",
+"gabarito": "Certo"
+},
+{
+"n": 10,
+"ref": "(CEBRASPE – 2025 – AEB – Tecno (AEB))",
+"texto": "Assinale a opção que corresponde a dois sistemas detectores de intrusão que são de código aberto e que estão disponíveis na Internet.\na) SNORT e SURICATA\nb) SNORT e PFSENSE\nc) SURICATA e PFSENSE\nd) SURICATA e IPTABLES\ne) SNORT e IPTABLES",
+"gabarito": "Letra A"
+},
+{
+"n": 11,
+"ref": "(CEBRASPE – 2025 – EMBRAPA – Ana (EMBRAPA))",
+"texto": "Julgue o item a seguir, relativo a implementação e monitoramento de segurança em firewall, IDS, IPS e configuração e administração de redes de computadores.\nUm sistema de detecção de intrusão baseado em anomalia é capaz de detectar um computador que normalmente apenas troca tráfego SMTP e DNS com alguns endereços IP, mas que, de repente, começa a enviar tráfego HTTP para endereços completamente desconhecidos e fora da rede local.",
+"gabarito": "Certo"
+},
+{
+"n": 12,
+"ref": "(CEBRASPE – 2025 – EMBRAPA – Ana (EMBRAPA))",
+"texto": "Julgue o item a seguir, relativo a implementação e monitoramento de segurança em firewall, IDS, IPS e configuração e administração de redes de computadores.\nUm IPS (intrusion prevention system) visa detectar e interromper um ataque, devendo esse sistema ficar no caminho em direção ao alvo e tomar decisões de aceitar ou descartar o tráfego em tempo real.",
+"gabarito": "Certo"
+},
+{
+"n": 13,
+"ref": "(CEBRASPE – 2025 – STM – AJ (STM))",
+"texto": "No que se refere aos protocolos DHCP e IMAP, aos sistemas de segurança IPS, aos modelos de nuvem, ao ambiente Linux e ao Microsoft Windows Server, julgue o item a seguir.\nUm IPS atua como um filtro de pacotes que inspeciona todo e qualquer pacote que entra e que sai na rede, sendo o critério de filtragem determinado por regras, ou por tabelas que listam as origens e os destinos aceitáveis.",
+"gabarito": "Errado"
+},
+{
+"n": 14,
+"ref": "(CEBRASPE – 2025 – CAESB – Ana SN (CAESB))",
+"texto": "Assinale a opção em que é citado um sistema capaz de verificar o conteúdo das camadas superiores do TCP/IP e alertar sobre atividades não apropriadas ou nocivas na rede.\na) SSH\nb) firewall\nc) IDS\nd) VPN\ne) proxy reverso",
+"gabarito": "Letra C"
+},
+{
+"n": 15,
+"ref": "(CEBRASPE – 2025 – TCE MS – AECE (TCE MS))",
+"texto": "No que concerne aos dispositivos de segurança, assinale a opção correta.\na) O firewall local, no host, substitui a necessidade de proxies, IDS e IPS, já que é suficiente, por si mesmo, para prover segurança completa em uma rede corporativa.\nb) O IPS (intrusion prevention system) apenas registra tentativas de ataque, sem possibilidade de reação em tempo real.\nc) O proxy garante a confidencialidade do tráfego entre usuários e servidores, pois utiliza exclusivamente criptografia de ponta a ponta.\nd) O firewall tem como função principal analisar o conteúdo de mensagens de email para identificar vírus e removê-los automaticamente.\ne) O IDS (intrusion detection system) monitora o tráfego de rede para identificar padrões suspeitos ou maliciosos.",
+"gabarito": "Letra E"
+},
+{
+"n": 16,
+"ref": "(CEBRASPE – 2024 – CNPq – Ana CT I (CNPq))",
+"texto": "Acerca de redes de comunicação cabeadas, de padrões IEEE 802.11, de routing e switching, de IDS, IPS e NAT, julgue o item subsequente.\nUm IPS é projetado para perceber ameaças e informar imediatamente ao administrador da rede acerca da atividade maliciosa descoberta, enquanto um IDS bloqueia automaticamente a atividade maliciosa detectada, reconfigurando outros ativos de segurança e encerrando conexões suspeitas.",
+"gabarito": "Errado"
+},
+{
+"n": 17,
+"ref": "(CEBRASPE – 2024 – FINEP – Ana (FINEP))",
+"texto": "Acerca de sistemas de detecção de intrusão (IDS, na sigla em inglês) que funcionam em rede, assinale a opção correta.\na) Tecnicamente, há poucas diferenças entre um IDS passivo e um IDS ativo.\nb) A posição de um IDS na rede não interfere na sua capacidade de detecção de eventos maliciosos.\nc) Um IDS executa análises sobre os dados coletados dos usuários, mas é incapaz de fazer análise, em tempo real, de fluxo de rede para buscar evidências que comprovem uma ação maliciosa.\nd) Um IDS que se baseia em anomalia monitora as ações que ocorrem em uma rede sem a necessidade de aprender o comportamento padrão da rede.\ne) Um IDS que se baseia em assinaturas pode identificar o tráfego malicioso de alguns tipos de malware, desde que esteja assim configurado e a assinatura esteja na base do IDS.",
+"gabarito": "Letra E"
+},
+{
+"n": 18,
+"ref": "(CEBRASPE – 2024 – MPE TO – Ana Min (MPE TO))",
+"texto": "Julgue o próximo item, a respeito de ataques, malwares, criptografia e certificação digital.\nUm sistema IDS baseado em assinatura usa aprendizado de máquina para criar um modelo definido de atividade confiável e comparar comportamentos considerados suspeitos com o modelo de confiança, reduzindo significativamente a ocorrência de falsos positivos.",
+"gabarito": "Errado"
+},
+{
+"n": 19,
+"ref": "(CEBRASPE – 2024 – CAPES – Ana CT (CAPES))",
+"texto": "Com relação a dispositivos de segurança, julgue o item subsequente.\nUm sistema IDS (intrusion detect system) detecta e modifica dados nos pacotes de rede para prevenir ataques.",
+"gabarito": "Errado"
+},
+{
+"n": 20,
+"ref": "(CEBRASPE – 2024 – MPE GO – Ana MP (MPE GO))",
+"texto": "Julgue o item subsequente referente a conceitos de segurança da informação, segurança de redes sem fio e gestão de riscos em tecnologia da informação.\nEntre os componentes de um IDS (intrusion detection system), o sensor é responsável por analisar as informações coletadas e compará-las com um padrão conhecido, para determinar se um evento é normal ou malicioso",
+"gabarito": "Errado"
+},
+{
+"n": 21,
+"ref": "(CEBRASPE – 2024 – TCE AC – ATI (TCE AC))",
+"texto": "Acerca de redes sem fio dos padrões 802.11, WEP, WPA e WPA2, conceitos relativos a routing e switching e IDS, julgue o item subsequente.\nO IDS faz análise das atividades de uma rede, com o objetivo de descobrir atividades inapropriadas e alertar os administradores, tendo como vantagens o sistema failover e a filtragem de pacotes.",
+"gabarito": "Errado"
+},
+{
+"n": 22,
+"ref": "(FCC – 2025 – TRT 1 – AJ TRT1)",
+"texto": "Um Tribunal Regional do Trabalho precisa reforçar a segurança da informação em seus sistemas, garantindo a proteção dos dados processuais e a continuidade dos serviços digitais. A equipe de TI promoveu um debate sobre a utilização de um Sistema de Prevenção de Intrusão (IPS) comparando-o a outras soluções. Eles concluíram corretamente que o\na) Firewall de borda substitui a necessidade de um IPS, pois sua função é suficiente para evitar todos os tipos de ataques e filtrar o tráfego malicioso antes que ele chegue aos servidores internos.\nb) Sniffer de Rede é uma ferramenta mais eficaz do que um IPS, pois permite capturar e analisar pacotes de dados sem causar impacto na latência da rede do Tribunal.\nc) IPS analisa o tráfego de rede em tempo real, identificando padrões suspeitos e bloqueando automaticamente atividades maliciosas antes que comprometam os sistemas do Tribunal, não sendo equivalente a um IDS, que apenas alerta sobre ameaças sem intervir ativamente.\nd) WAF (Web Application Firewall) analisa registros de eventos e detecta anomalias de segurança em tempo real, além de bloquear ataques automaticamente, sendo uma alternativa ao IPS.\ne) NAC (Network Access Control) é uma solução equivalente ao IPS, pois impede qualquer acesso não autorizado à rede do Tribunal, monitorando continuamente os dispositivos conectados.",
+"gabarito": "Letra C"
+},
+{
+"n": 23,
+"ref": "(FCC – 2025 – SEFAZ PI – Ag Trib (SEFAZ PI))",
+"texto": "Após uma tentativa de intrusão em seus sistemas fiscais, a Secretaria da Fazenda Estadual decidiu implementar IDS/IPS modernos para detectar e bloquear ameaças em tempo real. A solução robusta, que cobre todos os protocolos de rede, protege contra ameaças conhecidas e desconhecidas, e está alinhada às tecnologias mais recentes disponíveis atualmente é:\na) Utilizar um IDS híbrido com prevenção de intrusões, relatórios em tempo real e suporte a todos os protocolos.\nb) Adotar um IDS/IPS baseado em rede com análise de comportamento e integração a um SIEM.\nc) Implementar um IPS baseado em assinaturas com bloqueio automático e suporte a múltiplos protocolos, incluindo HTTP/HTTPS.\nd) Configurar um IDS/IPS com monitoramento passivo, alertas detalhados e análise manual para todos os protocolos.\ne) Instalar um IPS em nuvem com detecção de anomalias para tráfego criptografado e não criptografado, sem integração a um SIEM.",
+"gabarito": "Letra B"
+},
+{
+"n": 24,
+"ref": "(FCC – 2025 – SEFAZ PI – AFFE (SEFAZ PI))",
+"texto": "Um servidor de rede de uma Secretaria da Fazenda, que armazena informações financeiras confidenciais, foi configurado com um firewall que permite apenas o tráfego essencial para seu funcionamento. Além disso, todos os arquivos armazenados estão criptografados. No entanto, durante uma auditoria de segurança, foi identificada uma vulnerabilidade em um software de terceiros instalado no servidor. A medida adicional mais crucial para mitigar o risco de exploração dessa vulnerabilidade e potencial acesso aos dados é\na) reforçar a política de senhas para o acesso ao servidor com requisitos ainda mais complexos.\nb) realizar testes de penetração regulares para identificar e corrigir os antivírus, trocar o equipamento e outras possíveis vulnerabilidades.\nc) desabilitar completamente o acesso remoto a esse servidor.\nd) implementar um sistema de detecção de intrusão para monitorar atividades suspeitas.\ne) garantir que todas as estações de trabalho dos usuários que acessam o servidor possuam um antivírus atualizado.",
+"gabarito": "Letra D"
+},
+{
+"n": 25,
+"ref": "(FGV – 2026 – AMAZUL – ADTND (AMAZUL))",
+"texto": "Em um ambiente de rede corporativa, um administrador de segurança implementou um Sistema de Detecção de Intrusão (IDS), baseado em anomalias para identificar ameaças internas e ataques de dia zero.\nAssinale a opção que apresenta a principal desvantagem que esse administrador, provavelmente enfrentará em comparação com um IDS baseado em assinaturas, e o motivo.\na) Alta taxa de falsos positivos (alarmes que não são ameaças reais), devido à natureza de aprendizado de máquina e modelagem do tráfego de referência.\nb) Dificuldade em detectar ataques conhecidos, uma vez que se concentra em desvios do tráfego normal.\nc) Maior custo de implementação, pois exige hardware especializado para processamento intensivo.\nd) Incapacidade de gerar alertas em tempo real, resultando em atrasos na resposta a incidentes.\ne) Requer atualizações diárias e constantes do banco de dados de assinaturas, similar aos sistemas antivírus tradicionais.",
+"gabarito": "Letra A"
+},
+{
+"n": 26,
+"ref": "(FGV – 2026 – ALERO – Ana Leg (ALERO))",
+"texto": "A equipe de segurança da Assembleia busca um dispositivo que possa monitorar o tráfego de rede em tempo real, identificar padrões de ataques conhecidos ou anomalias comportamentais e, especificamente, tomar uma ação imediata, como derrubar a conexão ou bloquear o endereço IP de origem do tráfego malicioso detectado.\nO dispositivo de segurança, responsável pela detecção de intrusão e pela prevenção ou bloqueio ativo do tráfego malicioso, é\na) Network Access Control (NAC).\nb) Intrusion Detection System (IDS).\nc) Network Address Translation (NAT).\nd) Intrusion Prevention System (IPS).\ne) Web Application Firewall (WAF).",
+"gabarito": "Letra D"
+},
+{
+"n": 27,
+"ref": "(FGV – 2025 – PC MG – Per Crim (PC MG))",
+"texto": "No cenário atual de ameaças cibernéticas, as ferramentas de segurança desempenham um papel essencial na proteção de redes e sistemas contra ataques e acessos não autorizados.\nDentre as ferramentas mais utilizadas para garantir a segurança, destacam-se o firewall, o sistema de detecção de intrusão (IDS/IPS) e o antivírus.\nA ferramenta que tem como principal função monitorar o tráfego de rede em busca de atividades suspeitas e prevenir possíveis invasões, é denominada\na) Firewall.\nb) Antivírus.\nc) Sistema de Detecção de Intrusão (IDS/IPS).\nd) Roteador.\ne) Proxy.",
+"gabarito": "Letra C"
+},
+{
+"n": 28,
+"ref": "(FGV – 2025 – MPU – Ana MPU)",
+"texto": "O MPF processa milhares de requisições diárias e está preocupado com ataques cibernéticos, como varreduras de porta, ataques de negação de serviço (DoS) e a disseminação de malware.\nPara proteger sua infraestrutura, o MPF decide implementar um sistema IDS que:\n• detecte ataques conhecidos rapidamente;\n• reconheça padrões de tráfego anormais que possam indicar novos tipos de ataques; e\n• minimize alarmes falsos que possam sobrecarregar a equipe de resposta.\nO tipo mais adequado para atender essas necessidades é um sistema IDS:\na) baseado em anomalias;\nb) baseado em assinaturas;\nc) com implementação de controle de acesso baseado em identidade;\nd) que combine assinaturas e detecção baseada em anomalias;\ne) baseado em assinaturas, configurado para ignorar alarmes de anomalias.",
+"gabarito": "Letra D"
+},
+{
+"n": 29,
+"ref": "(FGV – 2025 – AgSUS – Ana Gest (AgSUS))",
+"texto": "Diversas tecnologias são empregadas por ferramentas de segurança de rede, como: criptografia, firewalls, sistemas de detecção e prevenção de intrusões e antivírus.\nCom relação às tecnologias dos sistemas de detecção e prevenção de intrusões, analise os itens a seguir:\nI. Sistema de prevenção de intrusão (IPS) tem as mesmas funções de detecção e relatório de ameaças de um Sistema de Detecção de Intrusão (IDS), além de habilidades de bloquear automaticamente ameaças, alertando a equipe de segurança, terminando conexões perigosas, removendo conteúdo malicioso ou acionando outros dispositivos de segurança.\nII. Sistema de prevenção de intrusão baseado em rede (NIPS) é instalado em um endpoint específico e serve para monitorar o tráfego de entrada e saída exclusivamente deste dispositivo.\nIII. Análise de Comportamento de Rede (NBA) normalmente usa métodos de detecção baseados em produção de registros periódicos de arquivos críticos do sistema operacional e realiza comparação destes arquivos ao longo do tempo.\nEstá correto o que se afirma em\na) I, II e III.\nb) I, apenas.\nc) I e II, apenas.\nd) I e III, apenas.\ne) II e III, apenas.",
+"gabarito": "Letra B"
+},
+{
+"n": 30,
+"ref": "(FGV – 2025 – ALEAM – Ana Leg (ALEAM))",
+"texto": "Os sistemas de detecção e prevenção de intrusão desempenham papéis diferentes na segurança de redes. A principal diferença entre IDS e IPS é que o IPS\na) monitora apenas tráfego de entrada.\nb) funciona somente em modo promíscuo.\nc) gera alertas sem capacidade de intervenção.\nd) opera inline e pode bloquear tráfego malicioso automaticamente.\ne) analisa apenas logs de eventos.",
+"gabarito": "Letra D"
+},
+{
+"n": 31,
+"ref": "(FGV – 2024 – TJ MS – Tec NS (TJ MS))",
+"texto": "O administrador de segurança do Tribunal de Justiça do Mato Grosso do Sul está implementando algumas regras no sistema de prevenção de intrusão (IPS) da rede local. Ele definiu um controle de acesso que determina quais usuários e dispositivos podem acessar um determinado host. Assim, se um usuário não autorizado tentar se conectar ao host, o IPS irá interrompê-lo.\nO administrador de segurança está configurando um IPS baseado em:\na) assinatura;\nb) anomalias;\nc) políticas;\nd) reputação;\ne) análise de protocolo estável.",
+"gabarito": "Letra C"
+},
+{
+"n": 32,
+"ref": "(FGV – 2024 – TCE GO – ACE (TCE-GO))",
+"texto": "Assinale a opção correta sobre a segurança de redes de computadores.\na) Os sistemas de detecção de intrusão (IDS) e os sistemas de prevenção de intrusão (IPS) são ferramentas com a mesma função\nb) Gestão de vulnerabilidades é um processo para correção de vulnerabilidades em softwares, não tendo relação direta com o firewall.\nc) Um sistema de detecção de intrusão (IDS) não funciona numa DMZ (Demilitarized Zone), pois ela necessita de visibilidade completa da rede.\nd) O uso de NAC (Network Access Control) não contribui para a gestão de vulnerabilidades.\ne) Os Sistemas de detecção de intrusão (IDS) são projetados para monitorar e alertar sobre possíveis intrusões, enquanto sistemas de prevenção de intrusão (IPS) atuam ativamente para bloquear ataques detectados.",
+"gabarito": "Letra E"
+},
+{
+"n": 33,
+"ref": "(FGV – 2024 – CVM – Ana (CVM))",
+"texto": "A fim de incrementar a segurança da rede da organização, a equipe de segurança instalou sistemas de detecção de intrusão (IDS – Intrusion Detection System) para monitorar a rede, identificando os eventos que violem suas regras de segurança. O IDS instalado baseia sua detecção na análise do comportamento do tráfego, comparando-o com seu comportamento padrão.\nO tipo de IDS instalado foi o:\na) host-based com detecção de anomalia;\nb) network-based com detecção de anomalia;\nc) host-based com detecção de assinatura;\nd) network-based com detecção de assinatura;\ne) host-based com análise de protocolo.",
+"gabarito": "Letra B"
+},
+{
+"n": 34,
+"ref": "(FGV – 2024 – INPE – Tecno Jr (INPE))",
+"texto": "Sobre Intrusion Detection Systems (IDS) e Intrusion Prevention Systems (IPS), assinale a afirmativa correta.\na) Não é uma prática recomendada implantar IPSs em linha para interromper ataques ativamente.\nb) Não é uma desvantagem de IDSs baseados em anomalias serem completamente cegos a novos ataques que ainda não foram registrados.\nc) Um IDS, normalmente situado no limite de rede, realiza uma \"inspeção superficial de pacote\", analisando somente campos de cabeçalho, não se envolvendo com cargas úteis no datagrama (incluindo dados da camada de aplicação).\nd) São razões pelas quais muitas organizações preferem o uso de IDS ao invés de IPS: ocorrência de tratamento indevido a falsos positivos e gargalo no tráfego da rede.\ne) O IPS é um sistema passivo, limitado a monitorar e gerar alarmes ao detectar atividades suspeitas. Por outro lado, o IDS não só identifica, mas também pode bloquear o tráfego suspeito, adotando uma abordagem mais proativa na prevenção de intrusões.",
+"gabarito": "Letra D"
+},
+{
+"n": 35,
+"ref": "(FGV – 2024 – TCE PA – Aud CE (TCE-PA))",
+"texto": "Com relação a tecnologias de segurança de rede, avalie se as afirmativas a seguir são verdadeiras (V) ou falsas (F).\n( ) Um IPS é um sistema que busca detectar ataques em curso, e pode tomar uma ação automática para mitigar ou impedir o ataque. ( ) Um analisador de tráfego como o WireShark permite visualizar pacotes que trafegam pela rede desde que sua interface de rede não esteja em modo promíscuo. ( ) O NAT (Network Address Translation) pode ser divido em DNAT que altera o cabeçalho dos pacotes e SNAT que altera o payload dos pacotes.\nAs afirmativas são, respectivamente,\na) V – F – F.\nb) F – F – F.\nc) V – V – V.\nd) V – F – V.\ne) F – V – V.",
+"gabarito": "Letra A"
+},
+{
+"n": 36,
+"ref": "(FGV – 2024 – TCE PA – Aud CE (TCE-PA))",
+"texto": "Para aumentar a segurança em uma rede wireless, é essencial implementar medidas eficazes contra ataques de falsificação de pontos de acesso (Evil Twin Attacks). Uma das técnicas desse tipo de ataque consiste em criar um ponto de acesso falso com o mesmo SSID (ou similar) de um ponto de acesso legítimo, com o objetivo de interceptar e manipular o tráfego de dados dos usuários que se conectam a ele.\nUma prática que pode ajudar a identificar e mitigar os riscos associados a esse tipo de ataques é\na) desativar o broadcast do SSID.\nb) usar um protocolo de criptografia forte como AES.\nc) implementar autenticação WPA2-PSK.\nd) configurar um sistema de detecção de intrusos (IDS).\ne) ativar o modo de economia de energia nos dispositivos wireless.",
+"gabarito": "Letra D"
+},
+{
+"n": 37,
+"ref": "(FGV – 2024 – TRF 1 – AJ (TRF 1ª Região))",
+"texto": "Um IPS identificou pacotes maliciosos por meio de escaneamento em busca de assinaturas de ataque no contexto de um conjunto de tráfego de dados, em vez de considerar apenas pacotes individuais.\nO método empregado denomina-se:\na) bastião duplo em T;\nb) anomalia de tráfego;\nc) anomalia estatística;\nd) correspondência com estado;\ne) correspondência com padrão.",
+"gabarito": "Letra D"
+},
+{
+"n": 38,
+"ref": "(FGV – 2024 – TRF 1 – AJ (TRF 1ª Região))",
+"texto": "Durante a análise de uma regra no Snort, um sistema de detecção de intrusões, foi identificada uma ação específica que permanece ociosa até ser ativada por uma regra de ativação, quando então age como uma regra de registro.\nA ação descrita é a:\na) pass;\nb) drop;\nc) alert;\nd) activate;\ne) dynamic.",
+"gabarito": "Letra E"
+}
+]
+},
+{
+"topico": "VPN",
+"questoes": [
+{
+"n": 1,
+"ref": "(CEBRASPE – 2026 – UDESC – TUD (UDESC))",
+"texto": "Redes privadas virtuais (VPNs) são úteis para proteger canais de comunicação. Considerando o uso de VPNs, julgue o item seguinte.\nNo modo de funcionamento tunelado, todo o pacote que passa por uma VPN é encriptado.",
+"gabarito": "Certo"
+},
+{
+"n": 2,
+"ref": "(CEBRASPE – 2026 – CAM DEP – TL (CAM DEP))",
+"texto": "Acerca de redes e de bancos de dados, julgue o item a seguir.\nUm dos princípios de uma VPN é garantir a privacidade do usuário, ocultando o endereço IP de seu computador e protegendo com criptografia as informações enviadas.",
+"gabarito": "Certo"
+},
+{
+"n": 3,
+"ref": "(CEBRASPE – 2025 – InoversaSul – Aux (InoversaSul))",
+"texto": "Em relação à utilização de tecnologia, ferramentas, aplicativos e procedimentos associados à Internet e à intranet, julgue o item subsequente.\nUma rede VPN (virtual private network) atua como filtro, tornando ilegíveis os dados em uma extremidade e apenas decodificando-os na outra, e sua conexão com a Internet é considerada segura.",
+"gabarito": "Certo"
+},
+{
+"n": 4,
+"ref": "(CEBRASPE – 2025 – InoversaSul – Aux (InoversaSul))",
+"texto": "Em relação à utilização de tecnologia, ferramentas, aplicativos e procedimentos associados à Internet e à intranet, julgue o item subsequente.\nDuas intranets podem estar conectadas por meio de VPN (virtual private network).",
+"gabarito": "Certo"
+},
+{
+"n": 5,
+"ref": "(CEBRASPE – 2025 – EMBRAPA – Ana (EMBRAPA))",
+"texto": "A respeito de redes de computadores, julgue o item a seguir.\nVPNs do tipo site-to-site são utilizadas quando usuários remotos acessam recursos de uma empresa por meio de conexão criptografada.",
+"gabarito": "Errado"
+},
+{
+"n": 6,
+"ref": "(CEBRASPE – 2025 – CAESB – Tec SS (CAESB))",
+"texto": "No que se refere às redes locais virtuais (VLAN) e às redes virtuais privadas (VPN), julgue os próximos itens.\nI As VLAN são segmentos lógicos das LAN, situados dentro de uma ou mais redes físicas, e suas estações são agrupadas em um mesmo domínio de broadcast.\nII Enquanto nas VLAN o endereço IP fica oculto e as mensagens são criptografadas, nas VPN a definição do endereço IP é feita por software.\nIII As VLAN e as VPN permitem redução de custos e tempo, criação de grupos de trabalho virtuais e envio de mensagens broadcast para todos os membros de um mesmo grupo.\nAssinale a opção correta.\na) Apenas o item I está certo.\nb) Apenas o item II está certo.\nc) Apenas os itens I e II estão certos.\nd) Apenas os itens II e III estão certos.\ne) Todos os itens estão certos.",
+"gabarito": "Letra A"
+},
+{
+"n": 7,
+"ref": "(CEBRASPE – 2025 – FUB – Tecno (FUB))",
+"texto": "Julgue os itens subsecutivos, relativos a redes de comunicação de dados.\nUma conexão VPN redireciona, por meio de uma espécie de túnel de dados seguro, os pacotes de dados da máquina do usuário para outro servidor remoto antes de enviá-los a terceiros, usando o IPSec na criptografia.",
+"gabarito": "Certo"
+},
+{
+"n": 8,
+"ref": "(CEBRASPE – 2025 – TCE MS – AECE (TCE MS))",
+"texto": "Assinale a opção correta no que diz respeito às VPN (virtual private networks).\na) As VPN IPSec operam apenas no modo transporte e garante a segurança de cabeçalhos e payloads embora não permita tunelamento entre redes inteiras.\nb) Uma VPN de acesso remoto garante a confidencialidade apenas se a rede do usuário final for segura, pois não utiliza protocolos de criptografia para proteger o tráfego de dados.\nc) O uso de VPN substitui totalmente a necessidade de firewalls, já que o túnel criptografado estabelecido por ela impede qualquer ataque externo.\nd) As VPN baseadas em SSL/TLS são restritas ao transporte de tráfego de email corporativo, não suportando aplicações web.\ne) A VPN do tipo site-to-site estabelece túneis criptografados entre redes distintas, sendo frequentemente utilizada para conectar filiais de uma mesma organização.",
+"gabarito": "Letra E"
+},
+{
+"n": 9,
+"ref": "(CEBRASPE – 2024 – CAPES – Ana CT (CAPES))",
+"texto": "Com relação a dispositivos de segurança, julgue o item subsequente.\nVPN (virtual private network) pode utilizar protocolos como IPSEC e PPTP.",
+"gabarito": "Certo"
+},
+{
+"n": 10,
+"ref": "(CEBRASPE – 2024 – Pref Cach Itapemirim – ASist (Pref Cach Itapemirim))",
+"texto": "Tendo em vista que o uso de rede privada virtual (VPN) e de TLS (transport layer security) é bastante comum para permitir acesso a sistemas na Internet, julgue o item a seguir, a respeito de VPN e TLS.\nIPSec (Internet Protocol Security) e L2TP (Layer 2 Tunneling Protocol) são exemplos de protocolos utilizados para se construir VPNs.",
+"gabarito": "Certo"
+},
+{
+"n": 11,
+"ref": "(CEBRASPE – 2024 – Pref Cach Itapemirim – ASist (Pref Cach Itapemirim))",
+"texto": "Tendo em vista que o uso de rede privada virtual (VPN) e de TLS (transport layer security) é bastante comum para permitir acesso a sistemas na Internet, julgue o item a seguir, a respeito de VPN e TLS.\nUma VPN é um tipo de serviço de segurança de rede que cria uma rede física sobre fluxos de dados lógicos em que os pacotes de dados se movem através de cabeçalhos dos protocolos de transporte criptografados.",
+"gabarito": "Errado"
+},
+{
+"n": 12,
+"ref": "(CEBRASPE – 2024 – CODEVASF – AnDR (CODEVASF))",
+"texto": "Em relação à segurança de redes sem fio e a protocolos de segurança, julgue o item a seguir.\nUma das diferenças entre VPN IPSec e VPN SSL está nas camadas do modelo de referência OSI em que os protocolos operam: enquanto os IPSec são aplicados nas camadas de rede e transporte, os SSL criptografam os dados na camada superior de aplicações.",
+"gabarito": "Certo"
+},
+{
+"n": 13,
+"ref": "(CEBRASPE – 2024 – TC DF – ACE (TC DF))",
+"texto": "Acerca de VPN (virtual private network), julgue o seguinte item.\nEm uma implantação de VPN user-to-site, o usuário, por meio de um cliente VPN e com suas respectivas configurações e credenciais, acessa o concentrador VPN, e este, por sua vez, valida as credenciais e estabelece o túnel, obedecendo aos parâmetros definidos pela política de acesso.",
+"gabarito": "Certo"
+},
+{
+"n": 14,
+"ref": "(CEBRASPE – 2024 – TC DF – ACE (TC DF))",
+"texto": "Acerca de VPN (virtual private network), julgue o seguinte item.\nUm dos algoritmos simétricos implantados no túnel de uma VPN site-to-site é o SHA256.",
+"gabarito": "Errado"
+},
+{
+"n": 15,
+"ref": "(CEBRASPE – 2024 – STJ – AJ STJ)",
+"texto": "A respeito de VPN, anti-DDoS, Nagios e Active Directory, julgue o item subsequente.\nEm uma VPN, o tráfego de dados é levado pela rede pública por meio de protocolos de criptografia por tunelamento, como o SSL, que define um tipo de cabeçalho de autenticação (AH - authentication header), garantindo a confidencialidade dos dados.",
+"gabarito": "Errado"
+},
+{
+"n": 16,
+"ref": "(CEBRASPE – 2023 – MPE RO – Ana (MPE RO))",
+"texto": "A rede de comunicação que é sobreposta às redes públicas, mas apresenta a maioria das propriedades das redes privadas é conhecida pela sigla\na) VPN.\nb) DNS.\nc) DHCP.\nd) FTP.\ne) NNTP.",
+"gabarito": "Letra A"
+},
+{
+"n": 17,
+"ref": "(CEBRASPE – 2023 – FUB – Ana TI (FUB))",
+"texto": "A respeito de segurança de redes de computadores, julgue o item subsecutivo.\nO uso de uma VPN é indicado para garantir confidencialidade e integridade na transmissão dos dados quando o meio de comunicação é considerado inseguro.",
+"gabarito": "Certo"
+},
+{
+"n": 18,
+"ref": "(CEBRASPE – 2023 – MRE – OF CHAN (MRE))",
+"texto": "Uma rede privada virtual (VPN) caracteriza-se por permitir ao usuário\na) restringir o tráfego da Internet para uma rede privada, de modo que ele possa ou não acessar determinados sites na Internet.\nb) ocultar seu endereço IP bem como enviar e receber informações online que só podem ser vistas por ele e seu provedor VPN.\nc) criptografar os dados trafegados entre o seu dispositivo e seu provedor de Internet, desde que esse dispositivo não seja um smartphone, que é incompatível com VPN.\nd) monitorar o tráfego de entrada e saída da rede, autorizando ou bloqueando tráfegos específicos.\ne) utilizar a VPN como um software antivírus abrangente, pois os arquivos são criptografados durante a transmissão dos dados.",
+"gabarito": "Letra B"
+},
+{
+"n": 19,
+"ref": "(FCC – 2025 – TRT 1 – TJ TRT1)",
+"texto": "Uma organização possui escritórios em diferentes cidades do país e uma equipe de colaboradores que frequentemente trabalha de forma remota. Para garantir a produtividade e a colaboração, os funcionários precisam acessar os servidores internos da empresa, que armazenam documentos sigilosos e sistemas administrativos essenciais. No entanto, a equipe de TI da organização identificou que alguns funcionários estão se conectando a esses sistemas por redes Wi-Fi públicas, o que representa um risco à segurança dos dados. Para que os colaboradores remotos acessem a rede interna da organização de forma segura, a solução mais adequada é\na) configurar um servidor web externo, acessível por HTTP, para disponibilizar os documentos e sistemas administrativos, permitindo que os funcionários acessem os dados sem necessidade de autenticação.\nb) obrigar que os colaboradores utilizem redes Wi-Fi domésticas ao invés de redes públicas para acessar os servidores da organização, garantindo uma conexão mais confiável.\nc) implementar um firewall adicional nos servidores da organização, bloqueando o acesso externo e permitindo apenas conexões HTTP de IPs específicos cadastrados previamente.\nd) configurar uma rede privada virtual (VPN), permitindo que os funcionários estabeleçam uma conexão criptografada com a rede interna da organização, garantindo segurança no acesso remoto.\ne) habilitar a autenticação multifator (MFA) nos sistemas administrativos, garantindo que apenas funcionários autenticados possam acessar os servidores da organização, sem necessidade de criptografar a conexão.",
+"gabarito": "Letra D"
+},
+{
+"n": 20,
+"ref": "(FCC – 2025 – TRT 2 – TJ TRT2)",
+"texto": "Um Tribunal está implementando uma solução de VPN-SSL para acesso remoto seguro aos seus sistemas na nuvem.\nConsiderando os princípios de segurança da informação e os mecanismos criptográficos envolvidos, um técnico descreveu corretamente que a solução adotada\na) oferece disponibilidade de serviço através da utilização exclusiva de algoritmos simétricos, oferecendo melhor desempenho operacional para a comunicação.\nb) utiliza tokens físicos como método de autenticação, substituindo a necessidade de certificados digitais e mecanismos criptográficos para proteção dos dados em trânsito.\nc) se beneficia da combinação de certificados digitais para autenticação, criptografia assimétrica para negociação de chaves e criptografia simétrica para transmissão de dados, proporcionando um equilíbrio entre segurança e desempenho.\nd) prioriza o uso de criptografia assimétrica em todas as etapas da comunicação, desde a autenticação até a transmissão de dados, para garantir o máximo nível de segurança possível.\ne) utiliza hashes criptográficos como mecanismo principal de proteção dos dados, sendo responsáveis por garantir tanto a confidencialidade quanto a integridade das informações transmitidas.",
+"gabarito": "Letra C"
+},
+{
+"n": 21,
+"ref": "(FCC – 2024 – TRT 20 – TJ TRT20)",
+"texto": "Um Técnico está utilizando o navegador Opera, aberto e funcionando em condições ideais, em uma máquina com o sistema operacional Windows. Em um dado momento, o Técnico precisou utilizar uma VPN e para isso, entre outras ações, ele clicou em\na) Configurações, localizou a caixa VPN, escolheu um país a partir de uma lista e habilitou o botão Conectar-se à VPN deste país.\nb) GX Control, localizou o botão VPN e habilitou-o para que a VPN fosse imediatamente ativada.\nc) Configurações, clicou em Avançado para abrir mais opções. localizou a caixa VPN e habilitou os botões Habilitar VPN e Conectar-se a uma VPN ao iniciar o navegador.\nd) Aria e digitou na caixa de diálogo: Acione a VPN. Ele concordou com os termos de uso e, em seguida, automaticamente o botão VPN foi habilitado no menu adequado.\ne) Aria e digitou na caixa de diálogo: Baixe uma VPN. Ele concordou com os termos de uso e, em seguida, algumas opções de serviços VPiN foram listados. Ele escolheu um deles e o download foi feito automaticamente.",
+"gabarito": "Letra C"
+},
+{
+"n": 22,
+"ref": "(FGV – 2025 – TCE PI – ACE (TCE-PI))",
+"texto": "As Redes Privadas Virtuais (VPNs) desempenham um papel fundamental em ambientes corporativos, proporcionando conectividade segura e flexível. Existem diferentes tipos de VPN, cada uma adequada a cenários distintos.\nAssinale a opção que descreve corretamente as características de uma VPN site-to-site em comparação com uma VPN de acesso remoto.\na) Tanto a VPN site-to-site quanto a VPN de acesso remoto requerem que os usuários finais instalem software cliente em seus dispositivos para se conectarem às redes.\nb) A VPN de acesso remoto é mais apropriada para conectar redes de filiais a uma matriz, enquanto a VPN site-to-site é usada para permitir que usuários individuais acessem remotamente os recursos da empresa.\nc) A VPN site-to-site exige a instalação de software cliente nos dispositivos dos usuários para que se conectem à rede, enquanto a VPN de acesso remoto não necessita dessa instalação, pois é configurada diretamente nos dispositivos de rede.\nd) A VPN de acesso remoto permite que usuários individuais se conectem à rede corporativa a partir de uma rede pré- configurada, sem a necessidade de interação desses usuários, enquanto a VPN site-to-site conecta redes corporativas em diferentes localidades, mas requer a autenticação de cada usuário para estabelecer e manter a conexão entre as redes.\ne) A VPN de acesso remoto permite que usuários individuais se conectem à rede corporativa a partir de qualquer local, geralmente usando um software cliente no dispositivo, enquanto a VPN site-to-site conecta diretamente redes de diferentes locais, sem exigir a interação direta de usuários, sendo gerenciada por dispositivos de rede como roteadores e firewalls.",
+"gabarito": "Letra E"
+},
+{
+"n": 23,
+"ref": "(FGV – 2024 – ALEP – Ana Leg (ALEP))",
+"texto": "Um empreendimento imobiliário decidiu instalar a sua rede de computadores com características de trabalhar com VPN, utilizando a técnica de tunelamento para encapsular um protocolo dentro de outro. Para esse caso, esse empreendimento precisa instalar na sua rede o protocolo de tunelamento, que vai definir como os pacotes serão encapsulados para serem transmitidos na rede pública.\nUm protocolo adequado, que pode ser utilizado nessa rede, é o\na) IPT.\nb) PPP.\nc) SIPT.\nd) FDDI.\ne) L2TP.",
+"gabarito": "Letra E"
+},
+{
+"n": 24,
+"ref": "(FGV – 2024 – TJ MS – Tec NS (TJ MS))",
+"texto": "O analista Bruno deseja acessar a rede corporativa do Tribunal de Justiça a partir da sua residência. Para isso, ele planeja utilizar a VPN (Rede Virtual Privada) fornecida pelo Tribunal.\nEm relação ao acesso de Bruno, é correto afirmar que:\na) a VPN permite a ocultação do endereço IP do usuário e a criptografia dos seus dados pessoais;\nb) é necessária uma infraestrutura de fibra óptica até a residência de Bruno;\nc) a VPN utiliza o IPSec para criptografar seu endereço IP, mas os dados trafegam em claro;\nd) ele pode acessar a rede corporativa sem autenticação e navegar anonimamente na internet sem deixar rastros de suas atividades;\ne) é necessário um equipamento de firewall na sua residência para permitir o acesso.",
+"gabarito": "Letra A"
+},
+{
+"n": 25,
+"ref": "(FGV – 2024 – Pref Caraguatatuba – Prof (Pref Caraguatatuba))",
+"texto": "Principais dicas de segurança na internet para todos\nDe crianças a avós e profissionais, as ameaças online podem afetar qualquer pessoa. Conhecer as regras da internet deve ser uma prioridade.\n(https://www.avast.com/pt-br/c-internet-safety-tips)\nA esse respeito, avalie se as afirmativas a seguir são verdadeiras (V) ou falsas (F).\n( ) VPN - Virtual Private Network é uma ferramenta que cria uma conexão de rede privada entre dispositivos por meio da Internet e são usadas para transmitir dados de forma segura e anônima em redes públicas.\n( ) As conexões Wi-Fi gratuitas geralmente são criptografadas e, portanto, cibercriminosos não poderão ver o que os usuários conectados estão fazendo.\n( ) Quando os criminosos virtuais induzem alguém a revelar informações sigilosas, como senhas e números de identidade, essa prática recebe o nome de phishing.\nAs afirmativas são, respectivamente,\na) V – F – V.\nb) F – V – F.\nc) V – V – F.\nd) F – F – V.\ne) V – F – F.",
+"gabarito": "Letra A"
+},
+{
+"n": 26,
+"ref": "(FGV – 2023 – DPE RS – Ana (DPE RS))",
+"texto": "Com a necessidade da migração para o trabalho remoto durante a pandemia, a editora EdLex definiu que as funções administrativas seriam realizadas no modelo de home office. Paulo, responsável pelo setor de TI da EdLex, decidiu que o acesso aos sistemas seria realizado por intermédio de VPN e estabeleceu que a VPN deveria: (i) usar criptografia com AES; (ii) oferecer suporte a TCP; e (iii) não ser proprietária.\nO protocolo utilizado por Paulo na VPN da editora EdLex é:\na) OpenVPN;\nb) L2TP com IPSec;\nc) PPTP;\nd) SSTP;\ne) WireGuard.",
+"gabarito": "Letra A"
+},
+{
+"n": 27,
+"ref": "(FGV – 2023 – TJ SE – AJ (TJ SE))",
+"texto": "Cláudia, responsável pela TI da empresa ConecTI-SE, produziu um relatório para que seja decidido o tipo de VPN que a empresa adotará. Ela relatou que a VPN-SSL:\na) criptografa diretamente os pacotes IP;\nb) utiliza chaves configuradas no cliente e no servidor;\nc) precisa ser configurada no lado do cliente;\nd) pode ser usada em modo túnel;\ne) utiliza por padrão o protocolo SSL.\nLISTA DE QUESTÕES",
+"gabarito": "Letra D"
+}
+]
+}
+]
+}
+}

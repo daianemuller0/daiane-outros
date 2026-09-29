@@ -1,6 +1,14 @@
 {
   "functions": {
-    "api/entregas.js": { "includeFiles": "entregas/**" },
-    "api/arquivo.js": { "includeFiles": "entregas/**" }
+    "api/entregas.js": {
+      "includeFiles": "entregas/**"
+    },
+    "api/arquivo.js": {
+      "includeFiles": "entregas/**"
+    },
+    "api/gerar.js": {
+      "includeFiles": "entregas/**",
+      "maxDuration": 60
+    }
   }
 }
