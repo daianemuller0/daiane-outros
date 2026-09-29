@@ -986,7 +986,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       qs:it.tipo==="abertura"?[]:it.node?parseQs(it.node.qs):(function(){const s=new Set();t.subs.forEach(n=>qsDoNo(n).forEach(x=>s.add(x)));return Array.from(s);})(),
       anteriores:feitosAntes.slice(-8),
       orientacoes:orient.concat(it.node&&it.node.comentario?["Sobre este item: "+it.node.comentario]:[]).join("\n"),
-      feedback:(opt&&opt.feedback)||"",textoAnterior:refazer&&tx[it.id]?tx[it.id].texto:"",versao:T.versao};
+      feedback:(opt&&opt.feedback)||"",textoAnterior:(refazer&&opt&&opt.feedback&&tx[it.id])?tx[it.id].texto:"",versao:T.versao};
   }
   function contextoGeracao(a,t){
     const licoes=(DB.licoes||[]).filter(l=>l.aulaId===a.id&&l.tipo==="revisao-teoria"&&l.comentario).slice(-6).map(l=>"- ("+l.topico+") "+l.comentario);
@@ -1010,16 +1010,18 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
   async function gerarTopico(a,t,ti,redraw,opt){
     const g=GEN[t.id]=GEN[t.id]||{};if(g.rodando)return;
     const T=t.teoria;const itens=itensDoTopico(t,ti);
-    g.rodando=true;g.parar=false;g.erro="";g.total=itens.length;
+    g.rodando=true;g.parar=false;g.erro="";g.aviso="";g.total=itens.length;
     const tx=await carregarTextos(a,t);
     const refazer=!!(opt&&opt.refazer);
-    g.feitos=refazer?0:itens.filter(x=>tx[x.id]).length;
+    const somente=opt&&opt.somente;
+    g.feitos=(refazer&&!somente)?0:itens.filter(x=>tx[x.id]).length;
     const sumario=itens.filter(x=>x.tipo==="item").map(x=>x.num+" "+x.nome);
     const orient=contextoGeracao(a,t);
     redraw();
     for(let k=0;k<itens.length;k++){
       const it=itens[k];
       if(g.parar)break;
+      if(somente&&it.id!==somente)continue;
       if(!refazer&&tx[it.id])continue;
       g.atual=it.num+" "+it.nome;redraw();
       const body=corpoPedido(a,t,ti,itens,k,tx,sumario,orient,opt);
@@ -1027,14 +1029,14 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         const r=await fetch("/api/gerar",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
         const d=await r.json().catch(()=>({}));
         if(!r.ok)throw new Error(d.error||("Erro "+r.status));
-        tx[it.id]={texto:d.texto,ts:Date.now()};g.feitos++;
+        tx[it.id]={texto:d.texto,ts:Date.now()};if(!somente)g.feitos++;
         T.tokIn=(T.tokIn||0)+((d.usage&&d.usage.entrada)||0);T.tokOut=(T.tokOut||0)+((d.usage&&d.usage.saida)||0);save();
         if(d.truncado)g.aviso="Um item foi cortado por tamanho; refaça-o se precisar.";
       }catch(e){g.erro="Parou em “"+it.num+" "+it.nome+"”: "+e.message;break;}
       redraw();
     }
     g.rodando=false;g.atual="";
-    if(!g.erro&&!g.parar&&g.feitos>=g.total){T.geradoEm=Date.now();T.versaoGerada=T.versao;addLog(a,STEPS.find(x=>x.id==="e5"),"Teoria gerada pela IA: "+t.nome+" (v"+T.versao+").");save();}
+    if(!somente&&!g.erro&&!g.parar&&g.feitos>=g.total){T.geradoEm=Date.now();T.versaoGerada=T.versao;addLog(a,STEPS.find(x=>x.id==="e5"),"Teoria gerada pela IA: "+t.nome+" (v"+T.versao+").");save();}
     redraw();
   }
   function blocoIA(a,t,ti,card,redraw,T){
@@ -1086,7 +1088,15 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
           bs.onclick=async()=>{const r=await fetch("/api/texto",{method:"PUT",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({aulaId:a.id,topicoId:t.id,noId:it.id,texto:ta.value})});
             if(r.ok){x.texto=ta.value;x.editado=true;redraw();}else alert("Não foi possível salvar.");};
           bar2.appendChild(bs);};
-        bar2.appendChild(be);d.appendChild(bar2);lst.appendChild(d);
+        bar2.appendChild(be);
+        const br=el("button","btn ghost sm","↻ Refazer este item");
+        br.disabled=!!g.rodando;
+        br.onclick=()=>{
+          const fb=prompt("Refazer só “"+it.nome+"” com a IA.\nSe quiser, escreva o que ajustar (deixe em branco para refazer do zero):");
+          if(fb===null)return;
+          gerarTopico(a,t,ti,redraw,{refazer:true,somente:it.id,feedback:fb.trim()});
+        };
+        bar2.appendChild(br);d.appendChild(bar2);lst.appendChild(d);
       });
       box.appendChild(lst);
     }else if(!TXT[t.id]){carregarTextos(a,t).then(()=>{if(Object.keys(TXT[t.id]||{}).length)redraw();});}
