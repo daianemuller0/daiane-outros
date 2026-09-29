@@ -30,6 +30,25 @@
   .btn.sm{padding:7px 12px;font-size:13px}
   .btn.ok{background:var(--ok)} .btn.ok:hover{filter:brightness(1.05)}
   .btn.danger{background:#fff;color:var(--red);border:1px solid #f0c9c9}
+  /* painéis de tópicos */
+  .pnl{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+  .pnl-sum{font-size:12px;font-weight:700;color:var(--blue);margin:8px 0}
+  .pnl-tools{margin:6px 0}.pnl-paste{margin:8px 0}.pnl-paste textarea{width:100%;margin:6px 0}
+  .tcard{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;background:#fbfcff}
+  .tcard.ok{border-color:#bfe5cf;background:#f4fbf7}.tcard.cur{border-color:var(--blue);box-shadow:0 0 0 2px #dbe8ff}.tcard.dim{opacity:.65}
+  .tcard-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .tname{flex:1;font-weight:700}.tname-ro{flex:1}
+  .tpill{font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;background:#e9edf5;color:#55607a}
+  .tpill.ok{background:#d8f3e5;color:#1a7f4b}.tpill.warn{background:#fff0cc;color:#9a6a00}
+  .subrow{display:flex;align-items:center;gap:6px;margin:4px 0}
+  .subrow input.subname{flex:1;min-width:0}.subrow input.subpag{width:78px}
+  .subrow.rem input{text-decoration:line-through;opacity:.5}
+  .obadge{font-size:10px;font-weight:800;padding:2px 6px;border-radius:6px}
+  .obadge.ia{background:#ede4ff;color:#6d28d9}.obadge.vc{background:#dff1ff;color:#0E57C4}
+  .tcard-a{display:flex;gap:8px;margin-top:8px}
+  .tnote{background:#fff7e0;border-left:3px solid #e29a00;padding:6px 10px;border-radius:6px;font-size:13px;margin:6px 0}
+  .pnl .x{cursor:pointer;color:#a33;padding:0 6px}
+  .pnl .err{color:#c0392b}
   /* header */
   header.top{background:linear-gradient(100deg,var(--navy) 0%,var(--navy2) 60%,#1c3a86 100%);color:#fff;box-shadow:0 2px 10px rgba(0,32,96,.18)}
   header.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
@@ -226,10 +245,14 @@
      obj:"O TEC esconde o gabarito das questões nas APIs, mas a IA precisa dele para montar a teoria e os comentários. Por isso, você exporta o caderno em PDF (com gabarito) e sobe aqui — a IA lê direto do sistema, sem depender do chat.",
      ativ:["No TEC, abra o caderno GERAL da aula (todas as questões).","Clique em Imprimir → Salvar como PDF, marcando a opção COM GABARITO.","Salve o PDF no computador.","Suba o PDF na área de upload abaixo (⬆ Subir caderno).","Confira que o arquivo aparece na lista de enviados."],
      res:"Caderno com gabarito disponível no sistema para a IA usar."},
-    {id:"e5",num:"1.5",trilha:"Teoria",nome:"Produção da Teoria",resp:"Estagiário / IA",tempo:"10h",
-     obj:"Produzir a teoria que fundamenta os comentários e a explicação conceitual da aula.",
-     ativ:["Elaborar a teoria dos tópicos com foco em concursos.","Estruturar conforme os tópicos das questões do material.","Priorizar explicações objetivas orientadas para prova.","Destacar definições conceituais importantes.","Incluir comparações entre conceitos próximos.","Inserir exemplos quando ajudarem.","Preparar conteúdo reutilizável nos comentários.","Linguagem didática e direta, alinhada às principais bancas."],
-     res:"PDF de teoria pronto para revisão."},
+    {id:"e4s",num:"1.4.2",trilha:"Teoria",nome:"Definição dos sub-tópicos da teoria (proposta da IA + sua revisão)",resp:"Revisão humana",tempo:"30min",panel:"subs",
+     obj:"Antes de produzir a teoria, a IA propõe os sub-tópicos de cada tópico principal (os tópicos principais já foram definidos no planejamento). Você exclui, adiciona, informa páginas (opcional) e comenta o porquê — a IA aprende com isso.",
+     ativ:["Conferir os tópicos principais definidos no planejamento.","Receber a proposta de sub-tópicos da IA (colar no painel abaixo).","Excluir, adicionar ou ajustar sub-tópicos; informar páginas se quiser.","Comentar o porquê das mudanças (treina a IA).","Aprovar os sub-tópicos de cada tópico."],
+     res:"Sub-tópicos aprovados para todos os tópicos da aula."},
+    {id:"e5",num:"1.5",trilha:"Teoria",nome:"Produção da Teoria (um tópico por vez)",resp:"Estagiário / IA",tempo:"10h",panel:"teoria",
+     obj:"Produzir a teoria em partes, um tópico por vez. Após cada tópico há uma revisão humana, com comentários que a IA usa para melhorar os tópicos seguintes.",
+     ativ:["Produzir o tópico seguindo os sub-tópicos aprovados, com foco em concursos.","Priorizar explicações objetivas, definições, comparações e exemplos.","Enviar o tópico para revisão humana.","Registrar os comentários da revisão (a IA aprende para os demais tópicos).","Repetir até todos os tópicos estarem aprovados."],
+     res:"Teoria de todos os tópicos produzida e aprovada, tópico a tópico."},
     {id:"e6",num:"1.6",trilha:"Teoria",nome:"Revisão de conteúdo da teoria",resp:"Professor Especialista",tempo:"1h",
      obj:"Garantir que o conteúdo teórico esteja correto, claro e alinhado antes dos comentários.",
      ativ:["Verificar a precisão dos conceitos apresentados.","Validar a coerência das explicações.","Corrigir inconsistências conceituais.","Garantir alinhamento entre teoria e questões usadas como exemplo."],
@@ -283,6 +306,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
   function blankEtapa(){return {status:"todo",resp:"",checks:[],notas:"",links:[],doneAt:null};}
   function ensure(a){ // migrate/ensure etapa objects
     a.etapas=a.etapas||{};
+    if(!a.etapas.e4s&&a.etapas.e5&&a.etapas.e5.status!=="todo"){a.etapas.e4s=Object.assign(blankEtapa(),{status:"done",doneAt:Date.now(),notas:"Etapa criada depois; considerada concluída porque a teoria já estava em andamento."});}
     STEPS.forEach(s=>{ if(!a.etapas[s.id]) a.etapas[s.id]=blankEtapa();
       const e=a.etapas[s.id]; if(!Array.isArray(e.checks))e.checks=[]; if(!Array.isArray(e.links))e.links=[]; if(!Array.isArray(e.log))e.log=[];
       if(typeof e.timeSpent!=='number')e.timeSpent=0;
@@ -342,7 +366,6 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     draw();
     return box;
   }
-  function safeSeg(x){return String(x||'').replace(/[^\w\-. ()À-ſ]/g,'_');}
   function fmtDur(ms){const m=Math.floor((ms||0)/60000);if(m<60)return m+"min";return Math.floor(m/60)+"h "+(m%60)+"min";}
   function timerCur(e){return (e.timeSpent||0)+(e.timerStart?(Date.now()-e.timerStart):0);}
   function progress(a){ensure(a);let d=0;STEPS.forEach(s=>{if(a.etapas[s.id].status==="done")d++;});return {done:d,total:STEPS.length,pct:Math.round(d/STEPS.length*100)};}
@@ -363,6 +386,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     const page=el("div","page");const w=el("div","wrap");page.appendChild(w);
     if(view.name==="painel")Painel(w);
     else if(view.name==="aula")AulaView(w,getAula(view.aulaId));
+    else if(view.name==="licoes")LicoesView(w);
     root.appendChild(page);
     root.appendChild(Modals());
   }
@@ -376,7 +400,9 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     b1.onclick=()=>{view={name:"painel"};render();};
     const b2=el("button","","Padrões do Manual");
     b2.onclick=openPadroes;
-    nav.appendChild(b1);nav.appendChild(b2);
+    const b3=el("button",view.name==="licoes"?"active":"","🧠 Aprendizado da IA");
+    b3.onclick=()=>{view={name:"licoes"};render();};
+    nav.appendChild(b1);nav.appendChild(b3);nav.appendChild(b2);
     w.appendChild(nav);h.appendChild(w);return h;
   }
 
@@ -534,6 +560,8 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
 
     if(s.manual){left.appendChild(ManualBox(s.manual));}
     if(s.upload){left.appendChild(UploadBox(a,s,e));}
+    if(s.panel==="subs"){left.appendChild(SubsPanel(a,s,e));}
+    if(s.panel==="teoria"){left.appendChild(TeoriaPanel(a,s,e));}
 
     // RIGHT: responsável, tempo, notas, links
     const right=el("div","");
@@ -641,6 +669,252 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
 
   function syncStepVisual(a,s){ // update pill + row class without full re-render
     render(); // simple: re-render keeps state (cheap enough)
+  }
+
+  // ---------- Tópicos / sub-tópicos / teoria por partes ----------
+  const norm=x=>String(x||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim();
+  function novoTopico(nome){return {id:uid(),nome:nome,subs:[],subStatus:"vazio",subComentario:"",teoria:{status:"aguardando",versao:1,arquivos:[],links:[],notas:"",revComentario:"",historico:[]}};}
+  function topicosOf(a){
+    if(!Array.isArray(a.topicos)){
+      const base=(a.escopo||"").split(/\.\s|\.$/)[0];
+      a.topicos=base.split(/[;,]/).map(x=>x.trim()).filter(x=>x&&x.length<80).map(novoTopico);
+      save();
+    }
+    a.topicos.forEach(t=>{if(!t.teoria)t.teoria=novoTopico("").teoria;if(!Array.isArray(t.subs))t.subs=[];if(!t.teoria.arquivos)t.teoria.arquivos=[];if(!t.teoria.links)t.teoria.links=[];if(!t.teoria.historico)t.teoria.historico=[];});
+    return a.topicos;
+  }
+  function subsAtivas(t){return t.subs.filter(x=>!x.removido);}
+  function addLicao(a,obj){DB.licoes=DB.licoes||[];DB.licoes.push(Object.assign({ts:Date.now(),aulaId:a.id,aula:a.titulo||"",disciplina:a.disciplina||""},obj));save();}
+  function safeSeg(x){return String(x||"").replace(/[^\w\-. ()À-ſ]/g,"_");}
+  async function blobUpload(a,f){
+    const blobMod=await import("https://esm.sh/@vercel/blob@2.8.0/client");
+    const bl=await blobMod.upload("uploads/"+safeSeg(a.id)+"/"+safeSeg(f.name),f,{access:"public",handleUploadUrl:"/api/upload",multipart:f.size>8*1024*1024});
+    return {name:safeSeg(f.name),size:f.size,url:bl.url,ts:Date.now()};
+  }
+  function parseProposta(a,text){
+    const tops=topicosOf(a);let cur=null,nSubs=0,nTop=0;
+    text.split(/\r?\n/).forEach(line=>{
+      const t=line.trim();if(!t)return;
+      const m=/^[-•*–]\s*(.+)$/.exec(t);
+      if(m&&cur){
+        const parts=m[1].split("|");const nome=parts[0].trim();const pag=(parts[1]||"").replace(/[^\d]/g,"");
+        if(nome&&!cur.subs.some(x=>norm(x.nome)===norm(nome))){cur.subs.push({id:uid(),nome:nome,pag:pag,origem:"ia",removido:false});nSubs++;}
+      }else if(!m){
+        const nome=t.replace(/^#+\s*/,"").replace(/:$/,"").trim();
+        cur=tops.find(x=>norm(x.nome)===norm(nome))||tops.find(x=>norm(x.nome).includes(norm(nome))||norm(nome).includes(norm(x.nome)));
+        if(!cur){cur=novoTopico(nome);tops.push(cur);nTop++;}
+      }
+    });
+    tops.forEach(t=>{if(t.subs.length&&t.subStatus==="vazio")t.subStatus="proposto";});
+    save();return {nSubs,nTop};
+  }
+
+  function SubsPanel(a,s,e){
+    const box=el("div","pnl");
+    function draw(){
+      const tops=topicosOf(a);
+      box.innerHTML="";
+      box.appendChild(el("div","block-lbl","🧩 Sub-tópicos da teoria (por tópico principal)"));
+      box.appendChild(el("div","small muted","A IA propõe os sub-tópicos de cada tópico principal. Você pode excluir, adicionar, informar o nº de páginas (opcional) e explicar o porquê no comentário — a IA aprende com isso."));
+      const nAprov=tops.filter(t=>t.subStatus==="aprovado").length;
+      box.appendChild(el("div","pnl-sum",nAprov+" de "+tops.length+" tópicos com sub-tópicos aprovados"));
+      const tools=el("div","pnl-tools");
+      const bp=el("button","btn ghost sm","📥 Colar proposta da IA");
+      const pa=el("div","pnl-paste");pa.style.display="none";
+      pa.innerHTML='<div class="small muted">Uma linha para o tópico principal e uma linha por sub-tópico começando com “-” (opcional: <code>- Nome | páginas</code>).</div>';
+      const ta=el("textarea");ta.placeholder="Antimalware\n- Conceitos e tipos de malware | 3\n- Antivírus e EDR\n\nProxy\n- Proxy direto e reverso";ta.rows=7;
+      const bok=el("button","btn sm","Importar");
+      bok.onclick=()=>{const r=parseProposta(a,ta.value);alert(r.nSubs+" sub-tópicos importados"+(r.nTop?" ("+r.nTop+" tópico(s) novo(s) criado(s))":"")+".");draw();};
+      pa.appendChild(ta);pa.appendChild(bok);
+      bp.onclick=()=>{pa.style.display=pa.style.display==="none"?"block":"none";};
+      tools.appendChild(bp);box.appendChild(tools);box.appendChild(pa);
+
+      if(!tops.length)box.appendChild(el("div","small muted","Nenhum tópico principal cadastrado. Adicione abaixo os tópicos definidos no planejamento."));
+      tops.forEach((t,ti)=>{
+        const lock=t.subStatus==="aprovado";
+        const card=el("div","tcard"+(lock?" ok":""));
+        const hd=el("div","tcard-h");
+        const ni=el("input","tname");ni.value=t.nome;ni.disabled=lock;ni.oninput=()=>{t.nome=ni.value;save();};
+        hd.appendChild(ni);
+        hd.appendChild(el("span","tpill "+(lock?"ok":t.subStatus==="proposto"?"warn":""),lock?"Aprovado":t.subStatus==="proposto"?"Em revisão":"Sem proposta"));
+        if(!lock){const rt=el("span","x","✕");rt.title="Remover tópico";rt.onclick=()=>{if(confirm("Remover o tópico “"+t.nome+"” da aula?")){tops.splice(ti,1);save();draw();}};hd.appendChild(rt);}
+        card.appendChild(hd);
+        if(!t.subs.length)card.appendChild(el("div","small muted","Ainda sem sub-tópicos. Use “Colar proposta da IA” ou adicione manualmente."));
+        t.subs.forEach((sb,si)=>{
+          const row=el("div","subrow"+(sb.removido?" rem":""));
+          row.appendChild(el("span","obadge "+(sb.origem==="ia"?"ia":"vc"),sb.origem==="ia"?"IA":"Você"));
+          const inp=el("input","subname");inp.value=sb.nome;inp.disabled=lock||sb.removido;inp.oninput=()=>{sb.nome=inp.value;save();};
+          const pg=el("input","subpag");pg.type="number";pg.min="0";pg.placeholder="págs";pg.value=sb.pag||"";pg.disabled=lock||sb.removido;pg.oninput=()=>{sb.pag=pg.value;save();};
+          row.appendChild(inp);row.appendChild(pg);
+          if(!lock){
+            const x=el("span","x",sb.removido?"↺":"✕");x.title=sb.removido?"Restaurar":"Excluir";
+            x.onclick=()=>{if(sb.origem==="ia"){sb.removido=!sb.removido;}else{t.subs.splice(si,1);}save();draw();};
+            row.appendChild(x);
+          }
+          card.appendChild(row);
+        });
+        if(!lock){
+          const ar=el("div","subrow add");
+          const ai=el("input","subname");ai.placeholder="Adicionar sub-tópico…";
+          const ap=el("input","subpag");ap.type="number";ap.min="0";ap.placeholder="págs";
+          const ab=el("button","btn ghost sm","+ Adicionar");
+          ab.onclick=()=>{const v=ai.value.trim();if(!v)return;t.subs.push({id:uid(),nome:v,pag:ap.value,origem:"voce",removido:false});if(t.subStatus==="vazio")t.subStatus="proposto";save();draw();};
+          ai.onkeydown=ev=>{if(ev.key==="Enter")ab.onclick();};
+          ar.appendChild(ai);ar.appendChild(ap);ar.appendChild(ab);card.appendChild(ar);
+        }
+        const tot=subsAtivas(t).reduce((n,x)=>n+(parseInt(x.pag,10)||0),0);
+        if(tot)card.appendChild(el("div","small muted","Total estimado: "+tot+" página(s)."));
+        const cm=el("div","fld");cm.appendChild(el("label","","Por que excluiu ou adicionou sub-tópicos? (a IA aprende com isto)"));
+        const ct=el("textarea");ct.rows=2;ct.value=t.subComentario||"";ct.disabled=lock;ct.placeholder="Ex.: removi “X” porque não cai em prova; adicionei “Y” porque a banca cobra com frequência…";
+        ct.oninput=()=>{t.subComentario=ct.value;save();};cm.appendChild(ct);card.appendChild(cm);
+        const ac=el("div","tcard-a");
+        if(lock){
+          const br=el("button","btn ghost sm","↺ Reabrir");br.onclick=()=>{t.subStatus="proposto";save();draw();};ac.appendChild(br);
+        }else{
+          const bap=el("button","btn ok sm","✓ Aprovar sub-tópicos deste tópico");
+          bap.onclick=()=>{
+            const at=subsAtivas(t);if(!at.length){alert("Inclua ao menos um sub-tópico antes de aprovar.");return;}
+            t.subStatus="aprovado";
+            addLicao(a,{tipo:"subtopicos",topico:t.nome,
+              mantidos:at.filter(x=>x.origem==="ia").map(x=>x.nome),
+              removidos:t.subs.filter(x=>x.removido).map(x=>x.nome),
+              adicionados:at.filter(x=>x.origem==="voce").map(x=>x.nome),
+              paginas:at.filter(x=>x.pag).map(x=>({sub:x.nome,pag:x.pag})),
+              comentario:t.subComentario||""});
+            addLog(a,s,"Sub-tópicos aprovados: "+t.nome+" ("+at.length+").");draw();
+          };
+          ac.appendChild(bap);
+        }
+        card.appendChild(ac);box.appendChild(card);
+      });
+      const nr=el("div","subrow add");
+      const ni2=el("input","subname");ni2.placeholder="Adicionar tópico principal…";
+      const nb=el("button","btn ghost sm","+ Tópico");
+      nb.onclick=()=>{const v=ni2.value.trim();if(!v)return;tops.push(novoTopico(v));save();draw();};
+      ni2.onkeydown=ev=>{if(ev.key==="Enter")nb.onclick();};
+      nr.appendChild(ni2);nr.appendChild(nb);box.appendChild(nr);
+    }
+    draw();return box;
+  }
+
+  function TeoriaPanel(a,s,e){
+    const box=el("div","pnl");
+    function syncDone(tops){
+      const all=tops.length&&tops.every(t=>t.teoria.status==="aprovado");
+      if(all&&e.status!=="done"){e.status="done";e.doneAt=Date.now();save();render();return true;}
+      if(!all&&e.status==="done"){e.status="doing";e.doneAt=null;save();render();return true;}
+      if(!all&&e.status==="todo"&&tops.some(t=>t.teoria.status!=="aguardando")){e.status="doing";save();render();return true;}
+      return false;
+    }
+    function hist(t,acao,comentario){t.teoria.historico.push({ts:Date.now(),acao:acao,versao:t.teoria.versao,comentario:comentario||""});}
+    function draw(){
+      const tops=topicosOf(a);
+      box.innerHTML="";
+      box.appendChild(el("div","block-lbl","📚 Produção da teoria, um tópico por vez"));
+      box.appendChild(el("div","small muted","Cada tópico passa por revisão humana antes de o próximo começar. Seus comentários de revisão servem para a IA aprender e acertar melhor nos tópicos seguintes."));
+      if(!tops.length){box.appendChild(el("div","small muted","Nenhum tópico cadastrado. Defina os tópicos e sub-tópicos na etapa 1.4.2."));return;}
+      const idxAtual=tops.findIndex(t=>t.teoria.status!=="aprovado");
+      box.appendChild(el("div","pnl-sum",tops.filter(t=>t.teoria.status==="aprovado").length+" de "+tops.length+" tópicos aprovados"));
+      tops.forEach((t,ti)=>{
+        const T=t.teoria,st=T.status;
+        const isCur=ti===idxAtual;
+        const card=el("div","tcard"+(st==="aprovado"?" ok":isCur?" cur":" dim"));
+        const hd=el("div","tcard-h");
+        hd.appendChild(el("b","tname-ro",(ti+1)+". "+esc(t.nome)));
+        const lbl={aguardando:"Aguardando",producao:"Em produção",revisao:"Em revisão humana",aprovado:"Aprovado"}[st]||st;
+        hd.appendChild(el("span","tpill "+(st==="aprovado"?"ok":st==="aguardando"?"":"warn"),lbl+(T.versao>1?" · v"+T.versao:"")));
+        card.appendChild(hd);
+        const at=subsAtivas(t);
+        card.appendChild(el("div","small muted","Sub-tópicos: "+(at.length?at.map(x=>esc(x.nome)+(x.pag?" ("+esc(x.pag)+"p)":"")).join(" · "):"—")));
+        if(st==="aprovado"){
+          if(T.revComentario)card.appendChild(el("div","small","💬 Revisão: "+esc(T.revComentario)));
+          if(T.arquivos.length||T.links.length)card.appendChild(filesRow(T));
+          const br=el("button","btn ghost sm","↺ Reabrir tópico");br.onclick=()=>{T.status="producao";T.versao++;hist(t,"reaberto","");save();if(!syncDone(tops))draw();};
+          card.appendChild(br);box.appendChild(card);return;
+        }
+        if(!isCur){card.appendChild(el("div","small muted","🔒 Libera após a aprovação do tópico anterior."));box.appendChild(card);return;}
+        if(t.subStatus!=="aprovado"){card.appendChild(el("div","small err","⚠ Aprove antes os sub-tópicos deste tópico (etapa 1.4.2)."));}
+        if(st==="aguardando"){
+          const b=el("button","btn sm","▶ Iniciar produção deste tópico");
+          b.onclick=()=>{T.status="producao";hist(t,"iniciado","");addLog(a,s,"Produção iniciada: "+t.nome);save();if(!syncDone(tops))draw();};
+          card.appendChild(b);
+        }
+        if(st==="producao"){
+          if(T.historico.length&&T.historico[T.historico.length-1].acao==="ajustes")
+            card.appendChild(el("div","tnote","↩ Ajustes pedidos: "+esc(T.historico[T.historico.length-1].comentario||"(sem comentário)")));
+          card.appendChild(el("div","small muted","A IA produz este tópico. Quando terminar, anexe a parte produzida e envie para revisão."));
+          card.appendChild(filesRow(T,true,draw));
+          card.appendChild(uploadRow(a,T,draw));
+          const bs=el("button","btn ok sm","📨 Enviar para revisão humana");
+          bs.onclick=()=>{T.status="revisao";hist(t,"enviado","");save();draw();};
+          card.appendChild(bs);
+        }
+        if(st==="revisao"){
+          card.appendChild(filesRow(T,true,draw));
+          const cm=el("div","fld");cm.appendChild(el("label","","Comentários da revisão (a IA aprende para os próximos tópicos)"));
+          const ct=el("textarea");ct.rows=3;ct.value=T.revComentario||"";ct.placeholder="Ex.: muito extenso; faltou destacar pegadinhas; usar mais quadros comparativos…";
+          ct.oninput=()=>{T.revComentario=ct.value;save();};cm.appendChild(ct);card.appendChild(cm);
+          const ac=el("div","tcard-a");
+          const bok=el("button","btn ok sm","✓ Aprovar tópico");
+          bok.onclick=()=>{T.status="aprovado";hist(t,"aprovado",T.revComentario);
+            addLicao(a,{tipo:"revisao-teoria",decisao:"aprovado",topico:t.nome,versao:T.versao,subtopicos:at.map(x=>x.nome),comentario:T.revComentario||""});
+            addLog(a,s,"Tópico aprovado: "+t.nome+(T.versao>1?" (v"+T.versao+")":""));if(!syncDone(tops))draw();};
+          const baj=el("button","btn danger sm","↩ Pedir ajustes");
+          baj.onclick=()=>{if(!(T.revComentario||"").trim()){alert("Escreva o que precisa ser ajustado — é isso que a IA usa para melhorar.");return;}
+            const c=T.revComentario;hist(t,"ajustes",c);
+            addLicao(a,{tipo:"revisao-teoria",decisao:"ajustes",topico:t.nome,versao:T.versao,subtopicos:at.map(x=>x.nome),comentario:c});
+            T.status="producao";T.versao++;T.revComentario="";save();draw();};
+          ac.appendChild(bok);ac.appendChild(baj);card.appendChild(ac);
+        }
+        box.appendChild(card);
+      });
+    }
+    function filesRow(T,editable,redraw){
+      const w=el("div","links");
+      T.arquivos.forEach((u,i)=>{const c=el("div","link-chip");c.innerHTML='📄 <a href="'+esc(u.url)+'" target="_blank" rel="noopener">'+esc(u.name)+"</a>"+(editable?' <span class="x">✕</span>':"");
+        if(editable)c.querySelector(".x").onclick=()=>{T.arquivos.splice(i,1);save();redraw();};w.appendChild(c);});
+      T.links.forEach((u,i)=>{const c=el("div","link-chip");c.innerHTML='🔗 <a href="'+esc(u.url)+'" target="_blank" rel="noopener">'+esc(u.label||u.url)+"</a>"+(editable?' <span class="x">✕</span>':"");
+        if(editable)c.querySelector(".x").onclick=()=>{T.links.splice(i,1);save();redraw();};w.appendChild(c);});
+      return w;
+    }
+    function uploadRow(a,T,redraw){
+      const r=el("div","link-row");
+      const fi=el("input");fi.type="file";fi.accept=".pdf,.doc,.docx,.txt";fi.style.display="none";
+      const bu=el("button","btn ghost sm","⬆ Anexar arquivo");const st=el("span","small muted","");
+      bu.onclick=()=>fi.click();
+      fi.onchange=async()=>{const f=fi.files[0];if(!f)return;st.textContent="Enviando…";
+        try{T.arquivos.push(await blobUpload(a,f));save();redraw();}catch(err){st.textContent="Erro: "+(err&&err.message||"falha no envio");}};
+      const li=el("input");li.placeholder="…ou cole um link (Drive, etc.)";
+      const bl=el("button","btn ghost sm","Add");
+      bl.onclick=()=>{const v=li.value.trim();if(!v)return;T.links.push({url:v,label:shortUrl(v)});save();redraw();};
+      r.appendChild(bu);r.appendChild(fi);r.appendChild(st);r.appendChild(li);r.appendChild(bl);return r;
+    }
+    draw();return box;
+  }
+
+  function LicoesView(w){
+    const ph=el("div","pagehead");
+    ph.innerHTML='<div><h1>Aprendizado da IA</h1><div class="sub">Comentários e decisões que você registrou. A IA usa este histórico para acertar mais nos próximos tópicos e aulas.</div></div>';
+    w.appendChild(ph);
+    const L=(DB.licoes||[]).slice().reverse();
+    const bc=el("button","btn ghost sm","📋 Copiar tudo como texto");
+    bc.onclick=()=>{const txt=L.slice().reverse().map(l=>{
+      let t="["+fmtTs(l.ts)+"] "+l.aula+" · "+l.topico+" · "+(l.tipo==="subtopicos"?"Sub-tópicos":"Revisão da teoria"+(l.decisao?" ("+l.decisao+")":""));
+      if(l.mantidos&&l.mantidos.length)t+="\n  Mantidos: "+l.mantidos.join("; ");
+      if(l.removidos&&l.removidos.length)t+="\n  Removidos: "+l.removidos.join("; ");
+      if(l.adicionados&&l.adicionados.length)t+="\n  Adicionados: "+l.adicionados.join("; ");
+      if(l.comentario)t+="\n  Comentário: "+l.comentario;return t;}).join("\n\n");
+      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>alert("Copiado.")).catch(()=>prompt("Copie o texto:",txt));};
+    w.appendChild(bc);
+    if(!L.length){w.appendChild(el("div","small muted","Nenhum registro ainda. Eles aparecem quando você aprova sub-tópicos ou revisa um tópico da teoria."));return;}
+    L.forEach(l=>{
+      const c=el("div","tcard");
+      c.innerHTML='<div class="tcard-h"><b>'+esc(l.aula)+" · "+esc(l.topico)+'</b><span class="tpill '+(l.decisao==="ajustes"?"warn":"ok")+'">'+(l.tipo==="subtopicos"?"Sub-tópicos":l.decisao==="ajustes"?"Ajustes pedidos":"Teoria aprovada")+'</span></div><div class="small muted">'+fmtTs(l.ts)+"</div>"
+        +(l.removidos&&l.removidos.length?'<div class="small">➖ Removidos: '+l.removidos.map(esc).join("; ")+"</div>":"")
+        +(l.adicionados&&l.adicionados.length?'<div class="small">➕ Adicionados: '+l.adicionados.map(esc).join("; ")+"</div>":"")
+        +(l.comentario?'<div class="tnote">💬 '+esc(l.comentario)+"</div>":"");
+      w.appendChild(c);
+    });
   }
 
   function ManualBox(kind){
