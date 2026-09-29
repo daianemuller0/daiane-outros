@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
       const tx = {};
       for (let i = 0; i < flat.length; i += 2) { try { tx[flat[i]] = JSON.parse(flat[i + 1]).texto; } catch (e) {} }
       const itens = (t.itens || []).filter((x) => tx[x.id]).map((x) => ({ nivel: x.nivel, nome: x.nome, texto: tx[x.id] }));
-      if (itens.length || tx.essencial) topicos.push({ nome: t.nome, essencial: tx.essencial || '', itens });
+      if (itens.length || tx.essencial || tx.abertura) topicos.push({ nome: t.nome, essencial: tx.essencial || '', abertura: tx.abertura || '', itens });
     }
     if (!topicos.length) return res.status(404).json({ error: 'Ainda não há texto produzido para montar o Word.' });
     const buf = await montarDocx({ titulo: b.titulo, topicos });

@@ -41,12 +41,13 @@ function runs(text, base = {}) {
 const para = (text, ppr = '', base) => `<w:p>${ppr ? `<w:pPr>${ppr}</w:pPr>` : ''}${runs(text, base)}</w:p>`;
 const item = (text) => `<w:p><w:pPr><w:pStyle w:val="PargrafodaLista"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="${NUM_LISTA}"/></w:numPr></w:pPr>${runs(text)}</w:p>`;
 const CALLOUT = {
-  'atenção': { style: 'Ateno', rot: '' },
-  'atencao': { style: 'Ateno', rot: '' },
-  'bizu': { style: 'Bizu', rot: '' },
+  'atenção': { style: 'Ateno', rot: 'Atenção: ' },
+  'atencao': { style: 'Ateno', rot: 'Atenção: ' },
+  'bizu': { style: 'Bizu', rot: 'Bizu: ' },
   'dica': { style: 'Barralateral', rot: 'Dica: ' },
   'exemplificando': { style: 'Barralateral', rot: 'Exemplificando: ' },
   'esclarecendo': { style: 'Barralateral', rot: 'Esclarecendo: ' },
+  'barra': { style: 'Barralateral', rot: '' },
 };
 function tabela(linhas) {
   const cel = (c) => c.trim().replace(/^\||\|$/g, '');
@@ -80,6 +81,8 @@ function blocos(texto) {
       while (i < L.length && /^\s*\|/.test(L[i])) t.push(L[i++]);
       i--;
       out.push(tabela(t));
+    } else if (/^\s*\[figura[^\]]*\]\s*$/i.test(l)) {
+      out.push('<w:p><w:r><w:rPr><w:b/><w:bCs/><w:highlight w:val="yellow"/></w:rPr><w:t xml:space="preserve">[figura]</w:t></w:r></w:p>');
     } else if (/^\s*[-*•]\s+/.test(l)) {
       out.push(item(l.replace(/^\s*[-*•]\s+/, '')));
     } else if (/^\s*>\s*\[([^\]]+)\]/.test(l)) {
@@ -179,6 +182,7 @@ async function montarDocx(aula) {
     corpo += h1s;
     if (t.essencial && String(t.essencial).trim()) corpo += quadroEssencial(essXml, t.essencial, `${t.nome} — essencial de prova`);
     corpo += '<w:p/>';
+    if (t.abertura && String(t.abertura).trim()) corpo += blocos(t.abertura) + '<w:p/>';
     (t.itens || []).forEach((it) => {
       const est = it.nivel <= 2 ? 'Ttulo2' : it.nivel === 3 ? 'Ttulo3' : 'Ttulo4';
       corpo += `<w:p><w:pPr><w:pStyle w:val="${est}"/></w:pPr>${run(it.nome, {})}</w:p>`;
