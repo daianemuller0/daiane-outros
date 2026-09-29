@@ -133,7 +133,9 @@ function quadroEssencial(modeloXml, texto, titulo) {
     bullets.forEach((t) => tb.appendChild(mk(modItem, t)));
   });
   xml = ser.serializeToString(p);
-  // altura proporcional ao conteúdo
+  // "Redimensionar forma para ajustar ao texto": o Word ajusta a altura do quadro ao conteúdo
+  xml = xml.replace(/<a:noAutofit\s*\/>/g, '<a:spAutoFit/>');
+  // altura inicial estimada (o ajuste automático refina)
   const todos = intro.concat(bullets);
   const linhasN = todos.reduce((n, t) => n + Math.max(1, Math.ceil(t.length / 46)), 0);
   const novoCy = Math.max(1500000, Math.round(900000 + linhasN * 195000 + todos.length * 76200 + 200000));

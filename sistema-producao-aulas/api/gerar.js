@@ -38,7 +38,7 @@ QUALIDADE
 - Só afirme fatos técnicos de que tenha certeza. Se houver dúvida, omita ou marque com [VERIFICAR]. Não invente normas, versões, números ou siglas.
 - Siga as orientações do professor quando houver; elas têm prioridade.
 - Retorne somente o texto do item, sem introdução nem despedida.
-- Quadro "Essencial de Prova" (quando pedido): resumo sintético dos pontos mais cobrados do tópico, em linhas curtas iniciadas por "- " (definições centrais, classificações, listas frequentemente cobradas).`;
+- Quadro "Essencial de Prova" (quando pedido): resumo sintético dos pontos mais cobrados do tópico, em linhas curtas iniciadas por "- ", cada uma com no máximo cerca de 20 palavras (definições centrais, classificações, listas frequentemente cobradas). O quadro precisa caber em uma página.`;
 
 function questoesDoTopico(aulaId, topicoNome, topicoIdx) {
   try {
@@ -64,7 +64,7 @@ function montarPedido(b, questoes) {
     `ITEM A ESCREVER: ${b.no.num} ${b.no.nome}`,
   ];
   if (b.tipo === 'essencial') {
-    partes.push('TAREFA: escreva o quadro "Essencial de Prova" do tópico: de 6 a 10 tópicos curtos (uma linha cada), os pontos que mais caem em prova neste tópico, com base no sumário e nas questões abaixo. Não repita títulos.');
+    partes.push('TAREFA: escreva o quadro "Essencial de Prova" do tópico: de 6 a 10 linhas curtas (até cerca de 20 palavras cada), os pontos que mais caem em prova neste tópico, com base no sumário e nas questões abaixo. Não repita títulos.');
   } else if (b.no.temFilhos) {
     partes.push('TAREFA: este item tem sub-itens que serão escritos depois. Escreva apenas uma introdução curta (2 a 4 frases) que apresente o assunto e como ele se divide; não aprofunde o que pertence aos sub-itens.');
   } else {
