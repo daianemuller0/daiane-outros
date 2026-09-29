@@ -962,13 +962,14 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       if(!l.trim()){i++;continue;}
       if(/^\s*\[figura[^\]]*\]\s*$/i.test(l)){out+='<p><b style="background:#fff200">[figura]</b></p>';i++;continue;}
       const mq=/^\s*>\s*\[([^\]]+)\]\s*:?\s*(.*)$/.exec(l);
-      if(mq){out+='<div class="callout"><b>'+esc(mq[1])+":</b> "+inl(mq[2])+"</div>";i++;continue;}
+      if(mq){out+='<div class="callout">'+(/^barra$/i.test(mq[1])?"":"<b>"+esc(mq[1])+":</b> ")+inl(mq[2])+"</div>";i++;continue;}
       out+="<p>"+inl(l)+"</p>";i++;
     }
     return out;
   }
   function itensDoTopico(t,ti){
     const itens=flatNos(t.subs,String(ti+1)).map(x=>({id:x.node.id,num:x.num,nome:x.nome,node:x.node,temFilhos:(x.node.subs||[]).length>0,tipo:"item"}));
+    itens.unshift({id:"abertura",num:"Abertura",nome:"Abertura do tópico",node:null,temFilhos:false,tipo:"abertura"});
     itens.push({id:"essencial",num:"Essencial de Prova",nome:"Essencial de Prova",node:null,temFilhos:false,tipo:"essencial"});
     return itens;
   }
@@ -981,8 +982,8 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     const it=itens[k];const T=t.teoria;const refazer=!!(opt&&opt.refazer);
     const feitosAntes=itens.slice(0,k).filter(x=>x.tipo==="item"&&tx[x.id]).map(x=>x.num+" "+x.nome+": "+String(tx[x.id].texto||"").replace(/\s+/g," ").slice(0,160)+"…");
     return {aulaId:a.id,aula:a.titulo,disciplina:a.disciplina||"",topico:t.nome,topicoId:t.id,topicoIdx:ti+1,
-      sumario:sumario,no:{id:it.id,num:it.num,nome:it.nome,temFilhos:it.temFilhos},tipo:it.tipo,
-      qs:it.node?parseQs(it.node.qs):(function(){const s=new Set();t.subs.forEach(n=>qsDoNo(n).forEach(x=>s.add(x)));return Array.from(s);})(),
+      sumario:sumario,no:{id:it.id,num:it.num,nome:it.nome,temFilhos:it.temFilhos,nivel:it.tipo==="item"?it.num.split(".").length:0},tipo:it.tipo,
+      qs:it.tipo==="abertura"?[]:it.node?parseQs(it.node.qs):(function(){const s=new Set();t.subs.forEach(n=>qsDoNo(n).forEach(x=>s.add(x)));return Array.from(s);})(),
       anteriores:feitosAntes.slice(-8),
       orientacoes:orient.concat(it.node&&it.node.comentario?["Sobre este item: "+it.node.comentario]:[]).join("\n"),
       feedback:(opt&&opt.feedback)||"",textoAnterior:refazer&&tx[it.id]?tx[it.id].texto:"",versao:T.versao};

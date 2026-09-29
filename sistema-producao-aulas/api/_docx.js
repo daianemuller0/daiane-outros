@@ -47,6 +47,7 @@ const CALLOUT = {
   'dica': { style: 'Barralateral', rot: 'Dica: ' },
   'exemplificando': { style: 'Barralateral', rot: 'Exemplificando: ' },
   'esclarecendo': { style: 'Barralateral', rot: 'Esclarecendo: ' },
+  'barra': { style: 'Barralateral', rot: '' },
 };
 function tabela(linhas) {
   const cel = (c) => c.trim().replace(/^\||\|$/g, '');
@@ -181,6 +182,7 @@ async function montarDocx(aula) {
     corpo += h1s;
     if (t.essencial && String(t.essencial).trim()) corpo += quadroEssencial(essXml, t.essencial, `${t.nome} — essencial de prova`);
     corpo += '<w:p/>';
+    if (t.abertura && String(t.abertura).trim()) corpo += blocos(t.abertura) + '<w:p/>';
     (t.itens || []).forEach((it) => {
       const est = it.nivel <= 2 ? 'Ttulo2' : it.nivel === 3 ? 'Ttulo3' : 'Ttulo4';
       corpo += `<w:p><w:pPr><w:pStyle w:val="${est}"/></w:pPr>${run(it.nome, {})}</w:p>`;
