@@ -683,7 +683,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     box.appendChild(g);
 
     // IA note + run button (for steps executed by the IA)
-    const isIA=/IA/.test(s.resp)&&!s.semRodarIA;
+    const isIA=false; // não há mais "Rodar com a IA" no chat: tudo é feito pelo sistema
     if(isIA){
       const note=el("div","ia-note",'🤖 <b>Etapa executada pela IA.</b> Clique em “Rodar com a IA” para eu executar esta etapa pelo seu navegador/ferramentas.');
       box.appendChild(note);
