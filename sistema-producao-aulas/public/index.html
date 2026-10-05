@@ -91,6 +91,7 @@
   .callout p{margin:3px 0}.callout ul{margin:3px 0 3px 18px;padding:0}
   .callout.c-atencao{background:#fff5f2;border-left-color:#e5483a}.callout.c-atencao .callout-t{color:#e5483a}
   .callout.c-bizu{background:#f0f8ff}
+  .tectab{border-collapse:collapse;width:100%;font-size:12px;margin:6px 0}.tectab th,.tectab td{border:1px solid var(--line);padding:4px 8px;text-align:left}.tectab th{background:#eef2fb}
   /* header */
   header.top{background:linear-gradient(100deg,var(--navy) 0%,var(--navy2) 60%,#1c3a86 100%);color:#fff;box-shadow:0 2px 10px rgba(0,32,96,.18)}
   header.top .wrap{display:flex;align-items:center;gap:16px;height:64px}
@@ -271,7 +272,7 @@
      obj:"Selecionar as questões que orientarão a produção.",
      ativ:["Pesquisar questões recentes das principais bancas (Cebraspe, FGV, FCC, Vunesp).","Selecionar entre 200 e 250 questões representativas do tema.","Priorizar as mais recentes.","Favoritar no TEC dentro dos tópicos definidos."],
      res:"Questões relevantes favoritadas no TEC."},
-    {id:"e3",num:"1.3",trilha:"Questões",nome:"Criação dos cadernos de questões",resp:"Assistente editorial / IA",tempo:"1h",
+    {id:"e3",num:"1.3",trilha:"Questões",nome:"Criação dos cadernos de questões",panel:"cadernos",resp:"Assistente editorial / IA",tempo:"1h",
      obj:"Transformar as questões favoritas no TEC em cadernos organizados (produção + estudo dos alunos).",
      ativ:["Acessar as questões favoritadas no TEC.","Criar o caderno geral da aula (todas as favoritadas).","Criar cadernos gerais por banca principal (CEBRASPE, FCC, FGV).","Criar caderno por tópico.","Criar cadernos por tópico para cada banca principal."],
      res:"Cadernos de questões organizados no TEC."},
@@ -605,6 +606,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     if(s.manual){left.appendChild(ManualBox(s.manual));}
     if(s.upload){left.appendChild(UploadBox(a,s,e));}
     if(s.panel==="subs"){left.appendChild(SubsPanel(a,s,e));}
+    if(s.panel==="cadernos"){left.appendChild(CadernosPanel(a,s,e));}
     if(s.panel==="teoria"){left.appendChild(TeoriaPanel(a,s,e));}
 
     // RIGHT: responsável, tempo, notas, links
@@ -683,7 +685,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     box.appendChild(g);
 
     // IA note + run button (for steps executed by the IA)
-    const isIA=/IA/.test(s.resp)&&!s.semRodarIA;
+    const isIA=false; // não há mais "Rodar com a IA" no chat: tudo é feito pelo sistema
     if(isIA){
       const note=el("div","ia-note",'🤖 <b>Etapa executada pela IA.</b> Clique em “Rodar com a IA” para eu executar esta etapa pelo seu navegador/ferramentas.');
       box.appendChild(note);
@@ -811,6 +813,98 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     novos.forEach(t=>{if(t.subs.length&&t.subStatus==="vazio")t.subStatus="proposto";});
     a.topicos=novos;save();
     return {ok:true,topicos:novos.length,itens:nNos};
+  }
+
+  // ---------- Etapa 1.3: cadernos no TEC (script na aba do TEC logada + resultado de volta ao sistema) ----------
+  function CadernosPanel(a,s,e){
+    const box=el("div","pnl");
+    const mCod=/([A-Za-z]{2}\d+)/.exec(a.titulo||"");
+    const cod0=mCod?mCod[1].toUpperCase():"";
+    e.cfgTEC=e.cfgTEC||{codigo:cod0,pastaDestino:"",bancas:/^FD/.test(cod0)?[4,3,5,6]:[4,3,5],pastasFav:{},limpeza:true,integradas:!/^FD/.test(cod0)};
+    const C=e.cfgTEC;
+    const BNOME={4:"CEBRASPE",3:"FCC",5:"FGV",6:"VUNESP"};
+    async function copiar(modo){
+      const tops=topicosOf(a);
+      if(!C.codigo){alert("Informe o código da aula (ex.: SI03).");return;}
+      if(!tops.length){alert("Cadastre os tópicos da aula antes.");return;}
+      if(!C.bancas.length){alert("Marque ao menos uma banca.");return;}
+      const cfg={modo:modo,codigo:C.codigo.trim(),pastaDestino:String(C.pastaDestino||"").trim(),bancas:C.bancas,pastasFav:C.pastasFav||{},
+        limpeza:C.limpeza!==false,integradas:!!C.integradas,
+        topicos:tops.map((t,i)=>({n:i+1,nome:t.nome}))};
+      let runner="";
+      try{const r=await fetch("/tec-runner.js",{cache:"no-store"});runner=await r.text();}catch(err){alert("Não consegui carregar o script.");return;}
+      const texto="window.__TTPA_CFG="+JSON.stringify(cfg)+";\n"+runner;
+      try{await navigator.clipboard.writeText(texto);alert("Script copiado ("+(modo==="criar"?"CRIAÇÃO":"SIMULAÇÃO")+").\n\n1) Abra o TEC (logada) em tecconcursos.com.br/questoes/filtrar\n2) Aperte F12 e abra a aba Console\n3) Cole o script e aperte Enter");}
+      catch(err){prompt("Copie o script (Ctrl+C) e cole no Console do TEC:",texto);}
+    }
+    function draw(){
+      box.innerHTML="";
+      box.appendChild(el("div","block-lbl","📚 Cadernos no TEC"));
+      box.appendChild(el("div","small muted","O TEC só aceita o login pelo seu navegador. Por isso o sistema prepara tudo (nomes, bancas, pastas) e gera um script que você cola uma vez no Console da aba do TEC (já logada). O resultado volta para cá."));
+      const tops=topicosOf(a);
+      // configuração
+      const g=el("div","grid2");
+      const f1=el("div","fld");f1.appendChild(el("label","","Código da aula"));
+      const i1=el("input");i1.value=C.codigo;i1.placeholder="SI03";i1.oninput=()=>{C.codigo=i1.value;save();};f1.appendChild(i1);
+      const f2=el("div","fld");f2.appendChild(el("label","","ID da pasta da aula no TEC (crie a pasta antes no TEC; o ID é o número do endereço)"));
+      const i2=el("input");i2.value=C.pastaDestino||"";i2.placeholder="ex.: 7351126 (número no endereço da pasta)";i2.oninput=()=>{C.pastaDestino=i2.value;save();};f2.appendChild(i2);
+      g.appendChild(f1);g.appendChild(f2);box.appendChild(g);
+      const fb=el("div","fld");fb.appendChild(el("label","","Bancas (só entram as que tiverem questões)"));
+      const bw=el("div","row");
+      [4,3,5,6].forEach(b=>{const lb=el("label","cobre");const cb=el("input");cb.type="checkbox";cb.checked=C.bancas.includes(b);
+        cb.onchange=()=>{C.bancas=cb.checked?Array.from(new Set(C.bancas.concat([b]))):C.bancas.filter(x=>x!==b);save();};
+        lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+BNOME[b]+"  "));bw.appendChild(lb);});
+      fb.appendChild(bw);box.appendChild(fb);
+      const fo=el("div","fld");
+      const mkOpt=(txt,key)=>{const lb=el("label","cobre");const cb=el("input");cb.type="checkbox";cb.checked=!!C[key];cb.onchange=()=>{C[key]=cb.checked;save();};lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+txt));return lb;};
+      fo.appendChild(mkOpt("Remover questões anuladas e desatualizadas (como o professor vê)","limpeza"));
+      fo.appendChild(mkOpt("Incluir cadernos de questões integradas por banca (se existir a pasta de favoritas “integradas” da aula; aulas FD não usam)","integradas"));
+      box.appendChild(fo);
+      // tópicos
+      box.appendChild(el("div","sublbl","Tópicos (cada um precisa ter uma pasta de favoritas no TEC):"));
+      tops.forEach((t,ti)=>{
+        const row=el("div","subrow");
+        row.appendChild(el("span","obadge vc",String(ti+1)));
+        const ni=el("input","subname");ni.value=t.nome;ni.oninput=()=>{t.nome=ni.value;save();};
+        const pi=el("input","subpag");pi.style.width="150px";pi.placeholder="ID da pasta (opc.)";pi.value=C.pastasFav[ti+1]||"";pi.title="Só preencha se o script não achar a pasta sozinho";
+        pi.oninput=()=>{if(pi.value.trim())C.pastasFav[ti+1]=pi.value.trim();else delete C.pastasFav[ti+1];save();};
+        row.appendChild(ni);row.appendChild(pi);box.appendChild(row);
+      });
+      const nr=el("div","subrow add");const ni2=el("input","subname");ni2.placeholder="Adicionar tópico…";
+      const nb=el("button","btn ghost sm","+ Tópico");nb.onclick=()=>{const v=ni2.value.trim();if(!v)return;tops.push(novoTopico(v));save();draw();};
+      nr.appendChild(ni2);nr.appendChild(nb);box.appendChild(nr);
+      // passo a passo
+      const ol=el("ol","small");ol.style.margin="10px 0 6px 18px";
+      ol.innerHTML="<li>Clique em <b>Copiar script de SIMULAÇÃO</b> e cole no Console do TEC: ele só confere as pastas e conta as questões, <b>sem criar nada</b>.</li><li>Se a tabela estiver certa, copie o <b>script de CRIAÇÃO</b> e rode na página <code>tecconcursos.com.br/questoes/filtrar</code>.</li><li>Ao terminar, ele copia o resultado. Cole abaixo.</li>";
+      box.appendChild(ol);
+      const ac=el("div","tcard-a");
+      const b1=el("button","btn ghost sm","📋 Copiar script de SIMULAÇÃO");b1.onclick=()=>copiar("simular");
+      const b2=el("button","btn sm","📋 Copiar script de CRIAÇÃO");b2.onclick=()=>copiar("criar");
+      ac.appendChild(b1);ac.appendChild(b2);box.appendChild(ac);
+      box.appendChild(el("div","small muted","Se o TEC mostrar erro 429, o script espera 1 minuto sozinho. Se ele parar no meio, rode de novo: ele retoma de onde parou, sem duplicar."));
+      // resultado
+      box.appendChild(el("div","sublbl","Resultado do TEC:"));
+      const res=e.cadernosTEC;
+      if(res&&res.cadernos&&res.cadernos.length){
+        const tb=el("table","tectab");
+        tb.innerHTML="<tr><th>Caderno</th><th>Questões</th><th>Confere</th><th>Link</th></tr>"+res.cadernos.map(c=>"<tr><td>"+esc(c.nome)+"</td><td>"+esc(c.total==null?"—":c.total)+"</td><td>"+(c.confere===false?"⚠ esperado "+esc(c.esperado):c.confere===true?"✓":"—")+"</td><td>"+(c.link?'<a href="'+esc(c.link)+'" target="_blank" rel="noopener">abrir</a>':"—")+"</td></tr>").join("");
+        box.appendChild(tb);
+        box.appendChild(el("div","small muted",res.cadernos.length+" cadernos · importado em "+fmtTs(res.importadoEm)));
+        const bc=el("button","btn ghost sm","📋 Copiar nomes e links");
+        bc.onclick=()=>{const t=res.cadernos.map(c=>c.nome+"\t"+(c.total==null?"":c.total)+"\t"+(c.link||"")).join("\n");(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("Copiado.")).catch(()=>prompt("Copie:",t));};
+        box.appendChild(bc);
+      }else box.appendChild(el("div","small muted","Nenhum resultado importado ainda."));
+      const ta=el("textarea");ta.rows=3;ta.placeholder='Cole aqui o resultado copiado pelo script ({"ttpa":1,…})';ta.style.width="100%";
+      const bi=el("button","btn sm","Importar resultado");
+      bi.onclick=()=>{
+        let j;try{j=JSON.parse(ta.value.trim());}catch(err){alert("Não entendi o texto colado. Cole exatamente o que o script copiou.");return;}
+        if(!j||!Array.isArray(j.cadernos)){alert("Resultado sem a lista de cadernos.");return;}
+        e.cadernosTEC={codigo:j.codigo,geradoEm:j.geradoEm,importadoEm:Date.now(),cadernos:j.cadernos};
+        addLog(a,s,"Cadernos do TEC importados: "+j.cadernos.length+" (código "+(j.codigo||"")+").");save();draw();
+      };
+      box.appendChild(ta);box.appendChild(bi);
+    }
+    draw();return box;
   }
 
   function SubsPanel(a,s,e){
