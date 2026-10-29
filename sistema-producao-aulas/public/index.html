@@ -1145,6 +1145,31 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     if(!somente&&!g.erro&&!g.parar&&g.feitos>=g.total){T.geradoEm=Date.now();T.versaoGerada=T.versao;addLog(a,STEPS.find(x=>x.id==="e5"),"Teoria gerada pela IA: "+t.nome+" (v"+T.versao+").");save();}
     redraw();
   }
+  // textos revisados pela Claude (api/revisados): botão "Aplicar texto revisado" no tópico
+  let REVIS=null;
+  async function carregarRevisados(){
+    if(REVIS)return REVIS;
+    try{const r=await fetch("/api/revisados",{credentials:"include",cache:"no-store"});REVIS=r.ok?await r.json():{aulas:{}};}catch(e){REVIS={aulas:{}};}
+    return REVIS;
+  }
+  function revisadoDoTopico(a,t){
+    const ra=REVIS&&REVIS.aulas&&REVIS.aulas[a.id];if(!ra||!ra.topicos)return null;
+    const k=Object.keys(ra.topicos).find(x=>norm(x)===norm(t.nome));
+    return k?{itens:ra.topicos[k].itens,versao:ra.versao||1}:null;
+  }
+  async function aplicarRevisado(a,t,ti,redraw,rv){
+    const itens=itensDoTopico(t,ti);const nomes=Object.keys(rv.itens);
+    const alvos=nomes.map(n=>({n:n,it:n==="abertura"?itens.find(x=>x.id==="abertura"):itens.find(x=>x.tipo==="item"&&norm(x.nome)===norm(n))})).filter(x=>x.it);
+    if(!alvos.length){alert("Não encontrei no sumário os itens do texto revisado.");return;}
+    if(!confirm("Substituir o texto atual de: "+alvos.map(x=>x.it.nome).join("; ")+" pelo texto revisado?\nOs outros itens não mudam."))return;
+    for(const x of alvos){
+      const r=await fetch("/api/texto",{method:"PUT",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({aulaId:a.id,topicoId:t.id,noId:x.it.id,texto:rv.itens[x.n]})});
+      if(!r.ok){alert("Não foi possível salvar “"+x.it.nome+"”.");return;}
+    }
+    t.teoria.revAplicada=rv.versao;
+    addLog(a,STEPS.find(s=>s.id==="e5"),"Texto revisado aplicado em "+t.nome+": "+alvos.map(x=>x.it.nome).join("; ")+".");save();
+    delete TXT[t.id];await carregarTextos(a,t);redraw();
+  }
   function blocoIA(a,t,ti,card,redraw,T){
     const g=GEN[t.id]=GEN[t.id]||{};
     const itens=itensDoTopico(t,ti);
@@ -1177,6 +1202,13 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       }
     }
     const bv=el("button","btn ghost sm","👁 Ver o que será enviado");bv.onclick=()=>verPedido(a,t,ti);ac.appendChild(bv);
+    if(!REVIS)carregarRevisados().then(()=>redraw());
+    const rv=REVIS?revisadoDoTopico(a,t):null;
+    if(rv&&T.revAplicada!==rv.versao&&Object.keys(tx).length&&!g.rodando){
+      const brv=el("button","btn ok sm","📥 Aplicar texto revisado (feedback do especialista)");
+      brv.title="Substitui só os itens corrigidos: "+Object.keys(rv.itens).join(", ");
+      brv.onclick=()=>aplicarRevisado(a,t,ti,redraw,rv);ac.appendChild(brv);
+    }
     box.appendChild(ac);
     // textos gerados
     if(Object.keys(tx).length){
