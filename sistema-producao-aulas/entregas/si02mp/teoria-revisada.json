@@ -1,0 +1,17 @@
+{
+ "versao": 1,
+ "descricao": "Tópico 4 revisado só com base no feedback do especialista (abertura, IDS e Honeypot). O IPS não mudou.",
+ "aulas": {
+  "si02mp": {
+   "topicos": {
+    "IDS, Honeypot e IPS": {
+     "itens": {
+      "abertura": "As redes e os sistemas computacionais estão sujeitos a diversas ameaças, como tentativas de acesso não autorizado, exploração de vulnerabilidades e execução de códigos maliciosos.\n\nPara identificar essas ameaças e reduzir seus impactos, as organizações utilizam mecanismos de segurança capazes de monitorar atividades, detectar comportamentos suspeitos e, em determinados casos, impedir ataques.\n\nNesse contexto, destacam-se três tecnologias: IDS, Honeypot e IPS.\n\n[figura]",
+      "Sistema de detecção de intrusão (IDS)": "O **IDS (Intrusion Detection System)** é um software ou appliance que {{az:monitora o tráfego e as atividades de uma rede ou host em busca de eventos suspeitos, para alertar os administradores}}.\n\nEle atua de forma passiva e pode inspecionar até as camadas superiores do TCP/IP. Mesmo assim, {{vm:não interfere no fluxo de dados, não bloqueia nem modifica pacotes}}.\n\n**Tráfego → Sensor (coleta) → Analisador (compara com padrões) → Alerta**\n\n[figura]\n\nSuas principais características são:\n- **Monitoramento em tempo real:** analisa o fluxo continuamente em busca de evidências de ataque.\n- **Componentes:** o sensor apenas coleta os dados. O analisador os compara com padrões e decide se o evento é malicioso.\n- **Posicionamento:** a localização define o que o IDS enxerga. No perímetro, não vê o tráfego entre hosts internos nem o conteúdo criptografado.\n- **Ferramentas de código aberto:** Snort e Suricata. No Snort, a ação **dynamic** fica ociosa até uma regra **activate** acioná-la e, então, age como registro (log).\n\n> [Esclarecendo] Os IDS podem ser dos seguintes tipos:\n> - **Baseado em assinatura:** compara o tráfego com uma base de ataques conhecidos. Só detecta o que está na base e gera poucos falsos positivos.\n> - **Baseado em anomalia (comportamento):** aprende o padrão normal, inclusive por aprendizado de máquina, e alerta sobre desvios. Detecta ataques novos, mas gera mais falsos positivos.\n> - **Híbrido:** combina assinatura e anomalia.\n> - **NIDS / HIDS:** baseado em rede ou instalado em um host específico.\n\n> [Atenção] O IDS {{vm:não}} realiza:\n> - Failover\n> - Filtragem de pacotes",
+      "Honeypot": "O **honeypot** é um {{az:sistema propositalmente vulnerável}}, usado como isca para {{az:atrair, monitorar e estudar atacantes}}. Ele {{vm:não é um sistema de produção}}: qualquer acesso a ele já é considerado suspeito.\n\nAs informações coletadas ajudam a identificar técnicas e ameaças novas. Assim, o honeypot complementa ferramentas como IDS e IPS.\n\n> [Esclarecendo] Os honeypots podem ser dos seguintes tipos:\n> - **Baseado em conhecimento (Knowledge-Based ou Misuse Detection):** as detecções são feitas com base em um banco de dados com informações sobre ataques conhecidos.\n> - **Baseado em comportamento (Behavior-Based ou Anomaly Detection):** assume que as intrusões podem ser detectadas por desvios de comportamento dos usuários ou dos sistemas, por meio de análise estatística ou heurística.\n\n> [Esclarecendo] O honeypot funciona melhor integrado a outros mecanismos:\n> - **Análise de comportamento:** permite detectar ameaças desconhecidas, que ainda não têm assinatura."
+     }
+    }
+   }
+  }
+ }
+}
