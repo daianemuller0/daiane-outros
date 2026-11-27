@@ -830,7 +830,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       if(!tops.length){alert("Cadastre os tópicos da aula antes.");return;}
       if(!C.bancas.length){alert("Marque ao menos uma banca.");return;}
       const cfg={modo:modo,codigo:C.codigo.trim(),pastaDestino:String(C.pastaDestino||"").trim(),bancas:C.bancas,pastasFav:C.pastasFav||{},
-        idCesgranrio:String(C.idCesgranrio||"").trim(),limpeza:C.limpeza!==false,integradas:!!C.integradas,
+        idCesgranrio:String(C.idCesgranrio||"").trim(),jaExistem:((e.cadernosTEC&&e.cadernosTEC.cadernos)||[]).map(c=>({id:c.id,nome:c.nome})),limpeza:C.limpeza!==false,integradas:!!C.integradas,
         topicos:tops.map((t,i)=>({n:i+1,nome:t.nome}))};
       let runner="";
       try{const r=await fetch("/tec-runner.js",{cache:"no-store"});runner=await r.text();}catch(err){alert("Não consegui carregar o script.");return;}
