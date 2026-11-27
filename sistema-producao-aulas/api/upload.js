@@ -4,6 +4,11 @@ const { isAuthed, readBody } = require('./_lib');
 // Upload direto do navegador para o Blob (sem limite de 4,5 MB da função).
 // Este endpoint só emite o token; o arquivo vai do navegador ao Blob.
 module.exports = async (req, res) => {
+  // diagnóstico (GET): sessão ok? token do Blob configurado? (não revela o valor)
+  if (req.method === 'GET') {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json({ authed: !!isAuthed(req), blobToken: !!process.env.BLOB_READ_WRITE_TOKEN });
+  }
   if (req.method !== 'POST') return res.status(405).end();
   try {
     const body = await readBody(req);
