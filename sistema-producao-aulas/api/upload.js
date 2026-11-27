@@ -1,5 +1,5 @@
 const { handleUpload } = require('@vercel/blob/client');
-const { isAuthed, readBody } = require('./_lib');
+const { isAuthed, readBody, blobToken } = require('./_lib');
 
 // Upload direto do navegador para o Blob (sem limite de 4,5 MB da função).
 // Este endpoint só emite o token; o arquivo vai do navegador ao Blob.
@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
   // diagnóstico (GET): sessão ok? token do Blob configurado? (não revela o valor)
   if (req.method === 'GET') {
     res.setHeader('Cache-Control', 'no-store');
-    return res.status(200).json({ authed: !!isAuthed(req), blobToken: !!process.env.BLOB_READ_WRITE_TOKEN });
+    return res.status(200).json({ authed: !!isAuthed(req), blobToken: !!blobToken() });
   }
   if (req.method !== 'POST') return res.status(405).end();
   try {
@@ -16,6 +16,7 @@ module.exports = async (req, res) => {
     if (body.type === 'blob.generate-client-token' && !isAuthed(req))
       return res.status(401).json({ error: 'Não autenticado' });
     const out = await handleUpload({
+      token: blobToken() || undefined,
       body,
       request: req,
       onBeforeGenerateToken: async (pathname) => {

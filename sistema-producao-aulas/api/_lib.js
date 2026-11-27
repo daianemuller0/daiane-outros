@@ -31,6 +31,13 @@ async function writeDb(data) {
   await redis(['SET', KEY, JSON.stringify(data)]);
 }
 
+// token do Vercel Blob: BLOB_READ_WRITE_TOKEN ou qualquer variável com prefixo (ex.: TTPA_READ_WRITE_TOKEN)
+function blobToken() {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return process.env.BLOB_READ_WRITE_TOKEN;
+  const k = Object.keys(process.env).find((n) => /READ_WRITE_TOKEN$/.test(n) && process.env[n]);
+  return k ? process.env[k] : '';
+}
+
 function secret() {
   return process.env.AUTH_SECRET || process.env.APP_PASSWORD || '';
 }
@@ -66,4 +73,4 @@ async function readBody(req) {
   return raw ? JSON.parse(raw) : {};
 }
 
-module.exports = { redis, readDb, writeDb, isAuthed, checkPassword, sessionCookie, readBody };
+module.exports = { blobToken, redis, readDb, writeDb, isAuthed, checkPassword, sessionCookie, readBody };
