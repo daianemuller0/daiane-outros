@@ -73,6 +73,8 @@
   function chave(nome) {
     const n = nn(nome).replace(new RegExp('^ti total - ' + nn(CFG.codigo) + ' - '), '');
     const b = /\((cebraspe(?: \(cespe\))?|fcc|fgv|vunesp|cesgranrio)\)\s*$/.exec(n); const banca = b ? b[1].replace(/ \(cespe\)/, '') : '';
+    const na = nn(CFG.nomeAula || 'geral da aula');
+    if (n.startsWith(na) && !/^\d+\s*-/.test(n)) return 'geral|' + banca;
     if (/^geral da aula/.test(n)) return 'geral|' + banca;
     if (/^questoes integradas/.test(n)) return 'integradas|' + banca;
     const m = /^(\d+)\s*-/.exec(n); return m ? 't' + m[1] + '|' + banca : 'outro|' + n;
@@ -154,7 +156,7 @@
         else L('Sem questões', BANCAS[b].rot, 'em', t.nome, '→ ignorado');
       }
     }
-    const baseAula = 'TI TOTAL - ' + CFG.codigo + ' - Geral da aula';
+    const baseAula = 'TI TOTAL - ' + CFG.codigo + ' - ' + (CFG.nomeAula || 'Geral da aula');   // padrão SI02: o caderno geral leva o nome da aula
     plano.push({ ...mk(baseAula, favIds, null, 'Geral da aula'), qtd: null });
     for (const b of bancas) {
       const c = await CNT(filtroDe(favIds, b));
@@ -163,9 +165,9 @@
     if (CFG.integradas) {
       const pi = pastas.find((x) => norm(x.nome).includes('integrad') && norm(x.nome).includes(norm(CFG.codigo)));
       if (!pi) L('Pasta de favoritas "integradas" da aula não encontrada: cadernos de integradas ignorados.');
-      else for (const b of bancas) {
+      else for (const b of [null].concat(bancas)) {   // integradas: geral + por banca
         const c = await CNT(filtroDe([String(pi.id)], b));
-        if (c > 0) plano.push({ ...mk('TI TOTAL - ' + CFG.codigo + ' - Questões integradas (' + BANCAS[b].rot + ')', [String(pi.id)], b, 'Integradas · ' + BANCAS[b].rot), qtd: c });
+        if (c > 0) plano.push({ ...mk('TI TOTAL - ' + CFG.codigo + ' - Questões integradas' + (b ? ' (' + BANCAS[b].rot + ')' : ''), [String(pi.id)], b, 'Integradas · ' + (b ? BANCAS[b].rot : 'geral')), qtd: c });
       }
     }
     // ---- 2b) o que já existe no TEC ----
