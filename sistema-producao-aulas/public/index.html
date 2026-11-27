@@ -758,7 +758,8 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
   function aplicarEntregas(E){
     if(!E||!E.aulas)return;let mudou=false;
     DB.aulas.forEach(a=>{
-      const ea=E.aulas[a.id];if(!ea)return;ensure(a);
+      const cod=((/([A-Za-z]{2}\d+)/.exec(a.titulo||"")||[])[1]||"").toLowerCase();
+      const ea=E.aulas[a.id]||(cod&&E.aulas[cod]);if(!ea)return;ensure(a);   // casa pelo id da aula ou pelo código (ex.: si03)
       Object.keys(ea).forEach(eid=>{
         const e=a.etapas[eid];if(!e)return;
         e.uploads=e.uploads||[];e.entregasVistas=e.entregasVistas||[];
