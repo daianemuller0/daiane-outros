@@ -93,7 +93,7 @@
     const doms = [];
     if (/\/questoes\/pastas\//.test(location.pathname)) doms.push(document);
     if (dest) { try { const h = await fetch('/questoes/pastas/' + dest, { credentials: 'include' }); if (h.ok) doms.push(new DOMParser().parseFromString(await h.text(), 'text/html')); } catch (e) {} }
-    for (const dm of doms) dm.querySelectorAll('a[href*="/cadernos/"]').forEach((a) => { const m = /\/cadernos\/(\d+)/.exec(a.getAttribute('href') || ''); if (m) add(m[1], a.textContent); });
+    for (const dm of doms) dm.querySelectorAll('a[href*="/questoes/cadernos/"]').forEach((a) => { const m = /\/questoes\/cadernos\/(\d+)/.exec(a.getAttribute('href') || ''); if (m && m[1] !== dest) add(m[1], a.textContent); });
     // cadernos que o sistema já conhece (resultado importado): valem mesmo se a listagem do TEC não os mostrar
     (CFG.jaExistem || []).forEach((c) => add(c.id, c.nome));
     return out;
