@@ -835,7 +835,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       let runner="";
       try{const r=await fetch("/tec-runner.js",{cache:"no-store"});runner=await r.text();}catch(err){alert("Não consegui carregar o script.");return;}
       const texto="window.__TTPA_CFG="+JSON.stringify(cfg)+";\n"+runner;
-      try{await navigator.clipboard.writeText(texto);alert("Script copiado ("+(modo==="criar"?"CRIAÇÃO":"SIMULAÇÃO")+").\n\n1) Abra o TEC (logada) em tecconcursos.com.br/questoes/filtrar\n2) Aperte F12 e abra a aba Console\n3) Cole o script e aperte Enter");}
+      try{await navigator.clipboard.writeText(texto);alert("Script copiado ("+(modo==="criar"?"CRIAÇÃO":modo==="verificar"?"VERIFICAÇÃO":"SIMULAÇÃO")+").\n\n1) Abra o TEC (logada) em "+(modo==="verificar"?"tecconcursos.com.br/questoes/pastas/"+(C.pastaDestino||"ID_DA_PASTA"):"tecconcursos.com.br/questoes/filtrar")+"\n2) Aperte F12 e abra a aba Console\n3) Cole o script e aperte Enter");}
       catch(err){prompt("Copie o script (Ctrl+C) e cole no Console do TEC:",texto);}
     }
     function draw(){
@@ -879,12 +879,13 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       nr.appendChild(ni2);nr.appendChild(nb);box.appendChild(nr);
       // passo a passo
       const ol=el("ol","small");ol.style.margin="10px 0 6px 18px";
-      ol.innerHTML="<li>Clique em <b>Copiar script de SIMULAÇÃO</b> e cole no Console do TEC: ele só confere as pastas e conta as questões, <b>sem criar nada</b>.</li><li>Se a tabela estiver certa, copie o <b>script de CRIAÇÃO</b> e rode na página <code>tecconcursos.com.br/questoes/filtrar</code>.</li><li>Ao terminar, ele copia o resultado. Cole abaixo.</li>";
+      ol.innerHTML="<li>Clique em <b>Copiar script de SIMULAÇÃO</b> e cole no Console do TEC: ele só confere as pastas e conta as questões, <b>sem criar nada</b>.</li><li>Se a tabela estiver certa, copie o <b>script de CRIAÇÃO</b> e rode na página <code>tecconcursos.com.br/questoes/filtrar</code>.</li><li>Ao terminar, ele copia o resultado. Cole abaixo.</li><li><b>Em qualquer script</b>, o sistema confere antes quais cadernos já existem no TEC e <b>nunca cria de novo</b> o que já existe. Se você já criou os cadernos, use o <b>script de VERIFICAÇÃO</b> (só lê) para registrar o resultado aqui.</li>";
       box.appendChild(ol);
       const ac=el("div","tcard-a");
       const b1=el("button","btn ghost sm","📋 Copiar script de SIMULAÇÃO");b1.onclick=()=>copiar("simular");
       const b2=el("button","btn sm","📋 Copiar script de CRIAÇÃO");b2.onclick=()=>copiar("criar");
-      ac.appendChild(b1);ac.appendChild(b2);box.appendChild(ac);
+      const b3=el("button","btn ghost sm","🔎 Copiar script de VERIFICAÇÃO (já criei no TEC)");b3.onclick=()=>copiar("verificar");
+      ac.appendChild(b1);ac.appendChild(b2);ac.appendChild(b3);box.appendChild(ac);
       box.appendChild(el("div","small muted","Se o TEC mostrar erro 429, o script espera 1 minuto sozinho. Se ele parar no meio, rode de novo: ele retoma de onde parou, sem duplicar."));
       // resultado
       box.appendChild(el("div","sublbl","Resultado do TEC:"));

@@ -15,7 +15,7 @@
     6: { id: 6, nome: 'VUNESP', sigla: 'VUNESP', url: 'vunesp', rot: 'VUNESP' },
     7: { id: 7, nome: 'CESGRANRIO', sigla: 'CESGRANRIO', url: 'cesgranrio', rot: 'CESGRANRIO' }, // id real resolvido abaixo
   };
-  const MODO = CFG.modo === 'criar' ? 'criar' : 'simular';
+  const MODO = CFG.modo === 'criar' ? 'criar' : CFG.modo === 'verificar' ? 'verificar' : 'simular';
   const KEY = 'ttpa_tec_' + CFG.codigo;
   const salvo = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; } };
   const grava = (o) => { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} };
@@ -45,8 +45,38 @@
     return r.ok && r.d && r.d.questoes ? r.d.questoes.length : -1;
   }
 
+  // ---- cadernos que JÁ existem no TEC (nunca criar de novo) ----
+  const nn = (s) => norm(s).replace(/[–—]/g, '-').replace(/\s+/g, ' ');
+  // chave do caderno: tópico (nº) ou geral/integradas + banca. Assim o nome do tópico pode estar abreviado no TEC.
+  function chave(nome) {
+    const n = nn(nome).replace(new RegExp('^ti total - ' + nn(CFG.codigo) + ' - '), '');
+    const b = /\((cebraspe(?: \(cespe\))?|fcc|fgv|vunesp|cesgranrio)\)\s*$/.exec(n); const banca = b ? b[1].replace(/ \(cespe\)/, '') : '';
+    if (/^geral da aula/.test(n)) return 'geral|' + banca;
+    if (/^questoes integradas/.test(n)) return 'integradas|' + banca;
+    const m = /^(\d+)\s*-/.exec(n); return m ? 't' + m[1] + '|' + banca : 'outro|' + n;
+  }
+  async function listaExistentes() {
+    const out = new Map(); const pref = nn('TI TOTAL - ' + CFG.codigo + ' - ');
+    const add = (id, nome) => { if (id != null && typeof nome === 'string' && nn(nome).startsWith(pref)) out.set(nn(nome), { id: String(id), nome: nome.trim() }); };
+    const varre = (o, d, vistos) => {
+      if (!o || typeof o !== 'object' || d > 6 || vistos.has(o)) return; vistos.add(o);
+      if (!Array.isArray(o)) { const nome = o.nome || o.titulo || o.nomeCaderno; if (o.id != null && nome) add(o.id, nome); }
+      for (const k of Object.keys(o)) varre(o[k], d + 1, vistos);
+    };
+    const dest = String(CFG.pastaDestino || '').replace(/\D/g, '');
+    const urls = [];
+    if (dest) urls.push('/api/pastas/' + dest + '/cadernos', '/api/pastas/' + dest, '/api/cadernos?pasta=' + dest, '/api/pastas/' + dest + '/conteudo');
+    urls.push('/api/cadernos', '/api/pastas-cadernos', '/api/cadernos/recentes');
+    for (const u of urls) { try { const r1 = await req('GET', u); if (r1.ok && r1.d) varre(r1.d, 0, new Set()); } catch (e) {} await sleep(300); }
+    const doms = [];
+    if (/\/questoes\/pastas\//.test(location.pathname)) doms.push(document);
+    if (dest) { try { const h = await fetch('/questoes/pastas/' + dest, { credentials: 'include' }); if (h.ok) doms.push(new DOMParser().parseFromString(await h.text(), 'text/html')); } catch (e) {} }
+    for (const dm of doms) dm.querySelectorAll('a[href*="/cadernos/"]').forEach((a) => { const m = /\/cadernos\/(\d+)/.exec(a.getAttribute('href') || ''); if (m) add(m[1], a.textContent); });
+    return out;
+  }
+
   try {
-    L('Modo:', MODO === 'criar' ? 'CRIAÇÃO' : 'SIMULAÇÃO (não cria nada)', '· aula', CFG.codigo);
+    L('Modo:', MODO === 'criar' ? 'CRIAÇÃO' : MODO === 'verificar' ? 'VERIFICAÇÃO (só lê, não cria)' : 'SIMULAÇÃO (não cria nada)', '· aula', CFG.codigo);
     // ---- 1) pastas-favoritas de cada tópico ----
     const pr = await req('GET', '/api/pastas-favoritas');
     const pastas = (pr.d && pr.d.pastas) || [];
@@ -114,18 +144,34 @@
         if (c > 0) plano.push({ ...mk('TI TOTAL - ' + CFG.codigo + ' - Questões integradas (' + BANCAS[b].rot + ')', [String(pi.id)], b, 'Integradas · ' + BANCAS[b].rot), qtd: c });
       }
     }
-    console.table(plano.map((p) => ({ caderno: p.nome, 'questões (1ª página)': p.qtd == null ? '—' : p.qtd })));
-    L('Cadernos a criar:', plano.length, '(contagem exata vem do gabarito, depois de criar)');
-    if (MODO !== 'criar') { L('SIMULAÇÃO concluída. Nada foi criado. Para criar, copie o script de CRIAÇÃO no sistema.'); return; }
-    if (!/\/questoes\/filtrar/.test(location.pathname)) { L('Abra https://www.tecconcursos.com.br/questoes/filtrar e rode de novo.'); alert('Abra a página /questoes/filtrar do TEC e rode o script de novo.'); return; }
-    if (!confirm('Criar ' + plano.length + ' cadernos no TEC para ' + CFG.codigo + '?\nPode levar vários minutos. Não feche esta aba.')) { L('Cancelado.'); return; }
+    // ---- 2b) o que já existe no TEC ----
+    const existentes = await listaExistentes();
+    const porChave = new Map(); existentes.forEach((v) => { const k = chave(v.nome); if (!porChave.has(k)) porChave.set(k, []); porChave.get(k).push(v); });
+    plano.forEach((p) => { const e = porChave.get(chave(p.nome)); if (e && e.length) { p.existe = e[0].id; p.existeNome = e[0].nome; } });
+    const chavesPlano = new Set(plano.map((p) => chave(p.nome)));
+    const sobrando = [];
+    porChave.forEach((arr, k) => { if (!chavesPlano.has(k)) arr.forEach((v) => sobrando.push(v.nome + ' (fora do plano)')); else arr.slice(1).forEach((v) => sobrando.push(v.nome + ' (DUPLICADO)')); });
+    const novos = plano.filter((p) => !p.existe);
+    console.table(plano.map((p) => ({ caderno: p.nome, 'questões (1ª página)': p.qtd == null ? '—' : p.qtd, 'já existe no TEC': p.existe ? 'SIM · ' + p.existeNome : 'não' })));
+    L('Já existem no TEC:', plano.length - novos.length, '· faltam criar:', novos.length, '· do plano:', plano.length);
+    if (sobrando.length) L('Sobrando no TEC (confira, pode ser duplicado ou teste):', sobrando.join(' | '));
+    if (!existentes.size) L('ATENÇÃO: não consegui ver nenhum caderno existente de', CFG.codigo, '. Se já criou cadernos, abra a pasta da aula (tecconcursos.com.br/questoes/pastas/ID) e rode o script nela.');
+    if (MODO === 'simular') { L('SIMULAÇÃO concluída. Nada foi criado. Para criar só o que falta, copie o script de CRIAÇÃO no sistema.'); return; }
+    if (MODO === 'criar' && novos.length) {
+      if (!/\/questoes\/filtrar/.test(location.pathname)) { L('Abra https://www.tecconcursos.com.br/questoes/filtrar e rode de novo.'); alert('Abra a página /questoes/filtrar do TEC e rode o script de novo.'); return; }
+      if (!existentes.size && !confirm('ATENÇÃO: não consegui ver os cadernos que já existem de ' + CFG.codigo + '.\nSe você já criou cadernos desta aula no TEC, CANCELE (abra a pasta da aula e rode o script lá).\nContinuar mesmo assim e criar tudo?')) { L('Cancelado por segurança (não consegui verificar os existentes).'); return; }
+      if (!confirm('Já existem ' + (plano.length - novos.length) + ' cadernos. Criar os ' + novos.length + ' que faltam no TEC para ' + CFG.codigo + '?\nPode levar vários minutos. Não feche esta aba.')) { L('Cancelado.'); return; }
+    } else if (MODO === 'criar') L('Todos os cadernos do plano já existem. Nada a criar; só vou conferir e gerar o resultado.');
 
     // ---- 3) criação (retomável: o que já foi criado fica guardado) ----
     const getVM = () => { let vm = null; document.querySelectorAll('.ng-scope').forEach((el) => { const s = angular.element(el).scope(); if (s && s.vm && s.vm.gerarCaderno) vm = s.vm; }); return vm; };
     async function aguardaVM() { for (let i = 0; i < 40; i++) { const vm = getVM(); if (vm) return vm; await sleep(500); } return null; }
     const progresso = salvo(); progresso.itens = progresso.itens || {};
+    if (MODO === 'verificar') progresso.itens = {};
     for (let i = 0; i < plano.length; i++) {
       const p = plano[i];
+      if (p.existe) { if (!progresso.itens[p.nome]) progresso.itens[p.nome] = { id: p.existe, rotulo: p.rotulo, existente: true }; grava(progresso); continue; }
+      if (MODO === 'verificar') continue;
       if (progresso.itens[p.nome]) { L('Já criado, pulando:', p.nome); continue; }
       const vm = await aguardaVM();
       if (!vm) { L('A página não está pronta. Volte para /questoes/filtrar e rode de novo (retoma de onde parou).'); return; }
@@ -147,8 +193,9 @@
     }
 
     // ---- 4) mover para a pasta da aula ----
-    const ids = Object.values(progresso.itens).map((x) => Number(x.id));
-    if (CFG.pastaDestino) {
+    const ids = Object.values(progresso.itens).filter((x) => !x.existente).map((x) => Number(x.id));
+    if (MODO === 'verificar' || !ids.length) L('Nenhum caderno novo para mover.');
+    else if (CFG.pastaDestino) {
       const TEC = angular.element(document.querySelector('.ng-scope')).injector().get('tec');
       for (let i = 0; i < ids.length; i += 20) { await TEC.apiPost('/cadernos/multiple-set', { cadernos: ids.slice(i, i + 20), pastaDestino: Number(CFG.pastaDestino), subpastaDestino: null }); await sleep(1500); }
       L('Cadernos movidos para a pasta', CFG.pastaDestino);
@@ -168,6 +215,7 @@
     console.table(resultados);
     const difere = resultados.filter((r) => r.confere === false);
     if (difere.length) L('ATENÇÃO: contagem diferente do esperado em', difere.length, 'caderno(s):', difere.map((r) => r.nome).join(' | '));
+    if (MODO === 'verificar') L('VERIFICAÇÃO: existem', plano.length - novos.length, 'de', plano.length, 'cadernos do plano.', novos.length ? 'FALTAM: ' + novos.map((p) => p.nome).join(' | ') : 'Nenhum falta.');
     const out = JSON.stringify({ ttpa: 1, codigo: CFG.codigo, geradoEm: Date.now(), cadernos: resultados });
     try { if (typeof copy === 'function') copy(out); } catch (e) {}
     L('PRONTO. O resultado foi copiado. Cole na etapa 1.3 do sistema ("Colar resultado do TEC"). Se não copiou, rode: copy(window.__TTPA_RESULTADO)');
