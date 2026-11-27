@@ -45,6 +45,28 @@
     return r.ok && r.d && r.d.questoes ? r.d.questoes.length : -1;
   }
 
+  // total EXATO de questões de um filtro (pagina até acabar). Devolve null se a paginação do TEC não for confiável.
+  async function CNTX(filtros) {
+    const pairs0 = [['formato', 'OBJETIVA'], ['universo', '']];
+    filtros.forEach((f, i) => { pairs0.push(['filtros[' + i + '].id', f.id], ['filtros[' + i + '].tipo', f.tipo]); });
+    const pagina = async (pg) => {
+      const pairs = pairs0.concat([['pagina', pg]]);
+      const body = pairs.map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
+      const r1 = await req('POST', '/api/questoes/filtros', body, true); await sleep(1200);
+      return r1.ok && r1.d && Array.isArray(r1.d.questoes) ? r1.d.questoes : null;
+    };
+    const p1 = await pagina(''); if (!p1) return null;
+    if (p1.length < 100) return p1.length;
+    let total = p1.length; const vistos = new Set(p1.map((q) => JSON.stringify(q)));
+    for (let pg = 2; pg <= 40; pg++) {
+      const pp = await pagina(String(pg)); if (!pp) return null;
+      if (!pp.length) return total;
+      if (pp.every((q) => vistos.has(JSON.stringify(q)))) return null;   // paginação não funcionou
+      pp.forEach((q) => vistos.add(JSON.stringify(q))); total += pp.length;
+    }
+    return null;
+  }
+
   // ---- cadernos que JÁ existem no TEC (nunca criar de novo) ----
   const nn = (s) => norm(s).replace(/[–—]/g, '-').replace(/\s+/g, ' ');
   // chave do caderno: tópico (nº) ou geral/integradas + banca. Assim o nome do tópico pode estar abreviado no TEC.
@@ -152,6 +174,10 @@
     const sobrando = [];
     porChave.forEach((arr, k) => { if (!chavesPlano.has(k)) arr.forEach((v) => sobrando.push(v.nome + ' (fora do plano)')); else arr.slice(1).forEach((v) => sobrando.push(v.nome + ' (DUPLICADO)')); });
     const novos = plano.filter((p) => !p.existe);
+    if (MODO !== 'simular') {
+      L('Conferindo o total exato de cada caderno que já existe (pode levar alguns minutos)…');
+      for (const p of plano) { if (!p.existe) continue; try { p.esperadoExato = await CNTX(filtroDe(p.favIds, p.bancaId)); } catch (e) { p.esperadoExato = null; } }
+    }
     console.table(plano.map((p) => ({ caderno: p.nome, 'questões (1ª página)': p.qtd == null ? '—' : p.qtd, 'já existe no TEC': p.existe ? 'SIM · ' + p.existeNome : 'não' })));
     L('Já existem no TEC:', plano.length - novos.length, '· faltam criar:', novos.length, '· do plano:', plano.length);
     if (sobrando.length) L('Sobrando no TEC (confira, pode ser duplicado ou teste):', sobrando.join(' | '));
@@ -209,12 +235,18 @@
       const s = await req('POST', '/api/cadernos/' + it.id + '/compartilhamento', {}); await sleep(1000);
       const link = s.d && s.d.links && s.d.links[0] ? s.d.links[0] : '';
       const total = g.d ? g.d.resultCount : null;
-      const esperado = p.qtd != null && p.qtd < 100 ? p.qtd : null;   // a 1ª página só traz até ~100 ids: acima disso não há como comparar
+      const esperado = p.esperadoExato != null ? p.esperadoExato : (p.qtd != null && p.qtd < 100 ? p.qtd : null);   // exato quando a paginação do TEC funciona; senão só até 100
       resultados.push({ nome: p.nome, rotulo: p.rotulo, id: it.id, total, esperado, confere: esperado == null || total == null ? null : total === esperado, link });
     }
     console.table(resultados);
     const difere = resultados.filter((r) => r.confere === false);
-    if (difere.length) L('ATENÇÃO: contagem diferente do esperado em', difere.length, 'caderno(s):', difere.map((r) => r.nome).join(' | '));
+    if (difere.length) {
+      L('ATENÇÃO: ' + difere.length + ' caderno(s) com quantidade DIFERENTE do que o TEC devolve hoje para a mesma pasta e banca (provavelmente desatualizados):');
+      difere.forEach((r) => L(' •', r.nome, '→ está com', r.total, 'mas o esperado é', r.esperado, '(id', r.id + ')'));
+      L('Para corrigir: apague esses cadernos no TEC e rode o script de CRIAÇÃO (ele só cria o que faltar).');
+    } else L('Nenhum caderno com quantidade diferente do esperado.');
+    const semComp = resultados.filter((r) => r.confere == null).length;
+    if (semComp) L(semComp, 'caderno(s) sem como comparar (sem total esperado).');
     if (MODO === 'verificar') L('VERIFICAÇÃO: existem', plano.length - novos.length, 'de', plano.length, 'cadernos do plano.', novos.length ? 'FALTAM: ' + novos.map((p) => p.nome).join(' | ') : 'Nenhum falta.');
     const out = JSON.stringify({ ttpa: 1, codigo: CFG.codigo, geradoEm: Date.now(), cadernos: resultados });
     try { if (typeof copy === 'function') copy(out); } catch (e) {}
