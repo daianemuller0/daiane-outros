@@ -81,8 +81,10 @@
   }
   async function listaExistentes() {
     const out = new Map(); const pref = nn('TI TOTAL - ' + CFG.codigo + ' - ');
-    const dest = String(CFG.pastaDestino || '').replace(/\D/g, '');
+    const dest = String(CFG.pastaDestino || '').replace(/\D/g, '') || ((/\/questoes\/pastas\/(\d+)/.exec(location.pathname) || [])[1] || '');
     const add = (id, nome) => { if (id != null && String(id) !== dest && typeof nome === 'string' && nn(nome).startsWith(pref)) out.set(nn(nome), { id: String(id), nome: nome.trim() }); };   // a própria pasta não é caderno
+    // cadernos que o sistema já conhece (resultado importado): valem só se o TEC não os mostrou agora (nunca sobrepõem o que foi lido do TEC)
+    const conhecidos = (CFG.jaExistem || []).filter((c) => c && c.id != null && String(c.id) !== dest);
     const varre = (o, d, vistos) => {
       if (!o || typeof o !== 'object' || d > 6 || vistos.has(o)) return; vistos.add(o);
       if (!Array.isArray(o)) { const nome = o.nome || o.titulo || o.nomeCaderno; if (o.id != null && nome) add(o.id, nome); }
@@ -96,8 +98,7 @@
     if (/\/questoes\/pastas\//.test(location.pathname)) doms.push(document);
     if (dest) { try { const h = await fetch('/questoes/pastas/' + dest, { credentials: 'include' }); if (h.ok) doms.push(new DOMParser().parseFromString(await h.text(), 'text/html')); } catch (e) {} }
     for (const dm of doms) dm.querySelectorAll('a[href*="/questoes/cadernos/"]').forEach((a) => { const m = /\/questoes\/cadernos\/(\d+)/.exec(a.getAttribute('href') || ''); if (m && m[1] !== dest) add(m[1], a.textContent); });
-    // cadernos que o sistema já conhece (resultado importado): valem mesmo se a listagem do TEC não os mostrar
-    (CFG.jaExistem || []).forEach((c) => add(c.id, c.nome));
+    conhecidos.forEach((c) => { const k = nn(c.nome); if (!out.has(k) && typeof c.nome === 'string' && nn(c.nome).startsWith(pref)) out.set(k, { id: String(c.id), nome: String(c.nome).trim() }); });
     return out;
   }
 
