@@ -822,6 +822,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     const cod0=mCod?mCod[1].toUpperCase():"";
     e.cfgTEC=e.cfgTEC||{codigo:cod0,pastaDestino:"",bancas:[4,3,5,6,7],idCesgranrio:"",pastasFav:{},limpeza:true,integradas:!/^FD/.test(cod0)};
     const C=e.cfgTEC;
+    if(C.nomeAula==null){C.nomeAula=String(a.titulo||"").replace(/^\s*TI\s*TOTAL\s*[-–]\s*/i,"").replace(new RegExp("^\\s*"+(C.codigo||"")+"\\s*[-–]\\s*","i"),"").trim();}
     if(C.v!==2){C.v=2;if(!C.bancas.includes(7))C.bancas.push(7);if(C.idCesgranrio==null)C.idCesgranrio="";}
     const BNOME={4:"CEBRASPE",3:"FCC",5:"FGV",6:"VUNESP",7:"CESGRANRIO"};
     async function copiar(modo){
@@ -830,7 +831,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       if(!tops.length){alert("Cadastre os tópicos da aula antes.");return;}
       if(!C.bancas.length){alert("Marque ao menos uma banca.");return;}
       const cfg={modo:modo,codigo:C.codigo.trim(),pastaDestino:String(C.pastaDestino||"").trim(),bancas:C.bancas,pastasFav:C.pastasFav||{},
-        idCesgranrio:String(C.idCesgranrio||"").trim(),jaExistem:((e.cadernosTEC&&e.cadernosTEC.cadernos)||[]).map(c=>({id:c.id,nome:c.nome})),limpeza:C.limpeza!==false,integradas:!!C.integradas,
+        idCesgranrio:String(C.idCesgranrio||"").trim(),nomeAula:String(C.nomeAula||"").trim(),jaExistem:((e.cadernosTEC&&e.cadernosTEC.cadernos)||[]).map(c=>({id:c.id,nome:c.nome})),limpeza:C.limpeza!==false,integradas:!!C.integradas,
         topicos:tops.map((t,i)=>({n:i+1,nome:t.nome}))};
       let runner="";
       try{const r=await fetch("/tec-runner.js",{cache:"no-store"});runner=await r.text();}catch(err){alert("Não consegui carregar o script.");return;}
@@ -856,6 +857,8 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         cb.onchange=()=>{C.bancas=cb.checked?Array.from(new Set(C.bancas.concat([b]))):C.bancas.filter(x=>x!==b);save();};
         lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+BNOME[b]+"  "));bw.appendChild(lb);});
       fb.appendChild(bw);
+      const fn=el("div","fld");fn.appendChild(el("label","","Nome da aula nos cadernos GERAIS (ex.: TI TOTAL - SI03 - Criptografia)"));
+      const inm=el("input");inm.value=C.nomeAula||"";inm.placeholder="ex.: Criptografia";inm.oninput=()=>{C.nomeAula=inm.value;save();};fn.appendChild(inm);box.appendChild(fn);
       const fc=el("div","small muted","CESGRANRIO: o script tenta achar o código da banca sozinho no TEC. Se não achar, informe aqui o número (aparece em filtros[…].id ao filtrar por Cesgranrio):");fb.appendChild(fc);
       const ic=el("input");ic.value=C.idCesgranrio||"";ic.placeholder="opcional, ex.: 2";ic.style.maxWidth="140px";ic.oninput=()=>{C.idCesgranrio=ic.value;save();};fb.appendChild(ic);
       box.appendChild(fb);
