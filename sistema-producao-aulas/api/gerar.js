@@ -16,7 +16,7 @@ PARÁGRAFOS CURTOS (feedback do professor especialista)
 Quebre os parágrafos: nenhum parágrafo pode passar de 3 linhas no Word (cerca de 35 a 40 palavras, no máximo 2 ou 3 frases curtas). Parágrafos maiores cansam o aluno. Cada parágrafo traz UMA ideia; se o texto tiver duas ideias, faça dois parágrafos. Vale também para as frases dentro de marcadores e dos quadros (até 2 linhas cada).
 
 TAMANHO E FORMA POR TIPO DE ITEM (o pedido informa o tipo)
-1. ABERTURA DO TÓPICO: 2 ou 3 parágrafos curtos (60 a 90 palavras no total): o que é o tema, sua importância ou evolução; termina com uma linha [figura].
+1. ABERTURA DO TÓPICO: 3 parágrafos curtos (60 a 90 palavras no total), nesta ordem: (1) o problema ou contexto (ameaças, riscos, necessidade); (2) o que as organizações fazem a respeito, em termos gerais; (3) "Nesse contexto, destacam-se N tecnologias: A, B e C.", citando pelo nome os itens do sumário do tópico. A abertura NÃO DEFINE NADA: sem definições, sem azul, sem vermelho e sem negrito; só texto simples. Termina com uma linha [figura].
 2. ITEM COM SUB-ITENS: só 1 ou 2 frases (20 a 40 palavras) que apresentam o assunto e como ele se divide. Não aprofunde o que pertence aos sub-itens.
 3. ITEM FOLHA SIMPLES (a maioria): UMA frase de definição, com o termo em **negrito** e o núcleo conceitual em {{az:azul}}, mais no máximo mais uma ou duas frases de complemento (20 a 60 palavras no total). Sem lista. Um quadro só se acrescentar algo útil (veja QUADROS).
 4. ITEM FOLHA CONCEITUAL (conceitos centrais, ou quando as questões exigem): definição + no máximo mais 1 ou 2 parágrafos curtos, uma linha de fluxo em negrito quando houver (ex.: **Cliente → Proxy → Servidor de destino**), [figura] se um esquema ajudar, e uma lista "Suas principais características são:" com 3 a 6 marcadores. Até 180 palavras.
@@ -24,13 +24,13 @@ Nunca passe de 250 palavras num item. Comece sempre direto pela definição: sem
 
 RECURSOS (o sistema converte para o Word)
 - **negrito**: o termo definido, rótulos de lista e propriedades do conceito.
-- {{az:texto}}: NEGRITO AZUL = núcleo conceitual (o que é): a definição direta, poucas palavras. Só o núcleo.
+- {{az:texto}}: NEGRITO AZUL = núcleo conceitual (o que é): a definição direta, poucas palavras. Só o núcleo da definição, nada mais: no máximo UM trecho azul por item (de preferência um só), e nunca azul em características, exemplos, listas, termos soltos ou na abertura do tópico.
 - {{vm:texto}}: NEGRITO VERMELHO = negação conceitual (o que NÃO é): ausência de propriedade, exclusão, armadilha, limite. Nunca use azul ou vermelho só para destacar, nem em frases inteiras.
-- Lista com marcadores: linhas "- **Rótulo:** frase curta (até 20 palavras)." Usada em "Suas principais características são:".
+- Lista com marcadores: linhas "- **Rótulo:** frase curta (até 20 palavras)." Usada em "Suas principais características são:". Sempre que o texto citar DUAS OU MAIS coisas (o que o conceito não faz, funções, componentes, tipos), escreva cada uma como marcador em lista; nunca em frase corrida com "e" ou vírgulas.
 - QUADROS: cada quadro tem um cabeçalho com ícone (feito pelo sistema). Sintaxe: a primeira linha é "> [Tipo] texto" e as linhas seguintes do MESMO quadro começam com "> " (use "> - " para marcadores). Uma linha em branco encerra o quadro. Tipos:
-  - [Esclarecendo]: aprofunda ou detalha um conceito sem repetir a definição: distinções, nuances, relações entre termos e, principalmente, LISTAS DE TIPOS ou CLASSIFICAÇÕES ("Os IDS podem ser dos seguintes tipos:" + marcadores "> - **Tipo:** descrição curta").
-  - [Exemplificando]: mostra a aplicação prática: caso real, cenário de prova, analogia técnica ou situação concreta, sempre DEPOIS da explicação abstrata.
-  - [Atenção]: alerta sobre erro comum ou pegadinha (não são sinônimos, exceções, limites do conceito, interpretações perigosas); só quando há risco real de confusão.
+  - [Esclarecendo]: (não omita os tipos principais de um conceito que tenha classificação consagrada, como os honeypots baseados em conhecimento e em comportamento) aprofunda ou detalha um conceito sem repetir a definição: distinções, nuances, relações entre termos e, principalmente, LISTAS DE TIPOS ou CLASSIFICAÇÕES ("Os IDS podem ser dos seguintes tipos:" + marcadores "> - **Tipo:** descrição curta").
+  - [Exemplificando]: mostra a aplicação prática: caso real, cenário de prova, analogia técnica ou situação concreta, sempre DEPOIS da explicação abstrata. Não use em item que já tem [figura] ou fluxo/esquema: a figura já exemplifica.
+  - [Atenção]: alerta sobre erro comum ou pegadinha (não são sinônimos, exceções, limites do conceito, interpretações perigosas); só quando há risco real de confusão. Traz UMA ÚNICA ideia, em uma frase (até 2 linhas): priorize o aviso mais importante, em geral o que o conceito NÃO é. Nunca junte vários avisos e nunca repita o que o texto do item já diz (se o vermelho do texto já nega algo, o quadro não repete).
   - [Bizu]: memorização rápida: macete, padrão de cobrança, atalho mental; curto e direto.
   - [Dica]: orientação estratégica de estudo ou de resolução de prova (como abordar, o que observar na leitura).
   Frequência (medida na aula-modelo de SI02: cerca de 11 quadros em 45 itens, ou seja, 1 quadro a cada 3 ou 4 itens): a maioria dos itens NÃO leva quadro; nunca mais de 2 por item, sem empilhar. O mais comum é o [Esclarecendo] (6 vezes: sempre que o item tem uma LISTA de tipos, métodos, metodologias ou classificações, como os tipos de IDS, os métodos do antivírus, os tipos de firewall), depois [Atenção] (3 vezes: só para pegadinha real, como "não são ferramentas excludentes" ou "proxy não é sinônimo de firewall") e [Exemplificando] (2 vezes: um cenário prático curto, como o funcionário que usa VPN de casa). [Bizu] e [Dica] são raros (0 na aula-modelo): use só se uma questão ou o professor pedir claramente. Use o tipo que combina com o conteúdo; não force variedade e não use [Atenção] como quadro padrão.
@@ -41,12 +41,12 @@ RECURSOS (o sistema converte para o Word)
 
 TRECHOS DO PADRÃO DESEJADO (só para o ESTILO e a extensão; não copie o conteúdo para outros itens)
 
-[Abertura do tópico Firewall]
-O firewall é um dos principais mecanismos de proteção de redes e sistemas, atuando como uma barreira de segurança entre diferentes ambientes.
+[Abertura do tópico IDS, Honeypot e IPS]
+As redes e os sistemas computacionais estão sujeitos a diversas ameaças, como tentativas de acesso não autorizado, exploração de vulnerabilidades e execução de códigos maliciosos.
 
-Dependendo de sua implementação, pode proteger desde um único computador até uma rede inteira, além de oferecer recursos de inspeção, monitoramento e controle de aplicações.
+Para identificar essas ameaças e reduzir seus impactos, as organizações utilizam mecanismos de segurança capazes de monitorar atividades, detectar comportamentos suspeitos e, em determinados casos, impedir ataques.
 
-Ao longo do tempo, os firewalls evoluíram de mecanismos simples de filtragem de pacotes para soluções mais avançadas, capazes de analisar conexões, aplicações e conteúdo.
+Nesse contexto, destacam-se três tecnologias: IDS, Honeypot e IPS.
 
 [figura]
 
@@ -60,7 +60,7 @@ O **firewall baseado em host** tem o objetivo de {{az:proteger um dispositivo es
 
 **Firewall de borda ou perímetro** é um mecanismo de segurança {{az:posicionado na fronteira entre redes}} ou ambientes com diferentes níveis de confiança, normalmente entre a rede interna e a Internet.
 
-**Zona desmilitarizada (DMZ)** é {{az:uma rede que fica entre a rede interna}}, que deve ser protegida, {{az:e a rede externa}}. Serve como uma camada adicional de segurança de rede.
+**Zona desmilitarizada (DMZ)** é {{az:uma rede que fica entre a rede interna, que deve ser protegida, e a rede externa}}. Serve como uma camada adicional de segurança de rede.
 
 **Internet → Firewall → DMZ → Firewall → Rede interna**
 
@@ -113,7 +113,6 @@ Ele consiste em uma solução de hardware, software ou combinação de ambos.
 É posicionado de forma estratégica para aplicar uma política de segurança às comunicações que passam por ele.
 
 > [Atenção] Proxy {{vm:não é sinônimo}} de firewall.
-> [Atenção] O firewall tem o foco em segurança e filtragem de ameaças, enquanto o proxy foca em intermediação, cache e controle de uso.
 
 QUADRO "ESSENCIAL DE PROVA" (quando o tipo do pedido for esse)
 É um resumo de UMA LINHA por conceito: o aluno relembra rapidamente os conceitos que mais caem em prova. Formato: uma linha de abertura ("Os ataques para obtenção de informações são:") e depois um marcador para cada conceito importante do tópico, na ordem do sumário (normalmente os itens folha): "- **Termo:** definição de no máximo 12 palavras." Sem explicações, sem exemplos, sem comparações, sem subdivisões, sem quadros. Modelo:
@@ -130,6 +129,7 @@ REGRA OBRIGATÓRIA DE COBERTURA
 Recebe, para cada item, as questões reais que ele precisa cobrir. O texto deve conter, de forma explícita e correta e SEM ficar longo, o conhecimento necessário para justificar o gabarito de CADA questão listada. Se uma pegadinha das questões importar, resolva-a em um [Atenção] curto ou em uma frase, não em vários parágrafos. Não cite números de questão nem escreva "gabarito".
 
 QUALIDADE
+- Não use siglas nem termos técnicos que a aula ainda não explicou (ex.: SIEM). Se for indispensável citar uma sigla, escreva-a por extenso e explique em poucas palavras na primeira vez; se não for indispensável, não cite. Não traga conceitos que não estejam no sumário.
 - Só afirme fatos técnicos de que tenha certeza. Se houver dúvida, omita ou marque com [VERIFICAR]. Não invente normas, versões, números ou siglas.
 - Nunca afirme o que uma banca já cobrou, decidiu ou considerou. Não cite bancas.
 - Siga as orientações do professor quando houver; elas têm prioridade.
@@ -163,7 +163,7 @@ function montarPedido(b, questoes) {
   if (b.tipo === 'essencial') {
     partes.push('TIPO: quadro "Essencial de Prova". Escreva uma linha de abertura ("Os <tema do tópico> são:") e depois UM marcador por conceito importante do sumário do tópico, na ordem do sumário, no formato "- **Termo:** definição de no máximo 12 palavras." Sem explicações, exemplos ou comparações. Use os itens folha do sumário; pule os itens que forem só agrupadores. Use as questões abaixo apenas para decidir quais conceitos incluir.');
   } else if (b.tipo === 'abertura') {
-    partes.push('TIPO: ABERTURA DO TÓPICO. Escreva 2 ou 3 parágrafos curtos (60 a 90 palavras no total) que apresentem o tema do tópico, sua importância ou evolução, e terminem com uma linha [figura]. Não defina cada item do sumário.');
+    partes.push('TIPO: ABERTURA DO TÓPICO. Escreva 3 parágrafos curtos (60 a 90 palavras no total): (1) o problema ou contexto; (2) o que as organizações fazem a respeito; (3) \"Nesse contexto, destacam-se N tecnologias: A, B e C.\" com os itens do sumário do tópico. NÃO defina nada: sem definições, sem azul, sem vermelho, sem negrito, só texto simples. Termine com uma linha [figura].');
   } else if (b.no.temFilhos) {
     partes.push('TIPO: ITEM COM SUB-ITENS (os sub-itens são escritos depois). Escreva só 1 ou 2 frases (20 a 40 palavras) que apresentem o assunto e como ele se divide.');
   } else {

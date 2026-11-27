@@ -13,6 +13,9 @@
     "api/docx.js": {
       "includeFiles": "templates/**",
       "maxDuration": 30
+    },
+    "api/revisados.js": {
+      "includeFiles": "entregas/**"
     }
   }
 }
