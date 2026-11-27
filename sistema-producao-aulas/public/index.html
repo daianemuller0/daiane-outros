@@ -282,7 +282,7 @@
      res:"Cadernos revisados e aprovados por um humano."},
     {id:"e4u",num:"1.4",trilha:"Questões",nome:"Exportar caderno com gabarito e subir no sistema",resp:"Revisão humana",tempo:"15min",upload:true,
      obj:"O TEC esconde o gabarito das questões nas APIs, mas a IA precisa dele para montar o Word de questões, a teoria e os comentários. Por isso, você exporta o caderno em PDF (com gabarito) e sobe aqui — a IA lê direto do sistema, sem depender do chat.",
-     ativ:["No TEC, abra o caderno GERAL da aula (todas as questões).","Clique em Imprimir → Salvar como PDF, marcando a opção COM GABARITO.","Salve o PDF no computador.","Suba o PDF na área de upload abaixo (⬆ Subir caderno).","Confira que o arquivo aparece na lista de enviados."],
+     ativ:["No TEC, abra o caderno GERAL da aula (todas as questões).","O TEC exporta no máximo 200 questões por PDF: se o caderno tiver mais, exporte em partes (por banca ou por tópico) até cobrir todas.","Clique em Imprimir → Salvar como PDF, marcando a opção COM GABARITO.","Salve os PDFs no computador.","Suba todos os PDFs na área de upload abaixo (⬆ Subir arquivo(s) — pode escolher vários de uma vez).","Confira que todos aparecem na lista de enviados."],
      res:"Caderno com gabarito disponível no sistema para a IA usar."},
     {id:"e4",num:"1.4.1",trilha:"Questões",nome:"Preparação editorial de questões (Word, sem comentários)",resp:"Assistente editorial / IA",tempo:"1h",manual:"q",upload:true,uploadTitulo:"⬇ Word de questões (arquivo entregue pela IA)",uploadDesc:"Ao finalizar, a IA deixa o Word aqui no sistema, e você baixa daqui (não é salvo no seu computador). Este Word é a referência obrigatória da teoria: toda questão dele precisa ter a resposta explicada na teoria.",
      obj:"Transpor de 100 a 200 questões (no máximo 200) dos cadernos para o Word, sempre das mais recentes para as mais antigas, já com o gabarito (enviado na etapa anterior), somente as questões, sem comentários. Ao concluir, a IA deixa o arquivo no sistema para você baixar.",
@@ -379,27 +379,37 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
         row.appendChild(x);list.appendChild(row);
       });
     }
-    const fi=el("input");fi.type="file";fi.accept=".pdf,.doc,.docx,.txt";fi.style.display="none";
-    const btn=el("button","btn upbtn","⬆ Subir arquivo");
+    const fi=el("input");fi.type="file";fi.accept=".pdf,.doc,.docx,.txt";fi.multiple=true;fi.style.display="none";
+    const btn=el("button","btn upbtn","⬆ Subir arquivo(s)");
     btn.onclick=()=>fi.click();
+    // por que o envio falhou? (pergunta ao servidor: login, token do Blob)
+    async function diagnostico(err){
+      let m=err&&err.message?err.message:"erro desconhecido";
+      try{const r=await fetch("/api/upload",{credentials:"include",cache:"no-store"});const d=await r.json();
+        if(!d.authed)m="sua sessão expirou — recarregue a página e entre de novo com a senha.";
+        else if(!d.blobToken)m="o armazenamento de arquivos (Vercel Blob) não está configurado: falta a variável BLOB_READ_WRITE_TOKEN na Vercel (crie um Blob em Armazenamento e conecte ao projeto, depois faça um novo deploy).";
+      }catch(x){}
+      return m;
+    }
     fi.onchange=async()=>{
-      const f=fi.files[0];if(!f)return;
-      status.className="upstatus small";status.textContent="Enviando "+f.name+"…";
-      try{
-        const blobMod=await import('https://esm.sh/@vercel/blob@2.8.0/client');
-        const pth='uploads/'+safeSeg(a.id)+'/'+safeSeg(f.name);
-        const bl=await blobMod.upload(pth,f,{access:'public',handleUploadUrl:'/api/upload',multipart:f.size>8*1024*1024});
-        const d={ok:true,name:safeSeg(f.name),size:f.size,url:bl.url};
-        if(d&&d.ok){
+      const files=Array.from(fi.files||[]);if(!files.length)return;
+      let ok=0,falhas=[];
+      for(let k=0;k<files.length;k++){
+        const f=files[k];
+        status.className="upstatus small";status.textContent="Enviando "+(k+1)+" de "+files.length+": "+f.name+"…";
+        try{
+          const blobMod=await import('https://esm.sh/@vercel/blob@2.8.0/client');
+          const pth='uploads/'+safeSeg(a.id)+'/'+safeSeg(f.name);
+          const bl=await blobMod.upload(pth,f,{access:'public',handleUploadUrl:'/api/upload',multipart:f.size>8*1024*1024});
+          const d={name:safeSeg(f.name),size:f.size,url:bl.url};
           const ex=e.uploads.findIndex(u=>u.name===d.name);const rec={name:d.name,size:d.size,url:d.url,ts:Date.now()};
           if(ex>=0)e.uploads[ex]=rec;else e.uploads.push(rec);
           addLog(a,s,"Arquivo enviado no sistema: "+d.name+" ("+fmtSize(d.size)+").");
-          save();draw();status.textContent="✓ Enviado: "+d.name;
-        }else{status.className="upstatus small err";status.textContent="Erro ao enviar o arquivo.";}
-      }catch(err){
-        status.className="upstatus small err";
-        status.textContent="⚠ Não foi possível enviar o arquivo: "+(err&&err.message?err.message:"erro desconhecido");
+          save();draw();ok++;
+        }catch(err){falhas.push(f.name+" — "+await diagnostico(err));}
       }
+      if(falhas.length){status.className="upstatus small err";status.textContent="⚠ Não foi possível enviar: "+falhas.join(" | ")+(ok?" ("+ok+" enviado(s) com sucesso)":"");}
+      else{status.textContent="✓ Enviado"+(ok>1?"s":"")+": "+ok+" arquivo"+(ok>1?"s":"")+".";}
       fi.value="";
     };
     box.appendChild(btn);box.appendChild(fi);box.appendChild(status);box.appendChild(list);
