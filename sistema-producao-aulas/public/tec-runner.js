@@ -81,13 +81,13 @@
   }
   async function listaExistentes() {
     const out = new Map(); const pref = nn('TI TOTAL - ' + CFG.codigo + ' - ');
-    const add = (id, nome) => { if (id != null && typeof nome === 'string' && nn(nome).startsWith(pref)) out.set(nn(nome), { id: String(id), nome: nome.trim() }); };
+    const dest = String(CFG.pastaDestino || '').replace(/\D/g, '');
+    const add = (id, nome) => { if (id != null && String(id) !== dest && typeof nome === 'string' && nn(nome).startsWith(pref)) out.set(nn(nome), { id: String(id), nome: nome.trim() }); };   // a própria pasta não é caderno
     const varre = (o, d, vistos) => {
       if (!o || typeof o !== 'object' || d > 6 || vistos.has(o)) return; vistos.add(o);
       if (!Array.isArray(o)) { const nome = o.nome || o.titulo || o.nomeCaderno; if (o.id != null && nome) add(o.id, nome); }
       for (const k of Object.keys(o)) varre(o[k], d + 1, vistos);
     };
-    const dest = String(CFG.pastaDestino || '').replace(/\D/g, '');
     const urls = [];
     if (dest) urls.push('/api/pastas/' + dest + '/cadernos', '/api/pastas/' + dest, '/api/cadernos?pasta=' + dest, '/api/pastas/' + dest + '/conteudo');
     urls.push('/api/cadernos', '/api/pastas-cadernos', '/api/cadernos/recentes');
