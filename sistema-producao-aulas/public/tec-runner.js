@@ -185,15 +185,27 @@
     if (sobrando.length) L('Sobrando no TEC (confira, pode ser duplicado ou teste):', sobrando.join(' | '));
     if (!existentes.size) L('ATENÇÃO: não consegui ver nenhum caderno existente de', CFG.codigo, '. Se já criou cadernos, abra a pasta da aula (tecconcursos.com.br/questoes/pastas/ID) e rode o script nela.');
     if (MODO === 'simular') { L('SIMULAÇÃO concluída. Nada foi criado. Para criar só o que falta, copie o script de CRIAÇÃO no sistema.'); return; }
-    if (MODO === 'criar' && novos.length) {
-      if (!/\/questoes\/filtrar/.test(location.pathname)) { L('Abra https://www.tecconcursos.com.br/questoes/filtrar e rode de novo.'); alert('Abra a página /questoes/filtrar do TEC e rode o script de novo.'); return; }
+    const jaReg = salvo().itens || {};
+    const pendentes = novos.filter((p) => !jaReg[p.nome]);
+    if (novos.length - pendentes.length) L('Já criados em rodadas anteriores (registro do navegador):', novos.length - pendentes.length);
+    if (MODO === 'criar' && pendentes.length) {
       if (!existentes.size && !confirm('ATENÇÃO: não consegui ver os cadernos que já existem de ' + CFG.codigo + '.\nSe você já criou cadernos desta aula no TEC, CANCELE (abra a pasta da aula e rode o script lá).\nContinuar mesmo assim e criar tudo?')) { L('Cancelado por segurança (não consegui verificar os existentes).'); return; }
-      if (!confirm('Já existem ' + (plano.length - novos.length) + ' cadernos. Criar os ' + novos.length + ' que faltam no TEC para ' + CFG.codigo + '?\nPode levar vários minutos. Não feche esta aba.')) { L('Cancelado.'); return; }
+      if (!confirm('Já existem ' + (plano.length - pendentes.length) + ' cadernos. Criar os ' + pendentes.length + ' que faltam no TEC para ' + CFG.codigo + '?\n' + pendentes.map((p) => '• ' + p.nome).join('\n') + '\nPode levar alguns minutos. Não feche esta aba.')) { L('Cancelado.'); return; }
     } else if (MODO === 'criar') L('Todos os cadernos do plano já existem. Nada a criar; só vou conferir e gerar o resultado.');
 
-    // ---- 3) criação (retomável: o que já foi criado fica guardado) ----
-    const getVM = () => { let vm = null; document.querySelectorAll('.ng-scope').forEach((el) => { const s = angular.element(el).scope(); if (s && s.vm && s.vm.gerarCaderno) vm = s.vm; }); return vm; };
-    async function aguardaVM() { for (let i = 0; i < 40; i++) { const vm = getVM(); if (vm) return vm; await sleep(500); } return null; }
+    // ---- 3) criação: envia o mesmo formulário do TEC (POST /questoes/filtrar) por trás dos panos, sem trocar de página ----
+    async function criaPorForm(p) {
+      const pairs = [['caderno', ''], ['universo', ''], ['formato', 'OBJETIVA'], ['formaEscolherQuestoes', 'ALEATORIA']];
+      filtroDe(p.favIds, p.bancaId).forEach((f, i) => pairs.push(['filtros[' + i + '].tipo', f.tipo], ['filtros[' + i + '].id', f.id]));
+      pairs.push(['nomeCaderno', p.nome], ['pastaDestino', String(CFG.pastaDestino || '0')], ['abrirEmModoCurso', 'false'], ['totalQuestoes', '']);
+      const body = pairs.map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
+      for (let t = 0; t < 3; t++) {
+        const r1 = await fetch('/questoes/filtrar', { method: 'POST', credentials: 'include', redirect: 'follow', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        if (r1.status === 429) { L('Limite do TEC (429). Aguardando 70 segundos…'); await sleep(70000); continue; }
+        const m = /\/questoes\/cadernos\/(\d+)/.exec(r1.url || ''); return m ? m[1] : null;
+      }
+      return null;
+    }
     const progresso = salvo(); progresso.itens = progresso.itens || {};
     if (MODO === 'verificar') progresso.itens = {};
     for (let i = 0; i < plano.length; i++) {
@@ -201,32 +213,22 @@
       if (p.existe) { if (!progresso.itens[p.nome]) progresso.itens[p.nome] = { id: p.existe, rotulo: p.rotulo, existente: true }; grava(progresso); continue; }
       if (MODO === 'verificar') continue;
       if (progresso.itens[p.nome]) { L('Já criado, pulando:', p.nome); continue; }
-      const vm = await aguardaVM();
-      if (!vm) { L('A página não está pronta. Volte para /questoes/filtrar e rode de novo (retoma de onde parou).'); return; }
-      const fm = {}, arr = [];
-      p.favIds.forEach((id) => { const o = { id, nome: 'x', ultimaAlterada: false, tipo: 'PASTA_FAVORITAS', tipoDescricao: 'Favoritas' }; fm['' + id] = o; arr.push(o); });
-      const filtros = { PASTA_FAVORITAS: fm };
-      if (p.bancaId) { const b = Object.assign({ bancaOculta: false, tipo: 'BANCA', tipoDescricao: 'Banca' }, BANCAS[p.bancaId]); delete b.rot; filtros.BANCA = {}; filtros.BANCA['' + p.bancaId] = b; arr.push(b); }
-      if (LIMPEZA.length) { const fq = {}; LIMPEZA.forEach((f) => { const o = { id: f.id, nome: f.nome, ultimaAlterada: false, tipo: 'FILTRO_QUESTAO', tipoDescricao: 'Filtro de questões' }; fq[f.id] = o; arr.push(o); }); filtros.FILTRO_QUESTAO = fq; }
-      const root = angular.element(document.querySelector('.ng-scope')).scope();
-      root.$apply(() => { vm.filtros = filtros; vm.arrayFiltros = arr; vm.nomeCaderno = p.nome; vm.pastaCadernosAtual = String(CFG.pastaDestino || ''); });
-      vm.gerarCaderno();
-      let id = null;
-      for (let k = 0; k < 40 && !id; k++) { await sleep(500); const m = location.pathname.match(/\/questoes\/cadernos\/(\d+)/); if (m) id = m[1]; }
-      if (!id) { L('Não consegui confirmar a criação de', p.nome, '. Parei. Confira no TEC e rode de novo.'); return; }
-      progresso.itens[p.nome] = { id, rotulo: p.rotulo }; grava(progresso);
+      const id = await criaPorForm(p);
+      if (!id) { L('Não consegui confirmar a criação de', p.nome, '. Parei. Confira no TEC e rode de novo (ele pula o que já foi criado).'); return; }
+      progresso.itens[p.nome] = { id, rotulo: p.rotulo, naPasta: !!CFG.pastaDestino }; grava(progresso);
       L('Criado (' + (i + 1) + '/' + plano.length + '):', p.nome, '→', id);
-      history.back();
       await sleep(6500);   // o TEC descarta criações muito rápidas
     }
 
     // ---- 4) mover para a pasta da aula ----
-    const ids = Object.values(progresso.itens).filter((x) => !x.existente).map((x) => Number(x.id));
+    const ids = Object.values(progresso.itens).filter((x) => !x.existente && !x.naPasta).map((x) => Number(x.id));
     if (MODO === 'verificar' || !ids.length) L('Nenhum caderno novo para mover.');
     else if (CFG.pastaDestino) {
-      const TEC = angular.element(document.querySelector('.ng-scope')).injector().get('tec');
-      for (let i = 0; i < ids.length; i += 20) { await TEC.apiPost('/cadernos/multiple-set', { cadernos: ids.slice(i, i + 20), pastaDestino: Number(CFG.pastaDestino), subpastaDestino: null }); await sleep(1500); }
-      L('Cadernos movidos para a pasta', CFG.pastaDestino);
+      try {
+        const TEC = angular.element(document.querySelector('.ng-scope')).injector().get('tec');
+        for (let i = 0; i < ids.length; i += 20) { await TEC.apiPost('/cadernos/multiple-set', { cadernos: ids.slice(i, i + 20), pastaDestino: Number(CFG.pastaDestino), subpastaDestino: null }); await sleep(1500); }
+        L('Cadernos movidos para a pasta', CFG.pastaDestino);
+      } catch (e) { L('Não consegui mover', ids.length, 'caderno(s) criados antes: mova-os à mão para a pasta', CFG.pastaDestino, '(ids:', ids.join(', ') + ')'); }
     } else L('Sem ID de pasta de destino: os cadernos ficaram em "Sem classificação".');
 
     // ---- 5) total exato (gabarito) e link de compartilhamento ----
