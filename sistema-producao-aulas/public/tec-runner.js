@@ -13,6 +13,7 @@
     3: { id: 3, nome: 'FCC', sigla: 'FCC', url: 'fcc', rot: 'FCC' },
     5: { id: 5, nome: 'FGV', sigla: 'FGV', url: 'fgv', rot: 'FGV' },
     6: { id: 6, nome: 'VUNESP', sigla: 'VUNESP', url: 'vunesp', rot: 'VUNESP' },
+    7: { id: 7, nome: 'CESGRANRIO', sigla: 'CESGRANRIO', url: 'cesgranrio', rot: 'CESGRANRIO' }, // id real resolvido abaixo
   };
   const MODO = CFG.modo === 'criar' ? 'criar' : 'simular';
   const KEY = 'ttpa_tec_' + CFG.codigo;
@@ -60,7 +61,27 @@
     console.table(topicos.map((t) => ({ tópico: t.n + ' ' + t.nome, pasta: t.pasta ? t.pasta.nome + ' (' + t.pasta.id + ')' : '— NÃO ENCONTRADA —' })));
     if (topicos.some((t) => !t.pasta)) { L('Alguma pasta de favoritas não foi encontrada. No sistema, informe o ID dela e copie o script de novo.'); return; }
     const favIds = topicos.map((t) => String(t.pasta.id));
-    const bancas = (CFG.bancas || [4, 3, 5]).filter((b) => BANCAS[b]);
+    let bancas = (CFG.bancas || [4, 3, 5]).filter((b) => BANCAS[b]);
+    if (bancas.includes(7)) {
+      // CESGRANRIO: id informado no sistema ou detectado na página do TEC
+      let idc = String(CFG.idCesgranrio || '').replace(/\D/g, '');
+      if (!idc) {
+        try {
+          const root = angular.element(document.querySelector('.ng-scope')).scope();
+          const vm = root && (root.vm || root.$ctrl || root);
+          const vistos = new Set();
+          const busca = (o, d) => {
+            if (!o || typeof o !== 'object' || d > 4 || vistos.has(o)) return null; vistos.add(o);
+            if (!Array.isArray(o) && typeof o.nome === 'string' && /cesgranrio/i.test(o.nome) && o.id != null) return o.id;
+            for (const k of Object.keys(o)) { if (k[0] === '$') continue; let r; try { r = busca(o[k], d + 1); } catch (e) { r = null; } if (r != null) return r; }
+            return null;
+          };
+          const f = busca(vm, 0); if (f != null) idc = String(f);
+        } catch (e) {}
+      }
+      if (idc) { BANCAS[idc] = Object.assign({}, BANCAS[7], { id: Number(idc) }); bancas = bancas.map((b) => (b === 7 ? Number(idc) : b)); L('CESGRANRIO = banca', idc); }
+      else { bancas = bancas.filter((b) => b !== 7); L('CESGRANRIO ignorada: não achei o código da banca no TEC. Informe no sistema (campo CESGRANRIO) e copie o script de novo.'); }
+    }
 
     // ---- 2) plano (só bancas com questões) ----
     const plano = [];

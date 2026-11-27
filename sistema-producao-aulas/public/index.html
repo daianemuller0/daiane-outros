@@ -274,7 +274,7 @@
      res:"Questões relevantes favoritadas no TEC."},
     {id:"e3",num:"1.3",trilha:"Questões",nome:"Criação dos cadernos de questões",panel:"cadernos",resp:"Assistente editorial / IA",tempo:"1h",
      obj:"Transformar as questões favoritas no TEC em cadernos organizados (produção + estudo dos alunos).",
-     ativ:["Acessar as questões favoritadas no TEC.","Criar o caderno geral da aula (todas as favoritadas).","Criar cadernos gerais por banca principal (CEBRASPE, FCC, FGV).","Criar caderno por tópico.","Criar cadernos por tópico para cada banca principal."],
+     ativ:["Acessar as questões favoritadas no TEC.","Criar o caderno geral da aula (todas as favoritadas).","Criar cadernos gerais por banca principal (CEBRASPE, FCC, FGV, VUNESP, CESGRANRIO).","Criar caderno por tópico.","Criar cadernos por tópico para cada banca principal."],
      res:"Cadernos de questões organizados no TEC."},
     {id:"e3r",num:"1.3.1",trilha:"Questões",nome:"Revisão da criação dos cadernos (humana)",resp:"Revisão humana",tempo:"30min",
      obj:"Toda entrega feita pela IA passa por revisão humana. Aqui, conferir manualmente os cadernos criados pela IA no TEC antes de seguir para a etapa seguinte.",
@@ -285,8 +285,8 @@
      ativ:["No TEC, abra o caderno GERAL da aula (todas as questões).","Clique em Imprimir → Salvar como PDF, marcando a opção COM GABARITO.","Salve o PDF no computador.","Suba o PDF na área de upload abaixo (⬆ Subir caderno).","Confira que o arquivo aparece na lista de enviados."],
      res:"Caderno com gabarito disponível no sistema para a IA usar."},
     {id:"e4",num:"1.4.1",trilha:"Questões",nome:"Preparação editorial de questões (Word, sem comentários)",resp:"Assistente editorial / IA",tempo:"1h",manual:"q",upload:true,uploadTitulo:"⬇ Word de questões (arquivo entregue pela IA)",uploadDesc:"Ao finalizar, a IA deixa o Word aqui no sistema, e você baixa daqui (não é salvo no seu computador). Este Word é a referência obrigatória da teoria: toda questão dele precisa ter a resposta explicada na teoria.",
-     obj:"Transpor entre 100 e 200 questões dos cadernos para o Word, já com o gabarito (enviado na etapa anterior), somente as questões, sem comentários. Ao concluir, a IA deixa o arquivo no sistema para você baixar.",
-     ativ:["Usar os cadernos revisados e o caderno com gabarito enviado na etapa anterior.","Colocar no template Word: separadas por tópico e por banca, em ordem decrescente de ano.","Não incluir comentários: deixar apenas o espaço reservado para a resolução (etapa de comentários).","Conferir se a quantidade de questões bate com os cadernos do TEC.","Deixar o Word no sistema (campo abaixo) para download."],
+     obj:"Transpor de 100 a 200 questões (no máximo 200) dos cadernos para o Word, sempre das mais recentes para as mais antigas, já com o gabarito (enviado na etapa anterior), somente as questões, sem comentários. Ao concluir, a IA deixa o arquivo no sistema para você baixar.",
+     ativ:["Usar os cadernos revisados e o caderno com gabarito enviado na etapa anterior.","Limitar o Word a no mínimo 100 e no máximo 200 questões. Se os cadernos tiverem mais, entram as mais recentes e as mais antigas ficam de fora.","Ordenar sempre da questão mais recente para a mais antiga (ano decrescente), dentro de cada tópico e banca.","Colocar no template Word: separadas por tópico e por banca.","Não incluir comentários: deixar apenas o espaço reservado para a resolução (etapa de comentários).","Conferir se a quantidade de questões bate com os cadernos do TEC.","Deixar o Word no sistema (campo abaixo) para download."],
      res:"Word de questões (sem comentários) pronto e disponível no sistema para download."},
     {id:"e4s",num:"1.4.2",trilha:"Teoria",nome:"Definição dos sub-tópicos da teoria (humano)",resp:"Revisão humana",tempo:"30min",panel:"subs",
      obj:"Antes de produzir a teoria, você define manualmente os sub-tópicos de cada tópico principal (os tópicos principais já foram definidos no planejamento), um tópico por vez. Nº de páginas e comentários são opcionais; a teoria é produzida seguindo esses sub-tópicos.",
@@ -820,16 +820,17 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
     const box=el("div","pnl");
     const mCod=/([A-Za-z]{2}\d+)/.exec(a.titulo||"");
     const cod0=mCod?mCod[1].toUpperCase():"";
-    e.cfgTEC=e.cfgTEC||{codigo:cod0,pastaDestino:"",bancas:/^FD/.test(cod0)?[4,3,5,6]:[4,3,5],pastasFav:{},limpeza:true,integradas:!/^FD/.test(cod0)};
+    e.cfgTEC=e.cfgTEC||{codigo:cod0,pastaDestino:"",bancas:[4,3,5,6,7],idCesgranrio:"",pastasFav:{},limpeza:true,integradas:!/^FD/.test(cod0)};
     const C=e.cfgTEC;
-    const BNOME={4:"CEBRASPE",3:"FCC",5:"FGV",6:"VUNESP"};
+    if(C.v!==2){C.v=2;if(!C.bancas.includes(7))C.bancas.push(7);if(C.idCesgranrio==null)C.idCesgranrio="";}
+    const BNOME={4:"CEBRASPE",3:"FCC",5:"FGV",6:"VUNESP",7:"CESGRANRIO"};
     async function copiar(modo){
       const tops=topicosOf(a);
       if(!C.codigo){alert("Informe o código da aula (ex.: SI03).");return;}
       if(!tops.length){alert("Cadastre os tópicos da aula antes.");return;}
       if(!C.bancas.length){alert("Marque ao menos uma banca.");return;}
       const cfg={modo:modo,codigo:C.codigo.trim(),pastaDestino:String(C.pastaDestino||"").trim(),bancas:C.bancas,pastasFav:C.pastasFav||{},
-        limpeza:C.limpeza!==false,integradas:!!C.integradas,
+        idCesgranrio:String(C.idCesgranrio||"").trim(),limpeza:C.limpeza!==false,integradas:!!C.integradas,
         topicos:tops.map((t,i)=>({n:i+1,nome:t.nome}))};
       let runner="";
       try{const r=await fetch("/tec-runner.js",{cache:"no-store"});runner=await r.text();}catch(err){alert("Não consegui carregar o script.");return;}
@@ -851,10 +852,13 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       g.appendChild(f1);g.appendChild(f2);box.appendChild(g);
       const fb=el("div","fld");fb.appendChild(el("label","","Bancas (só entram as que tiverem questões)"));
       const bw=el("div","row");
-      [4,3,5,6].forEach(b=>{const lb=el("label","cobre");const cb=el("input");cb.type="checkbox";cb.checked=C.bancas.includes(b);
+      [4,3,5,6,7].forEach(b=>{const lb=el("label","cobre");const cb=el("input");cb.type="checkbox";cb.checked=C.bancas.includes(b);
         cb.onchange=()=>{C.bancas=cb.checked?Array.from(new Set(C.bancas.concat([b]))):C.bancas.filter(x=>x!==b);save();};
         lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+BNOME[b]+"  "));bw.appendChild(lb);});
-      fb.appendChild(bw);box.appendChild(fb);
+      fb.appendChild(bw);
+      const fc=el("div","small muted","CESGRANRIO: o script tenta achar o código da banca sozinho no TEC. Se não achar, informe aqui o número (aparece em filtros[…].id ao filtrar por Cesgranrio):");fb.appendChild(fc);
+      const ic=el("input");ic.value=C.idCesgranrio||"";ic.placeholder="opcional, ex.: 2";ic.style.maxWidth="140px";ic.oninput=()=>{C.idCesgranrio=ic.value;save();};fb.appendChild(ic);
+      box.appendChild(fb);
       const fo=el("div","fld");
       const mkOpt=(txt,key)=>{const lb=el("label","cobre");const cb=el("input");cb.type="checkbox";cb.checked=!!C[key];cb.onchange=()=>{C[key]=cb.checked;save();};lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+txt));return lb;};
       fo.appendChild(mkOpt("Remover questões anuladas e desatualizadas (como o professor vê)","limpeza"));
@@ -1407,7 +1411,7 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
       html+=`<div>Template de questões (o que já usamos no FD05/FD06):</div><ul>
         <li>Separar por <b>tópico</b> e por <b>banca</b>; ordem <b>decrescente de ano</b>.</li>
         <li>Estrutura de comentário: <b>Resolução</b> (espaço), <b>Teoria</b> 📘, <b>Gabarito</b>.</li>
-        <li>Bancas do padrão: CEBRASPE, FCC, FGV, VUNESP.</li></ul>`;
+        <li>Bancas do padrão: CEBRASPE, FCC, FGV, VUNESP, CESGRANRIO.</li></ul>`;
     }else if(kind==="c"){
       html+=`<div>Padrão de comentário de questões:</div><ul>${MANUAL.comentarios.map(x=>"<li>"+x+"</li>").join("")}</ul>`;
     }else if(kind==="struct"){
@@ -1490,8 +1494,8 @@ let __saveT=null;function save(){clearTimeout(__saveT);__saveT=setTimeout(()=>{f
   }
 
   const IA_HINTS={
-    e3:"Entro no TEC pelo seu navegador, localizo as favoritas da aula e crio os cadernos: geral da aula, gerais por banca (CEBRASPE/FCC/FGV), por tópico, por tópico por banca e questões integradas por banca — dentro de uma pasta, seguindo o padrão da SI01.",
-    e4:"Exporto de 100 a 200 questões dos cadernos e monto o Word no template (por tópico e banca, ano decrescente), com espaço de Resolução, Teoria e Gabarito — como fiz no FD05/FD06.",
+    e3:"Entro no TEC pelo seu navegador, localizo as favoritas da aula e crio os cadernos: geral da aula, gerais por banca (CEBRASPE/FCC/FGV/VUNESP/CESGRANRIO), por tópico, por tópico por banca e questões integradas por banca — dentro de uma pasta, seguindo o padrão da SI01.",
+    e4:"Exporto de 100 a 200 questões dos cadernos e monto o Word no template (100 a 200 questões, por tópico e banca, sempre as mais recentes primeiro), com espaço de Resolução, Teoria e Gabarito — como fiz no FD05/FD06.",
     e5:"Produzo a teoria dos tópicos (orientada para prova), com definições, comparações e exemplos, pronta para os comentários.",
     e7:"Aplico o template visual ao PDF de teoria e gero o arquivo auxiliar de trechos reutilizáveis nos comentários.",
     e8:"Comento as questões no padrão editorial (resolução, correção da assertiva, teoria, gabarito), reutilizando trechos da teoria.",
